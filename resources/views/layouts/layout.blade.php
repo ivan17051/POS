@@ -16,11 +16,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <!-- CSS Files -->
     <link href="{{asset('public/css/material-dashboard.css')}}" rel="stylesheet" />
-    <!-- TypeHead CSS -->
-    <link href="{{asset('public/vendor/jquery-typeahead-2.11.0/jquery.typeahead.min.css')}}" rel="stylesheet" />
-    <!-- DateTimePicker Tempus Dominus -->
-    <!-- <link rel="stylesheet" href="{{asset('public/vendor/datetimepicker-tempus-dominus/css/tempus-dominus.min.css')}}"> -->    
-
     <!-- jquery photo viewer -->
     <link href="{{asset('public/vendor/viewerjs/viewer.min.css')}}" rel="stylesheet" />
     
@@ -83,7 +78,7 @@
                   <div class="dropdown-divider"></div> -->
                   <a class="dropdown-item" href=""
                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();">Log out</a>
-                  <form id="logout-form" action="" method="POST" style="display: none;">
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                       @csrf
                   </form>
                 </div>
@@ -195,8 +190,6 @@
   <!-- Jquery Validation -->
   <script src="{{asset('public/vendor/jqueryvalidation/jquery.validate.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/vendor/jqueryvalidation/localization/messages_id.min.js')}}" type="text/javascript"></script>
-  <!-- myFormAndToggle -->
-  <script src="{{asset('public/js/myformandtoggle.js')}}" type="text/javascript"></script>
   <!-- Moment JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js" integrity="sha512-he8U4ic6kf3kustvJfiERUpojM8barHoz0WYpAUDWQVn61efpm3aVAD8RWL8OloaDDzMZ1gZiubF9OSdYBqHfQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

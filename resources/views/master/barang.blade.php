@@ -31,34 +31,19 @@ active
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama Faskes</label>
+                <label for="nama" class="bmd-label-floating">Nama Barang</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Alamat</label>
+                <label for="nama" class="bmd-label-floating">Kode Barang</label>
                 <input type="text" class="form-control" id="alamat" name="alamat" required>
               </div>  
             </div>
-            
           </div>
-          <div class="row mt-4">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Koordinat X</label>
-                <input type="text" class="form-control" id="coord_x" name="coord_x">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Koordinat Y</label>
-                <input type="text" class="form-control" id="coord_y" name="coord_y">
-              </div>  
-            </div>
-          </div>
-          
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
           <button type="submit" class="btn btn-link text-primary">Simpan</button>
@@ -75,7 +60,7 @@ active
     <div class="modal-dialog mt-5">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Sunting Faskes</h4>
+                <h4 class="modal-title">Sunting Barang</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="material-icons">clear</i>
                 </button>
@@ -99,20 +84,7 @@ active
                   </div>
                   
                 </div>
-                <div class="row mt-4">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="nama" class="bmd-label-floating">Koordinat X</label>
-                      <input type="text" class="form-control" id="coord_x" name="coord_x">
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="nama" class="bmd-label-floating">Koordinat Y</label>
-                      <input type="text" class="form-control" id="coord_y" name="coord_y">
-                    </div>  
-                  </div>
-                </div>
+                
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default btn-link" data-dismiss="modal">TUTUP</button>
@@ -156,7 +128,7 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Data Fasilitas Kesehatan</h4>
+            <h4 class="card-title">Data Barang</h4>
           </div>
         </div>
         <div class="card-body">
@@ -224,9 +196,7 @@ active
         if(data['kecamatan']) $modal.find('input[name=kecamatan]').val(data['kecamatan']).change();
         else $modal.find('input[name=kecamatan]').val(" ").change();
         $modal.find('select[name=idkategori]').val(data['kategori']['id']).change();
-        $modal.find('input[name=coord_x]').val(data['coord_x']).change();
-        $modal.find('input[name=coord_y]').val(data['coord_y']).change();
-
+        
         $('#formedit').attr('action', '{{route("barang.update", ["barang"=>"'+data['id']+'"])}}');
         $modal.modal('show')
     }
@@ -265,27 +235,21 @@ active
             serverSide: true,
             responsive: true,
             ajax: {
-                type: "POST",
+                type: "GET",
                 url: '{{route("barang.data")}}',
                 data: {
                     '_token': @json(csrf_token())
                 }
             },
-            @if(isset($d['kategori']))
-            columns: [{ data: 'id', title: 'ID'},{
-                    data: 'nama',
-                    title: 'Faskes'
+            
+            columns: [{ data: 'id', title: 'ID'},
+                {
+                    data: 'kodebarang',
+                    title: 'Kode Barang'
                 },
                 {
-                    data: 'idkategori',
-                    title: 'Tingkat',
-                    render: function (e, d, r) {
-                        return r['kategori']['nama']
-                    }
-                },
-                {
-                    data: 'alamat',
-                    title: 'Alamat'
+                    data: 'namabarang',
+                    title: 'Nama Barang'
                 },
                 {
                     data: 'id',
@@ -299,15 +263,10 @@ active
                             '<i class="material-icons">more_vert</i>' +
                             '</a>' +
                             '<div class="dropdown-menu dropdown-menu-left" >' +
-                            @if(Auth::user()->role=='Saralkes')
                             '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
                             '<a class="dropdown-item" href="faskes/'+e+'">Detail</a>' +
-                            @endif
-                            '<a class="dropdown-item" href="#" onclick="daftarNakes(this)">Nakes Terkait</a>' +
-                            @if(Auth::user()->role=='Saralkes')
                             '<div class="dropdown-divider"></div>' +
                             '<a class="dropdown-item" href="#" onclick="hapus('+e+')">Hapus</a>' +
-                            @endif
                             '</div>' +
                             '</span>'
                     }
@@ -323,41 +282,6 @@ active
                     targets: 3
                 }
             ]
-            @else
-            columns: [{
-                    data: 'pegawai.nama',
-                    title: 'Nama Pemohon'
-                },
-                {
-                    data: 'pegawai.profesi',
-                    title: 'Profesi'
-                },
-                {
-                    data: 'alamatfaskes',
-                    title: 'Alamat'
-                },
-                {
-                    data: 'puskesmas.nama',
-                    title: 'Puskesmas',
-                    render: function (e,d,r) {
-                      if(e){
-                        return e;
-                      }
-                      return '';
-                    }
-                },
-                {
-                    data: 'idpegawai',
-                    title: 'Aksi',
-                    class: "text-center",
-                    width: 1,
-                    orderable: false,
-                    render: function (e, d, r) {
-                        return '<a href="?nakes='+ e +'" class="btn btn-info btn-link" style="padding:5px;"><i class="material-icons">launch</i></a>';
-                    }
-                },
-            ]
-            @endif
             
         });
     }

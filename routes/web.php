@@ -14,13 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/', 'HomeController@index')->name('home');
+
+    // index, store, show, update and destroy
+    Route::apiResource('kategori', KategoriController::class)->except('show');
+    Route::apiResource('barang', BarangController::class)->except('show');
+    Route::apiResource('user', UserController::class)->except('show');
+    
+    Route::get('barang/data', 'BarangController@data')->name('barang.data');
+
+    
 });
-
-// index, store, show, update and destroy
-Route::apiResource('barang', BarangController::class)->except('show');
-Route::get('barang/data', 'BarangController@data')->name('barang.data');
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

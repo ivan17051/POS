@@ -18,7 +18,7 @@
             </div>
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
-                    <span>ucwords(Auth::user()->nama)</span>
+                    <span>{{ucwords(Auth::user()->nama)}}</span>
                 </a>
             </div>
         </div>
@@ -38,6 +38,12 @@
                 </a>
                 <div class="collapse @yield('masterShow')" id="sidebar-master">
                     <ul class="nav">
+                        <li class="nav-item @yield('kategoriStatus')">
+                            <a class="nav-link" href="{{route('kategori.index')}}">
+                                <span class="sidebar-mini"> K </span>
+                                <span class="sidebar-normal"> Kategori </span>
+                            </a>
+                        </li>
                         <li class="nav-item @yield('barangStatus')">
                             <a class="nav-link" href="{{route('barang.index')}}">
                                 <span class="sidebar-mini"> B </span>
