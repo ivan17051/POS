@@ -1,5 +1,9 @@
 @include('layouts.sidebar')
 
+@php
+$role = Auth::user()->role;
+$role = explode(', ', $role);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/apple-icon.png')}}">
     <link rel="icon" type="image/png" href="{{asset('public/img/favicon.png')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>POS | @yield('title')</title>
+    <title>SDMK | @yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta content="{{ csrf_token() }}"  name="csrf-token">
     <!-- Fonts and icons -->
@@ -16,6 +20,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <!-- CSS Files -->
     <link href="{{asset('public/css/material-dashboard.css')}}" rel="stylesheet" />
+    <!-- TypeHead CSS -->
+    <link href="{{asset('public/vendor/jquery-typeahead-2.11.0/jquery.typeahead.min.css')}}" rel="stylesheet" />
+    <!-- DateTimePicker Tempus Dominus -->
+    <!-- <link rel="stylesheet" href="{{asset('public/vendor/datetimepicker-tempus-dominus/css/tempus-dominus.min.css')}}"> -->    
+
     <!-- jquery photo viewer -->
     <link href="{{asset('public/vendor/viewerjs/viewer.min.css')}}" rel="stylesheet" />
     
@@ -76,7 +85,7 @@
                   <!-- <a class="dropdown-item" href="#">Profile</a>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href=""
+                  <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();">Log out</a>
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                       @csrf
@@ -190,6 +199,8 @@
   <!-- Jquery Validation -->
   <script src="{{asset('public/vendor/jqueryvalidation/jquery.validate.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/vendor/jqueryvalidation/localization/messages_id.min.js')}}" type="text/javascript"></script>
+  <!-- myFormAndToggle -->
+  <script src="{{asset('public/js/myformandtoggle.js')}}" type="text/javascript"></script>
   <!-- Moment JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js" integrity="sha512-he8U4ic6kf3kustvJfiERUpojM8barHoz0WYpAUDWQVn61efpm3aVAD8RWL8OloaDDzMZ1gZiubF9OSdYBqHfQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

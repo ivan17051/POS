@@ -15,7 +15,6 @@ class KategoriController extends Controller
     public function store(Request $request){
         try{
             $kategori_baru = new Kategori($request->all());
-            // dd($request->all(),$kategori_baru);
             $kategori_baru->save();
         }catch(QueryException $exception){
             $this->flashError($exception->getMessage());

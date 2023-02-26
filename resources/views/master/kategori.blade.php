@@ -6,7 +6,7 @@ $role = Auth::user()->role;
 @endphp
 
 @section('title')
-Kategori Barang
+Kategori Faskes
 @endsection
 
 @section('masterShow')
@@ -174,14 +174,13 @@ var myUsers = @json($kategori);
 function onEdit(self) {
     var key = $(self).attr('key');
     var j = myUsers[key];
-    var id = j['id'];
     
     $modal=$('#modalEdit');
     
     $modal.find('[name=id]').val(j['id']).change();
     $modal.find('[name=nama]').val(j['nama']).change();
     
-    $modal.find('form').attr('action', "{{route('kategori.update', ['kategori'=>\''+id+'\'])}}");
+    $modal.find('form').attr('action', "{{route('kategori.update', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
@@ -189,15 +188,31 @@ function onEdit(self) {
 function onDelete(self) {
     var key = $(self).attr('key');
     var j = myUsers[key];
-    var id = j['id'];
     $modal=$('#modalDelete');
 
-    $modal.find('form').attr('action', "{{route('kategori.destroy', ['kategori'=>'"+id+"'])}}");
+    $modal.find('form').attr('action', "{{route('kategori.destroy', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
 $(document).ready(function() {
-    
+    my.initFormExtendedDatetimepickers();
+    if ($('.slider').length != 0) {
+        md.initSliders();
+    }
+
+    table = $('#datatables').DataTable({
+        responsive:{
+            details: false
+        },
+        columnDefs: [
+            {   
+                class: "details-control",
+                orderable: false,
+                targets: 0
+            }
+        ]
+    });
+
 } );
 </script>
 @endsection

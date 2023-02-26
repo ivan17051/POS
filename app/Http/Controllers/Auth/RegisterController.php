@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -29,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -51,8 +50,9 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'nama' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'nip' => ['required', 'string', 'max:18'],
         ]);
     }
 
@@ -68,6 +68,7 @@ class RegisterController extends Controller
             'nama' => $data['nama'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
+            'nip'=> $data['nip'],
         ]);
     }
 }

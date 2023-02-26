@@ -1,6 +1,10 @@
 @extends('layouts.layout')
 @extends('layouts.sidebar')
 
+@php
+$role = Auth::user()->role;
+@endphp
+
 @section('title')
 User
 @endsection
@@ -159,8 +163,8 @@ active
                 @foreach($user as $key=>$unit)
                 <tr>
                     <td hidden>{{$unit->id}}</td>
+                    <td>{{$unit->nama}}</td>
                     <td>{{$unit->username}}</td>
-                    <td>{{Hash::check(12345,$unit->password)? 'Y' : 'N'}} {{Hash::make(12345)}}</td>
                     <td>{{$unit->role}}</td>
                     <td class="text-right">
                         @if($unit->role=="Admin")
@@ -198,7 +202,6 @@ var myUsers = @json($user);
 function onEdit(self) {
     var key = $(self).attr('key');
     var j = myUsers[key];
-    var id = j['id'];
     
     $modal=$('#modalEdit');
     
@@ -207,7 +210,7 @@ function onEdit(self) {
     $modal.find('[name=nama]').val(j['nama']).change();
     $modal.find('[name=role]').val(j['role']).change().blur();
     
-    $modal.find('form').attr('action', "{{route('user.update', ['user'=>'"+id+"'])}}");
+    $modal.find('form').attr('action', "{{route('user.update', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
@@ -215,10 +218,9 @@ function onEdit(self) {
 function onDelete(self) {
     var key = $(self).attr('key');
     var j = myUsers[key];
-    var id = j['id'];
     $modal=$('#modalDelete');
 
-    $modal.find('form').attr('action', "{{route('user.destroy', ['user'=>'"+id+"'])}}");
+    $modal.find('form').attr('action', "{{route('user.destroy', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
