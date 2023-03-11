@@ -25,15 +25,12 @@ $role = Auth::user()->role;
             </div>
         </div>
         <ul class="nav">
-            @if($role=='SDMK')
             <li class="nav-item @yield('dashboardStatus') ">
                 <a class="nav-link" href="{{url('/dashboard')}}">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                 </a>
             </li>
-            @endif
-            @if(in_array($role, ['SDMK','Saralkes']))
             <li class="nav-item ">
                 <a class="nav-link" data-toggle="collapse" href="#sidebar-master">
                     <i class="material-icons">assignment</i>
@@ -43,30 +40,16 @@ $role = Auth::user()->role;
                 </a>
                 <div class="collapse @yield('masterShow')" id="sidebar-master">
                     <ul class="nav">
-                        <li class="nav-item @yield('faskesStatus')">
-                            <a class="nav-link" href="{{route('faskes.index')}}">
-                                <span class="sidebar-mini"> F </span>
-                                <span class="sidebar-normal"> Faskes </span>
-                            </a>
-                        </li>
-                        @if($role=='Saralkes')
                         <li class="nav-item @yield('kategoriStatus')">
                             <a class="nav-link" href="{{route('kategori.index')}}">
                                 <span class="sidebar-mini"> K </span>
                                 <span class="sidebar-normal"> Kategori </span>
                             </a>
                         </li>
-                        @elseif($role=='SDMK')
-                        <li class="nav-item @yield('mandiriStatus')">
-                            <a class="nav-link" href="{{route('faskesMandiri.index')}}">
-                                <span class="sidebar-mini"> FM </span>
-                                <span class="sidebar-normal"> Faskes Mandiri </span>
-                            </a>
-                        </li>
-                        <li class="nav-item @yield('profesiStatus')">
-                            <a class="nav-link" href="{{route('profesi.index')}}">
-                                <span class="sidebar-mini"> P </span>
-                                <span class="sidebar-normal"> Profesi </span>
+                        <li class="nav-item @yield('barangStatus')">
+                            <a class="nav-link" href="{{route('barang.index')}}">
+                                <span class="sidebar-mini"> B </span>
+                                <span class="sidebar-normal"> Barang </span>
                             </a>
                         </li>
                         <li class="nav-item @yield('userStatus')">
@@ -75,67 +58,27 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> User </span>
                             </a>
                         </li>
-                        <li class="nav-item @yield('berakhirStatus')">
-                            <a class="nav-link" href="{{route('berakhir.index')}}">
-                                <span class="sidebar-mini"> B </span>
-                                <span class="sidebar-normal"> Berakhir </span>
-                            </a>
-                        </li>
-                        <li class="nav-item @yield('ptmouStatus')">
-                            <a class="nav-link" href="{{route('ptmou.index')}}">
-                                <span class="sidebar-mini"> PM </span>
-                                <span class="sidebar-normal"> PT MOU </span>
-                            </a>
-                        </li>
-                        @endif
-                        <li class="nav-item @yield('pejabatStatus')">
-                            <a class="nav-link" href="{{route('pejabat.index')}}">
-                                <span class="sidebar-mini"> P </span>
-                                <span class="sidebar-normal"> Pejabat </span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </li>
-            @endif
-            @if(in_array($role,['SDMK','Bidang']))
-            <li class="nav-item @yield('strStatus') ">
-                <a class="nav-link" href="{{url('/str')}}">
-                    <i class="material-icons">list_alt</i>
-                    <p> Data SIP </p>
+            <li class="nav-item @yield('barangMasukStatus')">
+                <a class="nav-link" href="{{route('barang_masuk.index')}}">
+                    <i class="material-icons">archive</i>
+                    <p> Barang Masuk </p>
                 </a>
             </li>
-            @endif
-            @if($role=="SDMK")
             <li class="nav-item @yield('nakesStatus')">
-                <a class="nav-link" href="{{url('/nakes')}}">
+                <a class="nav-link" href="{{url('/')}}">
                     <i class="material-icons">people</i>
-                    <p> Data Nakes </p>
+                    <p> Transaksi </p>
                 </a>
             </li>
             <li class="nav-item @yield('bioStatus')">
-                <a class="nav-link" href="{{url('/bio')}}">
+                <a class="nav-link" href="{{url('/')}}">
                     <i class="material-icons">account_box</i>
-                    <p> Bio Nakes </p>
+                    <p> Stok </p>
                 </a>
             </li>
-            @endif
-            @if($role=="Saralkes")
-            <li class="nav-item @yield('bioFaskesStatus')">
-                <a class="nav-link" href="{{url('/faskes/0')}}">
-                    <i class="material-icons">home</i>
-                    <p> Bio Faskes </p>
-                </a>
-            </li>
-            @endif
-            @if(in_array($role,['Saralkes','SDMK']))
-            <li class="nav-item @yield('mapFaskesStatus')">
-                <a class="nav-link" href="{{url('/faskes/map')}}">
-                    <i class="material-icons">public</i>
-                    <p> Peta Faskes </p>
-                </a>
-            </li>
-            @endif
             <li class="nav-item @yield('laporanStatus')">
                 <a class="nav-link" href="{{url('/data/laporan')}}">
                     <i class="material-icons">summarize</i>

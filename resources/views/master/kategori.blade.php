@@ -6,7 +6,7 @@ $role = Auth::user()->role;
 @endphp
 
 @section('title')
-Kategori Faskes
+Kategori Barang
 @endsection
 
 @section('masterShow')
@@ -23,7 +23,7 @@ active
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Tambah Kategori Faskes</h4>
+            <h4 class="modal-title">Tambah Kategori Barang</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="material-icons">clear</i>
             </button>
@@ -32,7 +32,7 @@ active
         @csrf
         <div class="modal-body">
             <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama Kategori Faskes</label>
+                <label for="nama" class="bmd-label-floating">Nama Kategori Barang</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
             </div>
         </div>
@@ -51,7 +51,7 @@ active
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Sunting Data Kategori Faskes</h4>
+            <h4 class="modal-title">Sunting Data Kategori Barang</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="material-icons">clear</i>
             </button>
@@ -110,7 +110,7 @@ active
         <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Data Kategori Faskes</h4>
+            <h4 class="card-title">Data Kategori Barang</h4>
           </div>
         </div>
         <div class="card-body">

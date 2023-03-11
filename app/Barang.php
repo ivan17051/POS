@@ -11,7 +11,12 @@ class Barang extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        "idkategori",
         "namabarang",
         "kodebarang",
     ];
+
+    public function getKategori(){
+        return $this->belongsTo(Kategori::class, 'idkategori');
+    }
 }

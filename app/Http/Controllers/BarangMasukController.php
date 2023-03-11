@@ -3,27 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Barang;
-use App\Kategori;
-use Exception;
 use Datatables;
+use App\Barang;
+use App\BarangMasuk;
 
-class BarangController extends Controller
+class BarangMasukController extends Controller
 {
+    //index, create, store, show, edit, update and destroy
     public function index(){
-        $kategori = Kategori::all();
-        return view('master.barang', ['kategori'=>$kategori]);
+        $barang = Barang::get(['id','namabarang']);
+        
+        return view('transaksi.barang_masuk', ['barang'=>$barang]);
     }
 
     public function data(){
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = Barang::with('getKategori');
+        $data = BarangMasuk::with('getBarang');
         $datatable = Datatables::of($data);
         $datatable->rawColumns(['action']);
         
         $datatable->addColumn('action', function ($t) { 
-                return '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
+                return 
+                '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
                 '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
                 '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus(this)"><i class="material-icons">close</i></button>';
             });

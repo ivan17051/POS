@@ -2,58 +2,52 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Master Barang
+Transaksi Barang Masuk
 @endsection
 
-@section('masterShow')
-show
-@endsection
-
-@section('barangStatus')
+@section('barangMasukStatus')
 active
 @endsection
 
 @section('modal')
-@if(isset($kategori))
-<!-- Modal Tambah Barang -->
+<!-- Modal Tambah Barang Masuk -->
 <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog mt-5">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Tambah Barang </h4>
+        <h4 class="modal-title">Tambah Barang Masuk </h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
           <i class="material-icons">clear</i>
         </button>
       </div>
-      <form class="form-horizontal input-margin-additional" method="POST" action="{{route('barang.store')}}">
+      <form class="form-horizontal input-margin-additional" method="POST" action="{{route('barang_masuk.store')}}">
         @csrf
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
+              <select name="idbarang" id="idbarang" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true">
+                <option value="" disabled selected>Pilih Barang</option>
+                @foreach($barang as $unit)
+                <option value="{{$unit->id}}">{{$unit->namabarang}}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-12">
               <div class="form-group">
-                <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="btn btn-primary btn-round">
-                  <option value="" disabled selected>-- Pilih Kategori --</option>
-                  @foreach($kategori as $unit)
-                  <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                  @endforeach
-                </select>
-              </div>
-            </div>  
-            <div class="col-md-12 mt-3">
-              <div class="form-group">
-                <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
-                <input type="text" class="form-control" id="namabarang" name="namabarang" required>
+                <label for="nama" class="bmd-label-floating">QTY</label>
+                <input type="text" class="form-control" id="qty" name="qty" required>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Kode Barang</label>
-                <input type="text" class="form-control" id="kodebarang" name="kodebarang" required>
+                <label for="nama" class="bmd-label-floating">Harga</label>
+                <input type="text" class="form-control" id="harga_satuan" name="harga_satuan" required>
               </div>  
             </div>
+            
           </div>
+          
         </div>
-
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
           <button type="submit" class="btn btn-link text-primary">Simpan</button>
@@ -62,15 +56,15 @@ active
     </div>
   </div>
 </div>
-<!--  End Modal Tambah Barang -->
+<!--  End Modal Tambah Barang Masuk -->
 
-<!-- Modal Sunting Barang -->
+<!-- Modal Sunting Faskes -->
 <div class="modal modal-custom-1 fade" id="sunting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;"
     aria-hidden="true">
     <div class="modal-dialog mt-5">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Sunting Barang</h4>
+                <h4 class="modal-title">Sunting Barang Masuk</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="material-icons">clear</i>
                 </button>
@@ -79,30 +73,6 @@ active
             @csrf
             @method('PUT')
               <div class="modal-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="btn btn-primary btn-round">
-                      <option value="" disabled selected>-- Pilih Kategori --</option>
-                      @foreach($kategori as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>  
-                <div class="col-md-12 mt-3">
-                  <div class="form-group">
-                    <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
-                    <input type="text" class="form-control" id="namabarang" name="namabarang" required>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="nama" class="bmd-label-floating">Kode Barang</label>
-                    <input type="text" class="form-control" id="kodebarang" name="kodebarang" required>
-                  </div>  
-                </div>
-              </div>
                 
               </div>
               <div class="modal-footer">
@@ -113,8 +83,8 @@ active
         </div>
     </div>
 </div>
-<!-- End Modal Sunting Barang -->
-@endif
+<!-- End Modal Sunting Faskes -->
+
 <!-- Modal Hapus -->
 <div class="modal fade modal-mini modal-primary" id="hapus" tabindex="-1" role="dialog" aria-labelledby="myDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-small">
@@ -147,33 +117,15 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Data Barang</h4>
+            <h4 class="card-title">Transaksi Barang Masuk</h4>
           </div>
         </div>
         <div class="card-body">
-          @if(isset($d['kategori']))
-          <div class="filter-tags" data-select="#selectrole" data-tags="#tagsinput" data-col="2">
-              <div class="form-group d-inline-block" style="width: 150px;">
-                  <div class="row">
-                      <div class="col">
-                      <select id="selectrole" class="selectpicker" data-style2="btn-default btn-round btn-sm text-white" data-style="select-with-transition" multiple title="Filter Kategori" data-size="7" data-live-search="true">
-                          <optgroup label="Kategori">
-                            @foreach($d['kategori'] as $unit)
-                              <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                            @endforeach
-                          </optgroup>
-                      </select>
-                      </div>
-                  </div>
-              </div>
-              <div class="h-100 d-inline-block">
-                  <input id="tagsinput" hidden type="text" value="" class="form-control tagsinput" data-role="tagsinput" data-size="md" data-color="primary" data-role="filter">
-              </div>
-          </div>
-          @endif
+          
           <div class="toolbar row">
             <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
-                  data-target="#tambah">Tambah</button></div>
+                data-target="#tambah">Tambah</button></div>
+          
           </div>
           <div class="anim slide" id="table-container">
             <div class="material-datatables">
@@ -208,31 +160,24 @@ active
         
         var $modal = $('#sunting');
         
-        $modal.find('input[name=id]').val(data['id']).change();
-        $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
-        $modal.find('input[name=namabarang]').val(data['namabarang']).change();
-        $modal.find('input[name=kodebarang]').val(data['kodebarang']).change();
-        
-        $('#formedit').attr('action', '{{route("barang.update", ["barang"=>''])}}/'+data['id']);
+        $modal.find('input[name=nib]').val(data['nib']).change();
+        $modal.find('input[name=no_sertif]').val(data['no_sertif']).change();
+        $modal.find('input[name=nama]').val(data['nama']).change();
+        $modal.find('input[name=alamat]').val(data['alamat']).change();
+        $modal.find('select[name=kelurahan]').val(data['kelurahan']+','+data['kecamatan']).change();
+        if(data['kecamatan']) $modal.find('input[name=kecamatan]').val(data['kecamatan']).change();
+        else $modal.find('input[name=kecamatan]').val(" ").change();
+        $modal.find('select[name=idkategori]').val(data['kategori']['id']).change();
+        $modal.find('input[name=coord_x]').val(data['coord_x']).change();
+        $modal.find('input[name=coord_y]').val(data['coord_y']).change();
+
+        $('#formedit').attr('action', '{{route("barang_masuk.update", ["id"=>""])}}/'+data['id']);
         $modal.modal('show')
-    }
-
-    function back() {
-        $('#nakes-container').addClass('hidden')
-        $('#table-container').removeClass('hidden')
-        $('#btnkembali').attr('hidden', true);
-        $('#btntambah').attr('hidden', false);
-
-        if ($.fn.dataTable.isDataTable('#datatables2')) {
-          $('#datatables2').DataTable().clear();
-          $('#datatables2').DataTable().destroy();
-          $('#datatables2').empty();
-        }
     }
 
     function hapus(id){
       $modal=$('#hapus');
-      $modal.find('form').attr('action', "{{route('barang.destroy', ['barang'=>''])}}/"+id);
+      $modal.find('form').attr('action', "{{route('barang_masuk.destroy', ['id'=>''])}}/"+id);
     
       $modal.modal('show');
     }
@@ -252,35 +197,41 @@ active
             responsive: true,
             ajax: {
                 type: "POST",
-                url: '{{route("barang.data")}}',
+                url: '{{route("barang_masuk.data")}}',
                 data: {
                     '_token': @json(csrf_token())
                 }
             },
-            
             columns: [
               { data: 'id', title: 'ID'},
-              { data: 'get_kategori.nama', title: 'Kategori' },
-              { data: 'kodebarang', title: 'Kode Barang' },
-              { data: 'namabarang', title: 'Nama Barang' },
+              { data: 'get_barang.namabarang', title: 'Nama Barang' },
+              { data: 'qty', title: 'QTY' },
+              { data: 'harga_satuan', title: 'Harga Satuan' },
               { data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
-                return '<span class="nav-item dropdown ">' +
-                  '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                  '<i class="material-icons">more_vert</i>' +
-                  '</a>' +
-                  '<div class="dropdown-menu dropdown-menu-left" >' +
-                  '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
-                  '<a class="dropdown-item" href="Barang/'+e+'">Detail</a>' +
-                  '<div class="dropdown-divider"></div>' +
-                  '<a class="dropdown-item" href="#" onclick="hapus('+e+')">Hapus</a>' +
-                  '</div>' +
-                  '</span>'
-              }},
+                  return 
+                    '<span class="nav-item dropdown ">' +
+                    '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                    '<i class="material-icons">more_vert</i>' +
+                    '</a>' +
+                    '<div class="dropdown-menu dropdown-menu-left" >' +
+                    @if(Auth::user()->role=='Saralkes')
+                    '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
+                    '<a class="dropdown-item" href="faskes/'+e+'">Detail</a>' +
+                    @endif
+                    '<a class="dropdown-item" href="#" onclick="daftarNakes(this)">Nakes Terkait</a>' +
+                    @if(Auth::user()->role=='Saralkes')
+                    '<div class="dropdown-divider"></div>' +
+                    '<a class="dropdown-item" href="#" onclick="hapus('+e+')">Hapus</a>' +
+                    @endif
+                    '</div>' +
+                    '</span>'
+                }},
             ],
             columnDefs: [{
                     responsivePriority: 2,
                     targets: 0
-                },{
+                },
+                {
                     orderable: false,
                     responsivePriority: 2,
                     targets: 3
