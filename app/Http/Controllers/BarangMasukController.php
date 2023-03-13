@@ -25,9 +25,9 @@ class BarangMasukController extends Controller
         
         $datatable->addColumn('action', function ($t) { 
                 return 
-                '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
+                // '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
                 '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
-                '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus(this)"><i class="material-icons">close</i></button>';
+                '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
             });
         
         return $datatable->make(true); 
@@ -35,22 +35,23 @@ class BarangMasukController extends Controller
 
     public function store(Request $request){
         try{
-            $barang_baru = new Barang($request->all());
-            $barang_baru->save();
+            $barang_masuk = new BarangMasuk($request->all());
+            // dd($barang_masuk, $request->all());
+            $barang_masuk->save();
         }catch(Exception $exception){
             $this->flashError($exception->getMessage());
             return back();
         }
 
-        $this->flashSuccess('Data Barang Berhasil Ditambahkan');
+        $this->flashSuccess('Barang Masuk Berhasil Ditambahkan');
         return back();
     }
 
     public function update(Request $request, $id){
         try{
-            $barang = Barang::findOrFail($id);
-            $barang->fill($request->all());
-            $barang->save();
+            $barang_masuk = BarangMasuk::findOrFail($id);
+            $barang_masuk->fill($request->all());
+            $barang_masuk->save();
         }catch(Exception $exception){
             $this->flashError($exception->getMessage());
             return back();
@@ -62,14 +63,14 @@ class BarangMasukController extends Controller
 
     public function destroy(Request $request, $id){
         try {
-            $barang = Barang::findOrFail($id);
-            $barang->delete();
+            $barang_masuk = BarangMasuk::findOrFail($id);
+            $barang_masuk->delete();
         }catch (Exception $exception) {
             $this->flashError($exception->getMessage());
             return back();
         }
 
-        $this->flashSuccess('Data Barang Berhasil Dihapus');
+        $this->flashSuccess('Barang Masuk Berhasil Dihapus');
         return back();
     }
 }

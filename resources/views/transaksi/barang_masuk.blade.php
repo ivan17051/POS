@@ -24,7 +24,7 @@ active
         @csrf
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 mb-4">
               <select name="idbarang" id="idbarang" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true">
                 <option value="" disabled selected>Pilih Barang</option>
                 @foreach($barang as $unit)
@@ -32,19 +32,32 @@ active
                 @endforeach
               </select>
             </div>
-            <div class="col-md-12">
+            <!-- <div class="col-md-12 mb-4">
+              <select name="idbarang" id="idbarang" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true">
+                <option value="" disabled selected>Pilih Barang</option>
+                @foreach($barang as $unit)
+                <option value="{{$unit->id}}">{{$unit->namabarang}}</option>
+                @endforeach
+              </select>
+            </div> -->
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="nama" class="bmd-label-floating">QTY</label>
-                <input type="text" class="form-control" id="qty" name="qty" required>
+                <input type="text" class="form-control" id="qty" name="qty" onkeyup="hitungTotal(this)" required>
               </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="nama" class="bmd-label-floating">Harga Satuan</label>
+                <input type="text" class="form-control" id="harga_satuan" name="harga_satuan" onkeyup="hitungTotal(this)" required>
+              </div>  
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Harga</label>
-                <input type="text" class="form-control" id="harga_satuan" name="harga_satuan" required>
+                <label for="nama" class="bmd-label-floating">Total</label>
+                <input type="text" class="form-control" id="total" name="total" required readonly>
               </div>  
             </div>
-            
           </div>
           
         </div>
@@ -73,7 +86,42 @@ active
             @csrf
             @method('PUT')
               <div class="modal-body">
-                
+                <div class="row">
+                  <div class="col-md-12 mb-4">
+                    <select name="idbarang" id="idbarang" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true">
+                      <option value="" disabled selected>Pilih Barang</option>
+                      @foreach($barang as $unit)
+                      <option value="{{$unit->id}}">{{$unit->namabarang}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <!-- <div class="col-md-12 mb-4">
+                    <select name="idbarang" id="idbarang" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true">
+                      <option value="" disabled selected>Pilih Barang</option>
+                      @foreach($barang as $unit)
+                      <option value="{{$unit->id}}">{{$unit->namabarang}}</option>
+                      @endforeach
+                    </select>
+                  </div> -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="nama" class="bmd-label-floating">QTY</label>
+                      <input type="text" class="form-control" id="qty" name="qty" onkeyup="hitungTotal(this)" required>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label for="nama" class="bmd-label-floating">Harga Satuan</label>
+                      <input type="text" class="form-control" id="harga_satuan" name="harga_satuan" onkeyup="hitungTotal(this)" required>
+                    </div>  
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="nama" class="bmd-label-floating">Total</label>
+                      <input type="text" class="form-control" id="total" name="total" required readonly>
+                    </div>  
+                  </div>
+                </div>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default btn-link" data-dismiss="modal">TUTUP</button>
@@ -153,23 +201,17 @@ active
     var oTable;
     var now = moment();
 
-    function sunting(self) {
+    function edit(self) {
         var tr = $(self).closest('tr');
         var data = oTable.row(tr).data();
-        console.log(data);
         
         var $modal = $('#sunting');
         
-        $modal.find('input[name=nib]').val(data['nib']).change();
-        $modal.find('input[name=no_sertif]').val(data['no_sertif']).change();
-        $modal.find('input[name=nama]').val(data['nama']).change();
-        $modal.find('input[name=alamat]').val(data['alamat']).change();
-        $modal.find('select[name=kelurahan]').val(data['kelurahan']+','+data['kecamatan']).change();
-        if(data['kecamatan']) $modal.find('input[name=kecamatan]').val(data['kecamatan']).change();
-        else $modal.find('input[name=kecamatan]').val(" ").change();
-        $modal.find('select[name=idkategori]').val(data['kategori']['id']).change();
-        $modal.find('input[name=coord_x]').val(data['coord_x']).change();
-        $modal.find('input[name=coord_y]').val(data['coord_y']).change();
+        $modal.find('input[name=id]').val(data['id']).change();
+        $modal.find('select[name=idbarang]').val(data['idbarang']).change().blur();
+        $modal.find('input[name=qty]').val(data['qty']).change();
+        $modal.find('input[name=harga_satuan]').val(data['harga_satuan']).change();
+        $modal.find('input[name=total]').val(data['total']).change();
 
         $('#formedit').attr('action', '{{route("barang_masuk.update", ["id"=>""])}}/'+data['id']);
         $modal.modal('show')
@@ -203,42 +245,28 @@ active
                 }
             },
             columns: [
-              { data: 'id', title: 'ID'},
+              { data: 'id', title: 'ID', width:'5%'},
               { data: 'get_barang.namabarang', title: 'Nama Barang' },
-              { data: 'qty', title: 'QTY' },
-              { data: 'harga_satuan', title: 'Harga Satuan' },
-              { data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
-                  return 
-                    '<span class="nav-item dropdown ">' +
-                    '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                    '<i class="material-icons">more_vert</i>' +
-                    '</a>' +
-                    '<div class="dropdown-menu dropdown-menu-left" >' +
-                    @if(Auth::user()->role=='Saralkes')
-                    '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
-                    '<a class="dropdown-item" href="faskes/'+e+'">Detail</a>' +
-                    @endif
-                    '<a class="dropdown-item" href="#" onclick="daftarNakes(this)">Nakes Terkait</a>' +
-                    @if(Auth::user()->role=='Saralkes')
-                    '<div class="dropdown-divider"></div>' +
-                    '<a class="dropdown-item" href="#" onclick="hapus('+e+')">Hapus</a>' +
-                    @endif
-                    '</div>' +
-                    '</span>'
-                }},
+              { data: 'qty', title: 'QTY', width:'10%' },
+              { data: 'harga_satuan', title: 'Harga Satuan', width:'20%', render: function(e,d,r){
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
+              }},
+              { data: 'action', title: 'Aksi', width:'10%', orderable: false },
             ],
-            columnDefs: [{
-                    responsivePriority: 2,
-                    targets: 0
-                },
-                {
-                    orderable: false,
-                    responsivePriority: 2,
-                    targets: 3
-                }
+            columnDefs: [
+              { responsivePriority: 2, targets: 0 },
+              { orderable: false, responsivePriority: 2, targets: 3 },
+              { className: "text-right", targets: 4 }
             ]
             
         });
+    }
+
+    function hitungTotal(e) {
+      var qty = $('#qty').val();
+      var harga = $('#harga_satuan').val();
+      var total = qty*harga;
+      $('#total').val(total).change();
     }
 
     $('select[name=kelurahan]').change(function(){

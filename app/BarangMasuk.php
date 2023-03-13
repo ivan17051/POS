@@ -18,6 +18,6 @@ class BarangMasuk extends Model
     ];
 
     public function getBarang(){
-        return $this->belongsTo(Barang::class, 'idkategori');
+        return $this->belongsTo(Barang::class, 'idbarang');
     }
 }
