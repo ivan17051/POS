@@ -42,9 +42,9 @@ active
             <label class="bmd-label force-top mt-1">Role User <small class="text-danger align-text-top">*wajib</small></label>
             <select id="role" name="role" class="selectpicker form-control" data-size="7" data-style="btn btn-primary btn-round" title="Pilih Role">
                 <option disabled selected>Pilih Role</option>
-                <option>SDMK</option>
-                <option>Saralkes</option>
-                <option>Bidang</option>
+                <option value="admin">Admin</option>
+                <option value="kasir">Kasir</option>
+                <option value="member">Member</option>
             </select>
         </div>
         <div class="modal-footer">
@@ -83,9 +83,9 @@ active
             <label class="bmd-label force-top mt-1">Role User <small class="text-danger align-text-top">*wajib</small></label>
             <select id="role" name="role" class="selectpicker form-control" data-size="7" data-style="btn btn-primary btn-round" title="Pilih Role">
                 <option disabled selected>Pilih Role</option>
-                <option>SDMK</option>
-                <option>Saralkes</option>
-                <option>Bidang</option>
+                <option value="admin">Admin</option>
+                <option value="kasir">Kasir</option>
+                <option value="member">Member</option>
             </select>
         </div>
         <div class="modal-footer">

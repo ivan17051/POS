@@ -41,19 +41,8 @@ class DataController extends Controller
     }
 
     public function laporan(){
-        if(Auth::user()->role=='Bidang'){
-            $d['fasyankes']=Faskes::where('idkategori',1)->get();
-        }
-        else{
-            $d['fasyankes']=Faskes::select('id','nama')->get();
-        }
-        $d['profesi']=Profesi::select('id','nama')->get();
-        $d['profesiman']=SIP::where('isactive',1)->where('saranapraktik','PRAKTIK MANDIRI')
-            ->groupBy('idprofesi','mprofesi.nama')->join('mprofesi','sip.idprofesi','=','mprofesi.id')
-            ->get(['idprofesi as id','mprofesi.nama']);
-        $d['spesialisasi']=Profesi::where('isparent',1)->get();
-
-        return view('laporan', ['d'=>$d]);
+        
+        return view('laporan');
     }
 
     public function downloadLaporan(Request $request){

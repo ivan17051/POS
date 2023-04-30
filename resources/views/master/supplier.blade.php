@@ -6,14 +6,14 @@ $role = Auth::user()->role;
 @endphp
 
 @section('title')
-PT MOU Limbah Medis Pihak ke-3
+Supplier
 @endsection
 
 @section('masterShow')
 show
 @endsection
 
-@section('ptmouStatus')
+@section('supplierStatus')
 active
 @endsection
 
@@ -23,17 +23,29 @@ active
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Tambah PT MOU Limbah Medis Pihak ke-3</h4>
+            <h4 class="modal-title">Tambah Data Supplier</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="material-icons">clear</i>
             </button>
         </div>
-        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('ptmou.store')}}">
+        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('supplier.store')}}">
         @csrf
         <div class="modal-body">
             <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama PT MOU Limbah Medis Pihak ke-3</label>
+                <label for="nama" class="bmd-label-floating">Nama Supplier</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="alamat" class="bmd-label-floating">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat">
+            </div>
+            <div class="form-group">
+                <label for="email" class="bmd-label-floating">Email</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="notelp" class="bmd-label-floating">No. Telepon</label>
+                <input type="text" class="form-control" id="notelp" name="notelp">
             </div>
         </div>
         <div class="modal-footer">
@@ -51,19 +63,31 @@ active
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Sunting Data PT MOU Limbah Medis Pihak ke-3</h4>
+            <h4 class="modal-title">Sunting Data Supplier</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
             <i class="material-icons">clear</i>
             </button>
         </div>
-        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('ptmou.store')}}">
+        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('supplier.store')}}">
         @csrf
         @method('PUT')
         <div class="modal-body">
             <input type="hidden" name="id">
             <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama</label>
+                <label for="nama" class="bmd-label-floating">Nama Supplier</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="alamat" class="bmd-label-floating">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat">
+            </div>
+            <div class="form-group">
+                <label for="email" class="bmd-label-floating">Email</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="notelp" class="bmd-label-floating">No. Telepon</label>
+                <input type="text" class="form-control" id="notelp" name="notelp">
             </div>
         </div>
         <div class="modal-footer">
@@ -110,7 +134,7 @@ active
         <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Data PT MOU Limbah Medis Pihak ke-3</h4>
+            <h4 class="card-title">Data Supplier</h4>
           </div>
         </div>
         <div class="card-body">
@@ -124,7 +148,8 @@ active
                 <tr>
                     <th hidden>id</th>
                     <th data-priority="1">No</th>
-                    <th data-priority="2">Nama PT MOU</th>
+                    <th data-priority="2">Nama Supplier</th>
+                    <th data-priority="3">Email</th>
                     <th data-priority="2" class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </thead>
@@ -132,16 +157,18 @@ active
                 <tr>
                     <th hidden>id</th>
                     <th>No</th>
-                    <th>Nama PT MOU</th>
+                    <th>Nama Supplier</th>
+                    <th>Email</th>
                     <th class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </tfoot>
                 <tbody>
-                @foreach($ptmou as $key=>$unit)
+                @foreach($supplier as $key=>$unit)
                 <tr>
                     <td hidden>{{$unit->id}}</td>
                     <td>{{$key+1}}</td>
                     <td>{{$unit->nama}}</td>
+                    <td>{{$unit->email}}</td>
                     <td class="text-right">
                         <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
                         <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a>
@@ -168,7 +195,7 @@ active
 <script src="{{asset('public/js/plugins/bootstrap-tagsinput.js')}}"></script>
 <script>
 var table;
-var myUsers = @json($ptmou);
+var myUsers = @json($supplier);
 
 //ketika klik edit
 function onEdit(self) {
@@ -179,8 +206,11 @@ function onEdit(self) {
     
     $modal.find('[name=id]').val(j['id']).change();
     $modal.find('[name=nama]').val(j['nama']).change();
+    $modal.find('[name=alamat]').val(j['alamat']).change();
+    $modal.find('[name=email]').val(j['email']).change();
+    $modal.find('[name=notelp]').val(j['notelp']).change();
     
-    $modal.find('form').attr('action', "{{route('ptmou.update', ['id'=>''])}}/"+j['id']);
+    $modal.find('form').attr('action', "{{route('supplier.update', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
@@ -190,7 +220,7 @@ function onDelete(self) {
     var j = myUsers[key];
     $modal=$('#modalDelete');
 
-    $modal.find('form').attr('action', "{{route('ptmou.destroy', ['id'=>''])}}/"+j['id']);
+    $modal.find('form').attr('action', "{{route('supplier.destroy', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 

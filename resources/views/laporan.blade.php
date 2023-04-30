@@ -36,19 +36,10 @@ active
               <div class="row">
                 <label class="col-md-2 col-form-label label-checkbox">Jenis Laporan</label>
                 <div class="col-md-5 checkbox-radios">
-                  @if($role=='Bidang')
+                  
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="3" checked> Data Tenaga Kesehatan di Fasyankes
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  @else
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="1" checked> Data Nakes Teregistrasi/Tersertifikasi
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="1"> Data Barang Masuk
                       <span class="circle">
                         <span class="check"></span>
                       </span>
@@ -56,184 +47,19 @@ active
                   </div>
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="2"> Data Cetak Persetujuan Teknis
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="2"> Laporan Pemasukan
                       <span class="circle">
                         <span class="check"></span>
                       </span>
                     </label>
                   </div>
                   
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="3"> Data Tenaga Kesehatan di Fasyankes
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="4"> Data Nakes per Profesi
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="5"> Data Nakes Praktik Mandiri
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="6"> Data Expiry Nakes 5 Tahunan
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="13"> Data Nakes MOU Limbah Medis dengan Pihak Ke-3
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-5 checkbox-radios">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="7"> Data Nakes per Spesialisasi
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="8"> Laporan 9 Nakes
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="9"> Laporan Jumlah Nakes Per Kategori Faskes
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="10"> Data Nakes Terverifikasi per Periode
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="11"> Data Penambahan Nakes Secara Periodik
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="12"> Data Nakes Praktik Mandiri Per Wilayah
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="14"> Laporan PIH
-                      <span class="circle">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  @endif
                 </div>
               </div>
-              <div class="row" id="faskes" @if($role!='Bidang') hidden @endif>
-                <label class="col-sm-2 col-form-label">Nama Fasyankes</label>
-                <div class="col-sm-10">
-                  <div class="form-group">
-                    <select name="idfaskes" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Fasyankes">
-                      <option value="" disabled selected>Pilih Fasyankes</option>
-                      @foreach($d['fasyankes'] as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row" id="profesi" hidden>
-                <label class="col-sm-2 col-form-label">Profesi</label>
-                <div class="col-sm-10">
-                  <div class="form-group">
-                    <select name="idprofesi" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Profesi">
-                      <option value="" disabled selected>Pilih Profesi</option>
-                      @foreach($d['profesi'] as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row" id="profesiman" hidden>
-                <label class="col-sm-2 col-form-label">Profesi</label>
-                <div class="col-sm-10">
-                  <div class="form-group">
-                    <select name="idprofesiman" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Profesi">
-                      <option value="" disabled selected>Pilih Profesi</option>
-                      <option value="0">Semua Profesi</option>
-                      @foreach($d['profesiman'] as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row" id="spesialisasi" hidden>
-                <label class="col-sm-2 col-form-label">Profesi</label>
-                <div class="col-sm-10">
-                  <div class="form-group">
-                    <select name="idspesialisasi" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Profesi">
-                      <option value="" disabled selected>Pilih Profesi</option>
-                      @foreach($d['spesialisasi'] as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row" id='tanggal' hidden>
-                <label class="col-sm-2 col-form-label">Pilih Range Tanggal</label>
-                <div class="col-sm-5">
-                  <div class="form-group">
-                    <input type="text" name="tglawal" class="form-control monthyearpicker" placeholder="Awal">
-                  </div>
-                </div>
-                <div class="col-sm-5">
-                  <div class="form-group">
-                    <input type="text" name="tglakhir" class="form-control monthyearpicker" placeholder="Akhir">
-                  </div>
-                </div>
-              </div>
+              
               <div class="row text-right mt-3">
                 <div class="col">
-                  <button type="submit" class="btn btn-primary">Lihat</button>
+                  <button type="button" class="btn btn-primary">Lihat</button>
                   <!-- <button type="submit" class="btn btn-success">Download</button>                   -->
                 </div>
               </div>

@@ -3,7 +3,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/apple-icon.png')}}">
   <link rel="icon" type="image/png" href="{{asset('public/img/favicon.png')}}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>SDMK</title>
+  <title>Koperasi POS</title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
   
   <!-- Fonts and icons -->
@@ -19,7 +19,7 @@
   <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
     <div class="container">
       <div class="navbar-wrapper">
-        <a class="navbar-brand" href="javascript:;">SDMK</a>
+        <a class="navbar-brand" href="javascript:;">Koperasi</a>
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
@@ -151,7 +151,7 @@
             &copy;
             <script>
               document.write(new Date().getFullYear())
-            </script>, made with <i class="material-icons">favorite</i> by IT Dinkes Surabaya.
+            </script>, made with <i class="material-icons">favorite</i> by D I A Corp.
             <!-- <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web. -->
           </div>
         </div>

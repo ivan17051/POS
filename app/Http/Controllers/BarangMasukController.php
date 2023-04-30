@@ -6,37 +6,74 @@ use Illuminate\Http\Request;
 use Datatables;
 use App\Barang;
 use App\BarangMasuk;
+use App\BarangMasukDetail;
+use App\Supplier;
 
 class BarangMasukController extends Controller
 {
     //index, create, store, show, edit, update and destroy
     public function index(){
-        $barang = Barang::get(['id','namabarang']);
-        
-        return view('transaksi.barang_masuk', ['barang'=>$barang]);
+        $d['barang'] = Barang::get(['id','namabarang']);
+        $d['supplier'] = Supplier::get(['id','nama']);
+        return view('transaksi.barang_masuk', $d);
     }
 
     public function data(){
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = BarangMasuk::with('getBarang');
+        $data = BarangMasuk::with('getSupplier');
         $datatable = Datatables::of($data);
         $datatable->rawColumns(['action']);
         
         $datatable->addColumn('action', function ($t) { 
                 return 
+                '<span class="nav-item dropdown ">'.
+                '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
+                '<i class="material-icons">more_vert</i>'.
+                '</a>'.
+                '<div class="dropdown-menu dropdown-menu-right" >'.
+                '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>'.
+                '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>'.
+                '<div class="dropdown-divider"></div>'.
+                '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
+                '</div>'.
+                '</span>';
                 // '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
-                '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
-                '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
+                // '<button type="button" class="btn btn-sm btn-info btn-link" style="padding:5px;" onclick="view(this)"><i class="material-icons">visibility</i></button>&nbsp'.
+                // '<button type="button" class="btn btn-sm btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
+                // '<button type="button" class="btn btn-sm btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
             });
         
         return $datatable->make(true); 
     }
 
+    public function detail($nomor){
+        
+        $data = BarangMasukDetail::where('nomor',$nomor)->with('getSupplier:id,nama','getBarang:id,namabarang')->get();
+        return $data; 
+    }
+
     public function store(Request $request){
         try{
+            $jumlah = 0;
             $barang_masuk = new BarangMasuk($request->all());
-            // dd($barang_masuk, $request->all());
+            foreach($request->detail as $unit){
+                $harga = explode("||",$unit);
+                $jumlah += $harga[3];
+                $detail_barang = new BarangMasukDetail([
+                    'tanggal'   => $request->tanggal,
+                    'nomor'     => $request->nomor,
+                    'idsupplier'=> $request->idsupplier,
+                    'idbarang'  => $harga[0],
+                    'qty'       => $harga[1],
+                    'h_sat'     => $harga[2],
+                    'jumlah'    => $harga[3],
+                ]);
+                // dd($detail_barang);
+                $detail_barang->save();
+            }
+            // dd($request->detail, $barang_masuk, $jumlah);
+            $barang_masuk->jumlah = $jumlah;
             $barang_masuk->save();
         }catch(Exception $exception){
             $this->flashError($exception->getMessage());

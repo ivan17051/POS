@@ -11,13 +11,13 @@ class BarangMasuk extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "idbarang",
-        "qty",
-        "harga_satuan",
-        "total",
+        "tanggal",
+        "nomor",
+        "idsupplier",
+        "jumlah",
     ];
 
-    public function getBarang(){
-        return $this->belongsTo(Barang::class, 'idbarang');
+    public function getSupplier(){
+        return $this->belongsTo(Supplier::class, 'idsupplier');
     }
 }

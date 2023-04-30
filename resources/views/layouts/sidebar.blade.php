@@ -10,8 +10,8 @@ $role = Auth::user()->role;
         Tip 2: you can also add an image using data-image tag
         -->
     <div class="logo">
-        <a href="{{url('/')}}" class="simple-text logo-mini">K</a>
-        <a href="{{url('/')}}" class="simple-text logo-normal">SDMK</a>
+        <a href="{{url('/')}}" class="simple-text logo-mini">KP</a>
+        <a href="{{url('/')}}" class="simple-text logo-normal">Koperasi POS</a>
     </div>
     <div class="sidebar-wrapper">
         <div class="user">
@@ -52,6 +52,12 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> Barang </span>
                             </a>
                         </li>
+                        <li class="nav-item @yield('supplierStatus')">
+                            <a class="nav-link" href="{{route('supplier.index')}}">
+                                <span class="sidebar-mini"> S </span>
+                                <span class="sidebar-normal"> Supplier </span>
+                            </a>
+                        </li>
                         <li class="nav-item @yield('userStatus')">
                             <a class="nav-link" href="{{route('user.index')}}">
                                 <span class="sidebar-mini"> U </span>
@@ -61,21 +67,46 @@ $role = Auth::user()->role;
                     </ul>
                 </div>
             </li>
-            <li class="nav-item @yield('barangMasukStatus')">
-                <a class="nav-link" href="{{route('barang_masuk.index')}}">
-                    <i class="material-icons">archive</i>
-                    <p> Barang Masuk </p>
+            <li class="nav-item ">
+                <a class="nav-link" data-toggle="collapse" href="#sidebar-transaksi">
+                    <i class="material-icons">point_of_sale</i>
+                    <p> Transaksi
+                        <b class="caret"></b>
+                    </p>
                 </a>
+                <div class="collapse @yield('transaksiShow')" id="sidebar-transaksi">
+                    <ul class="nav">
+                        <li class="nav-item @yield('barangMasukStatus')">
+                            <a class="nav-link" href="{{route('barang_masuk.index')}}">
+                                <span class="sidebar-mini">BM</span>
+                                <span class="sidebar-normal"> Barang Masuk </span>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item @yield('kategoriStatus')">
+                            <a class="nav-link" href="{{route('kategori.index')}}">
+                                <span class="sidebar-mini">BK</span>
+                                <span class="sidebar-normal"> Barang Keluar </span>
+                            </a>
+                        </li> -->
+                        <li class="nav-item @yield('pembelianStatus')">
+                            <a class="nav-link" href="{{route('barang.pembelian')}}">
+                                <span class="sidebar-mini"> BK </span>
+                                <span class="sidebar-normal"> Barang Keluar </span>
+                            </a>
+                        </li>
+                        <li class="nav-item @yield('userStatus')">
+                            <a class="nav-link" href="{{url('/customer_view')}}">
+                                <span class="sidebar-mini"> T </span>
+                                <span class="sidebar-normal"> Tampilan Pembeli </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <li class="nav-item @yield('nakesStatus')">
-                <a class="nav-link" href="{{url('/')}}">
-                    <i class="material-icons">people</i>
-                    <p> Transaksi </p>
-                </a>
-            </li>
+            
             <li class="nav-item @yield('bioStatus')">
-                <a class="nav-link" href="{{url('/')}}">
-                    <i class="material-icons">account_box</i>
+                <a class="nav-link" href="">
+                    <i class="material-icons">inventory</i>
                     <p> Stok </p>
                 </a>
             </li>
