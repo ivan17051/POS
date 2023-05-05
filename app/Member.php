@@ -4,17 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier extends Model
+class Member extends Model
 {
-    protected $table = 'msupplier';
+    protected $table = 'mmember';
 
     public $timestamps = false;
 
     protected $fillable = [
         "nama",
         "alamat",
-        "email",
         "notelp",
-        "nama_cp",
+        "poin",
     ];
 }

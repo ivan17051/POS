@@ -29,17 +29,23 @@ active
         @csrf
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="form-group">
-                <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="btn btn-primary btn-round">
-                  <option value="" disabled selected>-- Pilih Kategori --</option>
+                <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="select-with-transition" required>
+                  <option value="" disabled selected> Kategori </option>
                   @foreach($kategori as $unit)
                   <option value="{{$unit->id}}">{{$unit->nama}}</option>
                   @endforeach
                 </select>
               </div>
-            </div>  
-            <div class="col-md-12 mt-3">
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="expired" class="bmd-label-floating">Tanggal Expired</label>
+                <input type="date" class="form-control" id="expired" name="expired">
+              </div>  
+            </div>
+            <div class="col-md-12">
               <div class="form-group">
                 <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
                 <input type="text" class="form-control" id="namabarang" name="namabarang" required>
@@ -47,8 +53,27 @@ active
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Kode Barang</label>
+                <label for="nama" class="bmd-label-floating">Kode Barang (Barcode)</label>
                 <input type="text" class="form-control" id="kodebarang" name="kodebarang" required>
+              </div>  
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="harga_1" class="bmd-label-floating">Harga Satuan</label>
+                <input type="text" class="form-control" id="harga_1" name="harga_1" required>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="harga_3" class="bmd-label-floating">Harga 3</label>
+                <input type="text" class="form-control" id="harga_3" name="harga_3" required>
+              </div>  
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="harga_6" class="bmd-label-floating">Harga 6</label>
+                <input type="text" class="form-control" id="harga_6" name="harga_6" required>
               </div>  
             </div>
           </div>
@@ -80,28 +105,53 @@ active
             @method('PUT')
               <div class="modal-body">
               <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="btn btn-primary btn-round">
-                      <option value="" disabled selected>-- Pilih Kategori --</option>
-                      @foreach($kategori as $unit)
-                      <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="select-with-transition" required>
+                    <option value="" disabled selected> Kategori </option>
+                    @foreach($kategori as $unit)
+                    <option value="{{$unit->id}}">{{$unit->nama}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="expired" class="bmd-label-floating">Tanggal Expired</label>
+                  <input type="date" class="form-control" id="expired" name="expired">
                 </div>  
-                <div class="col-md-12 mt-3">
-                  <div class="form-group">
-                    <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
-                    <input type="text" class="form-control" id="namabarang" name="namabarang" required>
-                  </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
+                  <input type="text" class="form-control" id="namabarang" name="namabarang" required>
                 </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="nama" class="bmd-label-floating">Kode Barang</label>
-                    <input type="text" class="form-control" id="kodebarang" name="kodebarang" required>
-                  </div>  
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="nama" class="bmd-label-floating">Kode Barang (Barcode)</label>
+                  <input type="text" class="form-control" id="kodebarang" name="kodebarang" required>
+                </div>  
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="harga_1" class="bmd-label-floating">Harga Satuan</label>
+                  <input type="text" class="form-control" id="harga_1" name="harga_1" required>
                 </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="harga_3" class="bmd-label-floating">Harga 3</label>
+                  <input type="text" class="form-control" id="harga_3" name="harga_3" required>
+                </div>  
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="harga_6" class="bmd-label-floating">Harga 6</label>
+                  <input type="text" class="form-control" id="harga_6" name="harga_6" required>
+                </div>  
+              </div>
               </div>
                 
               </div>
@@ -135,6 +185,25 @@ active
             </button>
         </div>
         </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal Hapus  -->
+<!-- Modal Hapus -->
+<div class="modal fade modal-mini modal-primary" id="view" tabindex="-1" role="dialog" aria-labelledby="myViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-small">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+          </div>
+          <div class="modal-body text-center">
+            <svg id="barcode"></svg>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
+                <div class="ripple-container"></div>
+            </button>
+          </div>
         </div>
     </div>
 </div>
@@ -197,24 +266,45 @@ active
 @endsection
 
 @section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.3/JsBarcode.all.min.js"></script>
 <script>
     var oTable;
     var now = moment();
 
+    function view(self) {
+      var tr = $(self).closest('tr');
+      var data = oTable.row(tr).data();
+      console.log(data);
+      
+      // let text = document.getElementById("text").value;
+      JsBarcode("#barcode", data.kodebarang);
+      
+
+      var $modal = $('#view');
+      
+      // $modal.find('input[name=id]').val(data['id']).change();
+      // $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
+      
+      $modal.modal('show')
+    }
+
     function sunting(self) {
-        var tr = $(self).closest('tr');
-        var data = oTable.row(tr).data();
-        console.log(data);
-        
-        var $modal = $('#sunting');
-        
-        $modal.find('input[name=id]').val(data['id']).change();
-        $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
-        $modal.find('input[name=namabarang]').val(data['namabarang']).change();
-        $modal.find('input[name=kodebarang]').val(data['kodebarang']).change();
-        
-        $('#formedit').attr('action', '{{route("barang.update", ["barang"=>''])}}/'+data['id']);
-        $modal.modal('show')
+      var tr = $(self).closest('tr');
+      var data = oTable.row(tr).data();
+      
+      var $modal = $('#sunting');
+      
+      $modal.find('input[name=id]').val(data['id']).change();
+      $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
+      $modal.find('input[name=namabarang]').val(data['namabarang']).change();
+      $modal.find('input[name=kodebarang]').val(data['kodebarang']).change();
+      $modal.find('input[name=harga_1]').val(data['harga_1']).change();
+      $modal.find('input[name=harga_3]').val(data['harga_3']).change();
+      $modal.find('input[name=harga_6]').val(data['harga_6']).change();
+      $modal.find('input[name=expired]').val(data['expired']).change();
+      
+      $('#formedit').attr('action', '{{route("barang.update", ["barang"=>''])}}/'+data['id']);
+      $modal.modal('show')
     }
 
     function back() {
@@ -270,7 +360,7 @@ active
                   '</a>' +
                   '<div class="dropdown-menu dropdown-menu-left" >' +
                   '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
-                  '<a class="dropdown-item" href="Barang/'+e+'">Detail</a>' +
+                  '<a class="dropdown-item" href="#" onclick="view(this)">Lihat Barcode</a>' +
                   '<div class="dropdown-divider"></div>' +
                   '<a class="dropdown-item" href="#" onclick="hapus('+e+')">Hapus</a>' +
                   '</div>' +

@@ -14,6 +14,10 @@ class Barang extends Model
         "idkategori",
         "namabarang",
         "kodebarang",
+        "expired",
+        "harga_1",
+        "harga_3",
+        "harga_6",
     ];
 
     public function getKategori(){

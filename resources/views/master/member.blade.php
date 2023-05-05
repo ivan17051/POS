@@ -6,14 +6,14 @@ $role = Auth::user()->role;
 @endphp
 
 @section('title')
-Supplier
+Member
 @endsection
 
 @section('masterShow')
 show
 @endsection
 
-@section('supplierStatus')
+@section('memberStatus')
 active
 @endsection
 
@@ -28,24 +28,16 @@ active
             <i class="material-icons">clear</i>
             </button>
         </div>
-        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('supplier.store')}}">
+        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('member.store')}}">
         @csrf
         <div class="modal-body">
             <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama Supplier</label>
+                <label for="nama" class="bmd-label-floating">Nama</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
             </div>
             <div class="form-group">
                 <label for="alamat" class="bmd-label-floating">Alamat</label>
                 <input type="text" class="form-control" id="alamat" name="alamat">
-            </div>
-            <div class="form-group">
-                <label for="nama_cp" class="bmd-label-floating">Nama Contact Person</label>
-                <input type="text" class="form-control" id="nama_cp" name="nama_cp">
-            </div>
-            <div class="form-group">
-                <label for="email" class="bmd-label-floating">Email</label>
-                <input type="email" class="form-control" id="email" name="email">
             </div>
             <div class="form-group">
                 <label for="notelp" class="bmd-label-floating">No. Telepon</label>
@@ -72,26 +64,18 @@ active
             <i class="material-icons">clear</i>
             </button>
         </div>
-        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('supplier.store')}}">
+        <form class="form-horizontal input-margin-additional" method="POST" action="{{route('member.store')}}">
         @csrf
         @method('PUT')
         <div class="modal-body">
             <input type="hidden" name="id">
             <div class="form-group">
-                <label for="nama" class="bmd-label-floating">Nama Supplier</label>
+                <label for="nama" class="bmd-label-floating">Nama</label>
                 <input type="text" class="form-control" id="nama" name="nama" required>
             </div>
             <div class="form-group">
                 <label for="alamat" class="bmd-label-floating">Alamat</label>
                 <input type="text" class="form-control" id="alamat" name="alamat">
-            </div>
-            <div class="form-group">
-                <label for="nama_cp" class="bmd-label-floating">Nama Contact Person</label>
-                <input type="text" class="form-control" id="nama_cp" name="nama_cp">
-            </div>
-            <div class="form-group">
-                <label for="email" class="bmd-label-floating">Email</label>
-                <input type="email" class="form-control" id="email" name="email">
             </div>
             <div class="form-group">
                 <label for="notelp" class="bmd-label-floating">No. Telepon</label>
@@ -142,7 +126,7 @@ active
         <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Data Supplier</h4>
+            <h4 class="card-title">Data Member</h4>
           </div>
         </div>
         <div class="card-body">
@@ -156,8 +140,9 @@ active
                 <tr>
                     <th hidden>id</th>
                     <th data-priority="1">No</th>
-                    <th data-priority="2">Nama Supplier</th>
-                    <th data-priority="3">Email</th>
+                    <th data-priority="2">Nama</th>
+                    <th data-priority="3">Alamat</th>
+                    <th data-priority="3">No Telp</th>
                     <th data-priority="2" class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </thead>
@@ -165,18 +150,20 @@ active
                 <tr>
                     <th hidden>id</th>
                     <th>No</th>
-                    <th>Nama Supplier</th>
-                    <th>Email</th>
+                    <th>Nama</th>
+                    <th>Alamat</th>
+                    <th>No Telp</th>
                     <th class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </tfoot>
                 <tbody>
-                @foreach($supplier as $key=>$unit)
+                @foreach($member as $key=>$unit)
                 <tr>
                     <td hidden>{{$unit->id}}</td>
                     <td>{{$key+1}}</td>
                     <td>{{$unit->nama}}</td>
-                    <td>{{$unit->email}}</td>
+                    <td>{{$unit->alamat}}</td>
+                    <td>{{$unit->notelp}}</td>
                     <td class="text-right">
                         <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
                         <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a>
@@ -203,7 +190,7 @@ active
 <script src="{{asset('public/js/plugins/bootstrap-tagsinput.js')}}"></script>
 <script>
 var table;
-var myUsers = @json($supplier);
+var myUsers = @json($member);
 
 //ketika klik edit
 function onEdit(self) {
@@ -215,11 +202,9 @@ function onEdit(self) {
     $modal.find('[name=id]').val(j['id']).change();
     $modal.find('[name=nama]').val(j['nama']).change();
     $modal.find('[name=alamat]').val(j['alamat']).change();
-    $modal.find('[name=email]').val(j['email']).change();
     $modal.find('[name=notelp]').val(j['notelp']).change();
-    $modal.find('[name=nama_cp]').val(j['nama_cp']).change();
     
-    $modal.find('form').attr('action', "{{route('supplier.update', ['id'=>''])}}/"+j['id']);
+    $modal.find('form').attr('action', "{{route('member.update', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 
@@ -229,7 +214,7 @@ function onDelete(self) {
     var j = myUsers[key];
     $modal=$('#modalDelete');
 
-    $modal.find('form').attr('action', "{{route('supplier.destroy', ['id'=>''])}}/"+j['id']);
+    $modal.find('form').attr('action', "{{route('member.destroy', ['id'=>''])}}/"+j['id']);
     $modal.modal('show');
 } 
 

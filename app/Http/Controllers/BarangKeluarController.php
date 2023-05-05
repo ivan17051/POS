@@ -16,21 +16,13 @@ class BarangKeluarController extends Controller
         return view('transaksi.barang_masuk', ['barang'=>$barang]);
     }
 
-    public function data(){
-        // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
-        // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = BarangMasuk::with('getBarang');
-        $datatable = Datatables::of($data);
-        $datatable->rawColumns(['action']);
-        
-        $datatable->addColumn('action', function ($t) { 
-                return 
-                // '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
-                '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
-                '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
-            });
-        
-        return $datatable->make(true); 
+    public function dataBarang(Request $request){
+        $data=$request->input('query');
+        $data = Barang::where('namabarang', 'like', '%' . strtolower($request->input('query')) . '%')
+            ->orWhere('kodebarang', 'like', '%' . strtolower($request->input('query')) . '%')
+            ->limit(10)
+            ->get();
+        return response()->json($data);
     }
 
     public function store(Request $request){

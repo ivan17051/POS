@@ -58,6 +58,12 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> Supplier </span>
                             </a>
                         </li>
+                        <li class="nav-item @yield('memberStatus')">
+                            <a class="nav-link" href="{{route('member.index')}}">
+                                <span class="sidebar-mini"> M </span>
+                                <span class="sidebar-normal"> Member </span>
+                            </a>
+                        </li>
                         <li class="nav-item @yield('userStatus')">
                             <a class="nav-link" href="{{route('user.index')}}">
                                 <span class="sidebar-mini"> U </span>
@@ -104,8 +110,8 @@ $role = Auth::user()->role;
                 </div>
             </li>
             
-            <li class="nav-item @yield('bioStatus')">
-                <a class="nav-link" href="">
+            <li class="nav-item @yield('stokStatus')">
+                <a class="nav-link" href="{{route('stok.index')}}">
                     <i class="material-icons">inventory</i>
                     <p> Stok </p>
                 </a>

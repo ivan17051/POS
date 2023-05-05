@@ -8,6 +8,8 @@ use App\Barang;
 use App\BarangMasuk;
 use App\BarangMasukDetail;
 use App\Supplier;
+use App\Stok;
+use Illuminate\Support\Facades\DB;
 
 class BarangMasukController extends Controller
 {
@@ -54,6 +56,7 @@ class BarangMasukController extends Controller
     }
 
     public function store(Request $request){
+        DB::beginTransaction();
         try{
             $jumlah = 0;
             $barang_masuk = new BarangMasuk($request->all());
@@ -69,17 +72,31 @@ class BarangMasukController extends Controller
                     'h_sat'     => $harga[2],
                     'jumlah'    => $harga[3],
                 ]);
-                // dd($detail_barang);
+                
+                $stok = Stok::where('idbarang',$harga[0])->where('idsupplier',$request->idsupplier)->first();
+                
+                if(!$stok){
+                    $stok = new Stok([
+                        'idbarang'  => $harga[0],
+                        'idsupplier'=> $request->idsupplier,
+                        'stok'      => $harga[1],
+                    ]);
+                } else {
+                    $stok->stok += $harga[1];
+                }
+                $stok->save();
                 $detail_barang->save();
             }
-            // dd($request->detail, $barang_masuk, $jumlah);
+            
             $barang_masuk->jumlah = $jumlah;
             $barang_masuk->save();
         }catch(Exception $exception){
+            DB::rollBack();
             $this->flashError($exception->getMessage());
             return back();
         }
 
+        DB::commit();
         $this->flashSuccess('Barang Masuk Berhasil Ditambahkan');
         return back();
     }
@@ -99,14 +116,27 @@ class BarangMasukController extends Controller
     }
 
     public function destroy(Request $request, $id){
+        DB::beginTransaction();
         try {
             $barang_masuk = BarangMasuk::findOrFail($id);
+            $detail = BarangMasukDetail::where('nomor',$barang_masuk->nomor)->get();
+            
+            foreach($detail as $unit){
+                $stok = Stok::where('idsupplier',$unit->idsupplier)->where('idbarang',$unit->idbarang)->first();
+                $stok->stok -= $unit->qty;
+                $stok->save();
+
+                $unit->delete();
+            }
+            
             $barang_masuk->delete();
         }catch (Exception $exception) {
+            DB::rollBack();
             $this->flashError($exception->getMessage());
             return back();
         }
 
+        DB::commit();
         $this->flashSuccess('Barang Masuk Berhasil Dihapus');
         return back();
     }

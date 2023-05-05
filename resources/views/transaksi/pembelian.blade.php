@@ -17,38 +17,57 @@ active
 @section('content')
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Barang</h4>
+            <h4 class="card-title">Cari Barang</h4>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="searchbarang">
           
           <div class="toolbar row">
             <!-- <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
                 data-target="#tambah">Tambah</button></div> -->
           
           </div>
-          <div class="anim slide" id="table-container">
-            <div class="material-datatables">
-              <table id="datatables" class="table table-striped table-no-bordered table-hover"
-                width="100%" style="width:100%">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+          <div class="typeahead__container ">
+            <div class="typeahead__field">
+              <div class="form-group typeahead__query">
+                <input class="form-control js-typeahead" name="q" autocomplete="off">
+              </div>
             </div>
           </div>
           
         </div>
         <!--  end card  -->
       </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="tanggal">Tanggal</label>
+            <input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" />
+          </div>
+          <div class="form-group" id="searchmember">
+            <label for="member" class="bmd-label-floating">Member</label>
+            <!-- <input type="text" class="form-control" name="member"/> -->
+            <div class="typeahead__container ">
+              <div class="typeahead__field">
+                <div class="form-group typeahead__query">
+                  <input class="form-control js-typeahead" name="q" autocomplete="off">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="metode" class="bmd-label-floating">Metode Pembayaran</label>
+            <input type="text" class="form-control" id="metode" name="metode">
+          </div>
+        </div>
+      </div>
       <!-- end col-md-12 -->
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <div class="card">
         
         <div class="card-body">
@@ -56,15 +75,46 @@ active
           <div class="toolbar row">
             <!-- <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
                 data-target="#tambah">Tambah</button></div> -->
-          
+            
           </div>
-          
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID</th>
+                <th>Barang</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Dakota Rice</td>
+                  <td>2</td>
+                  <td>$36,738</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Minerva Hooper</td>
+                  <td>5</td>
+                  <td>$23,789</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Sage Rodriguez</td>
+                  <td>1</td>
+                  <td>$56,142</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
           
         </div>
         <!--  end card  -->
       </div>
     </div>
   </div>
+  
 </div>
 @endsection
 
@@ -96,44 +146,67 @@ active
       $modal.modal('show');
     }
 
-    // Datatable
-    function showTable() {
-
-        if ($.fn.dataTable.isDataTable('#datatables')) {
-            $('#datatables').DataTable().clear();
-            $('#datatables').DataTable().destroy();
-            $('#datatables').empty();
-        }
-
-        oTable = $("#datatables").DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: {
-                type: "POST",
-                url: '{{route("barang.dataPembelian")}}',
-                data: {
-                    '_token': @json(csrf_token())
+    $('#searchbarang .js-typeahead').typeahead({
+        input: ".js-typeahead",
+        dynamic: true, 
+        hint: true,
+        order: "asc",
+        display: ["kodebarang", "namabarang"],
+        template: function (query, item) {return '['+item.kodebarang+'] '+item.namabarang},
+        emptyTemplate: "Tidak ditemukan",
+        source: {
+            faskes: {
+                // Ajax Request
+                ajax: function (query) {
+                    return {
+                        type: 'GET',
+                        url: '{{route("data.searchbarang")}}',
+                        data: {'query':query}
+                    }
                 }
-            },
-            columns: [
-              { data: 'id', title: 'ID', visible: false},
-              { data: 'nama', title: 'Nama Barang' },
-              { data: 'get_kategori.nama', title: 'Kategori', visible: false},
-              { data: 'qty', title: 'QTY', width:'10%' },
-              { data: 'harga_satuan', title: 'Harga Satuan', width:'20%', render: function(e,d,r){
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
-              }},
-              { data: 'action', title: 'Aksi', width:'10%', orderable: false },
-            ],
-            columnDefs: [
-              { responsivePriority: 2, targets: 0 },
-              { orderable: false, responsivePriority: 2, targets: 3 },
-              { className: "text-right", targets: 4 }
-            ]
-            
-        });
-    }
+            }
+        },
+        callback: {
+            onClick: function(node, a, item, event){
+               console.log(item);
+
+            }
+        },
+        selector:{
+            result: 'typeahead__result c-typeahead',
+        }
+    });
+
+    $('#searchbarang .js-typeahead').typeahead({
+        input: ".js-typeahead",
+        dynamic: true, 
+        hint: true,
+        order: "asc",
+        display: ["kodebarang", "namabarang"],
+        template: function (query, item) {return '['+item.kodebarang+'] '+item.namabarang},
+        emptyTemplate: "Tidak ditemukan",
+        source: {
+            faskes: {
+                // Ajax Request
+                ajax: function (query) {
+                    return {
+                        type: 'GET',
+                        url: '{{route("data.searchmember")}}',
+                        data: {'query':query}
+                    }
+                }
+            }
+        },
+        callback: {
+            onClick: function(node, a, item, event){
+               console.log(item);
+
+            }
+        },
+        selector:{
+            result: 'typeahead__result c-typeahead',
+        }
+    });
 
     function hitungTotal(e) {
       var qty = $('#qty').val();
