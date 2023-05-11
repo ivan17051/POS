@@ -11,15 +11,20 @@ class BarangKeluar extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        "tanggal",
+        "nomor",
         "idmember",
-        "idbarang",
-        "qty",
-        "harga",
+        "metode",
+        "periode",
+        "jumlah",
         "diskon",
-        "total",
+        "bayar",
     ];
 
     public function getBarang(){
         return $this->belongsTo(Barang::class, 'idbarang');
+    }
+    public function getMember(){
+        return $this->belongsTo(Member::class, 'idmember');
     }
 }

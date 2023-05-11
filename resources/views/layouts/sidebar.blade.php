@@ -88,21 +88,21 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> Barang Masuk </span>
                             </a>
                         </li>
-                        <!-- <li class="nav-item @yield('kategoriStatus')">
-                            <a class="nav-link" href="{{route('kategori.index')}}">
+                        <li class="nav-item @yield('barangKeluarStatus')">
+                            <a class="nav-link" href="{{route('barang_keluar.index')}}">
                                 <span class="sidebar-mini">BK</span>
                                 <span class="sidebar-normal"> Barang Keluar </span>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="nav-item @yield('pembelianStatus')">
                             <a class="nav-link" href="{{route('barang.pembelian')}}">
-                                <span class="sidebar-mini"> BK </span>
-                                <span class="sidebar-normal"> Barang Keluar </span>
+                                <span class="sidebar-mini"> TK </span>
+                                <span class="sidebar-normal"> Tampilan Kasir </span>
                             </a>
                         </li>
                         <li class="nav-item @yield('userStatus')">
                             <a class="nav-link" href="{{url('/customer_view')}}">
-                                <span class="sidebar-mini"> T </span>
+                                <span class="sidebar-mini"> TP </span>
                                 <span class="sidebar-normal"> Tampilan Pembeli </span>
                             </a>
                         </li>

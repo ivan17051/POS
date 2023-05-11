@@ -34,8 +34,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/stok', 'StokController@index')->name('stok.index');
     Route::post('stok/data', 'StokController@data')->name('stok.data');
 
-    Route::get('/pembelian/data', 'BarangKeluarController@dataBarang')->name('data.searchbarang');
+    Route::get('/pembelian/getbarang', 'DataController@getBarang')->name('data.searchbarang');
+    Route::get('/pembelian/getmember', 'DataController@getMember')->name('data.searchmember');
     Route::get('/pembelian', 'BarangKeluarController@pembelian')->name('barang.pembelian');
+    Route::post('/pembelian', 'BarangKeluarController@store')->name('barang_keluar.store');
     
     Route::get('/raw/bio', 'BioNakesController@rawBio')->name('raw.bio');
     Route::get('/raw/historistr', 'BioNakesController@rawHistoristr')->name('raw.historistr');

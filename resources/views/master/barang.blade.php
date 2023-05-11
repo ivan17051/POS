@@ -31,7 +31,7 @@ active
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7" data-style="select-with-transition" required>
+                <select name="idkategori" id="idkategori" class="selectpicker" data-size="7" data-style="select-with-transition" required>
                   <option value="" disabled selected> Kategori </option>
                   @foreach($kategori as $unit)
                   <option value="{{$unit->id}}">{{$unit->nama}}</option>

@@ -6,36 +6,99 @@ use Illuminate\Http\Request;
 use Datatables;
 use App\Barang;
 use App\BarangKeluar;
+use App\BarangKeluarDetail;
+use App\Member;
+use App\Stok;
+use Illuminate\Support\Facades\DB;
 
 class BarangKeluarController extends Controller
 {
     //index, create, store, show, edit, update and destroy
     public function index(){
-        $barang = Barang::get(['id','namabarang']);
-        
-        return view('transaksi.barang_masuk', ['barang'=>$barang]);
+        return view('transaksi.barang_keluar');
     }
 
-    public function dataBarang(Request $request){
-        $data=$request->input('query');
-        $data = Barang::where('namabarang', 'like', '%' . strtolower($request->input('query')) . '%')
-            ->orWhere('kodebarang', 'like', '%' . strtolower($request->input('query')) . '%')
-            ->limit(10)
-            ->get();
-        return response()->json($data);
+    // PEMBELIAN
+    public function pembelian(){
+        return view('transaksi.pembelian');
+    }
+
+    public function data(){
+        // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
+        // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
+        $data = BarangKeluar::with('getMember:id,nama','getBarang:id,namabarang');
+        $datatable = Datatables::of($data);
+        $datatable->rawColumns(['action']);
+        
+        $datatable->addColumn('action', function ($t) { 
+                return 
+                '<span class="nav-item dropdown ">'.
+                '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
+                '<i class="material-icons">more_vert</i>'.
+                '</a>'.
+                '<div class="dropdown-menu dropdown-menu-right" >'.
+                '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>'.
+                '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>'.
+                '<div class="dropdown-divider"></div>'.
+                '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
+                '</div>'.
+                '</span>';
+                
+            });
+        
+        return $datatable->make(true); 
     }
 
     public function store(Request $request){
+        
+        DB::beginTransaction();
         try{
-            $barang_masuk = new BarangMasuk($request->all());
-            // dd($barang_masuk, $request->all());
-            $barang_masuk->save();
+            $jumlah = 0;
+            $max = BarangKeluar::whereNotNull('nomor')->max('nomor');
+            $barang_keluar = new BarangKeluar($request->all());
+            $barang_keluar->tanggal = date('Y-m-d');
+            $barang_keluar->nomor = 'BK'.date('Ymd').'-'.sprintf("%04d", $max+1);
+            $barang_keluar->save();
+            
+            foreach($request->detail as $unit){
+                $harga = explode("||",$unit);
+                $jumlah += $harga[3];
+                $detail_barang = new BarangKeluarDetail([
+                    'idtransaksi'   => $barang_keluar->id,
+                    'tanggal'       => $barang_keluar->tanggal,
+                    'nomor'         => $barang_keluar->nomor,
+                    'idmember'      => $barang_keluar->idmember,
+                    'idbarang'      => $harga[0],
+                    'qty'           => $harga[1],
+                    'h_sat'         => $harga[2],
+                    'jumlah'        => $harga[3],
+                ]);
+                
+                // $stok = Stok::where('idbarang',$harga[0])->orderBy('doc')->get(['id','stok']);
+                // dd($stok, $detail_barang);
+                // if(!$stok){
+                //     $stok = new Stok([
+                //         'idbarang'  => $harga[0],
+                //         'idsupplier'=> $request->idsupplier,
+                //         'stok'      => $harga[1],
+                //     ]);
+                // } else {
+                //     $stok->stok += $harga[1];
+                // }
+                // $stok->save();
+                $detail_barang->save();
+            }
+            
+            $barang_keluar->jumlah = $jumlah;
+            $barang_keluar->save();
         }catch(Exception $exception){
+            DB::rollBack();
             $this->flashError($exception->getMessage());
             return back();
         }
 
-        $this->flashSuccess('Barang Masuk Berhasil Ditambahkan');
+        DB::commit();
+        $this->flashSuccess('Transaksi Berhasil Ditambahkan');
         return back();
     }
 
@@ -66,22 +129,4 @@ class BarangKeluarController extends Controller
         return back();
     }
 
-    // PEMBELIAN
-    public function pembelian(){
-        return view('transaksi.pembelian');
-    }
-
-    public function dataPembelian(){
-        // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
-        // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = Barang::with('getKategori');
-        $datatable = Datatables::of($data);
-        $datatable->rawColumns(['action']);
-        
-        $datatable->addColumn('action', function ($t) { 
-                return '<button type="button" class="btn btn-info btn-link" style="padding:5px;" onclick="hapus(this)"><i class="material-icons">add_circle</i></button>';
-            });
-        
-        return $datatable->make(true); 
-    }
 }

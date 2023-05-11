@@ -2,7 +2,7 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Pembelian
+Tampilan Kasir
 @endsection
 
 @section('transaksiShow')
@@ -16,12 +16,14 @@ active
 
 @section('content')
 <div class="container-fluid">
+  <form action="{{route('barang_keluar.store')}}" method="POST">
+  @csrf
   <div class="row">
     <div class="col-md-6">
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Cari Barang</h4>
+            <h4 class="card-title">Barang</h4>
           </div>
         </div>
         <div class="card-body" id="searchbarang">
@@ -31,81 +33,120 @@ active
                 data-target="#tambah">Tambah</button></div> -->
           
           </div>
-          <div class="typeahead__container ">
-            <div class="typeahead__field">
-              <div class="form-group typeahead__query">
-                <input class="form-control js-typeahead" name="q" autocomplete="off">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="typeahead__container ">
+                <div class="typeahead__field">
+                  <div class="form-group typeahead__query">
+                    <input type="text" class="form-control" id="qty" placeholder="Qty">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="typeahead__container ">
+                <div class="typeahead__field">
+                  <div class="form-group typeahead__query">
+                    <input class="form-control js-typeahead" name="q" id="querybarang" autocomplete="off" onclick="$('#searchbarang .js-typeahead').val('');" placeholder="Cari Barang">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          
           
         </div>
         <!--  end card  -->
       </div>
       <div class="card">
-        <div class="card-body">
-          <div class="form-group">
-            <label for="tanggal">Tanggal</label>
-            <input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" />
+        <div class="card-header card-header-tabs card-header-primary">
+          <div class="subtitle-wrapper">
+            <h4 class="card-title">Checkout</h4>
           </div>
-          <div class="form-group" id="searchmember">
-            <label for="member" class="bmd-label-floating">Member</label>
-            <!-- <input type="text" class="form-control" name="member"/> -->
-            <div class="typeahead__container ">
-              <div class="typeahead__field">
-                <div class="form-group typeahead__query">
-                  <input class="form-control js-typeahead" name="q" autocomplete="off">
-                </div>
-              </div>
+        </div>
+        <div class="card-body row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <!-- <label for="metode" class="bmd-label-floating">Metode Pembayaran</label> -->
+              <!-- <input type="text" class="form-control" id="metode" name="metode"> -->
+              <select class="selectpicker" name="metode" data-style="select-with-transition" required onchange="show(this)">
+                <option value="" selected disabled>Metode Pembayaran</option>  
+                <option value="cash">Cash</option>
+                <option value="kredit">Kredit</option>
+              </select>
+            </div>
+            
+          </div>
+          <div class="col-md-6" id="showPeriode" hidden>
+            <div class="form-group">
+              <!-- Periode muncul jika metode = kredit -->
+              <!-- <label for="periode" class="bmd-label-floating">Periode Kredit</label> -->
+              <select class="selectpicker" name="periode" data-style="select-with-transition" >
+                <option value="" selected disabled>Periode Kredit</option>
+                <option value="1">1 Bulan</option>
+                <option value="2">2 Bulan</option>
+                <option value="3">3 Bulan</option>
+              </select>
             </div>
           </div>
-          <div class="form-group">
-            <label for="metode" class="bmd-label-floating">Metode Pembayaran</label>
-            <input type="text" class="form-control" id="metode" name="metode">
+          <div class="col-md-6" id="showBayar" hidden>
+            <div class="form-group">
+              <label for="bayar" class="bmd-label-floating">Uang Dibayarkan</label>
+              <input type="text" class="form-control" name="bayar" onkeyup="hitungKembali(this)"/>
+            </div>
           </div>
+          <div class="col-md-12" id="showKembali" hidden>
+            <div class="form-group">
+              <label for="kembali" class="bmd-label-floating">Uang Kembali</label>
+              <input type="text" class="form-control" name="kembali" readonly/>
+            </div>
+          </div>
+          
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary">Konfirmasi</button>
         </div>
       </div>
       <!-- end col-md-12 -->
     </div>
+    
     <div class="col-md-6">
       <div class="card">
-        
         <div class="card-body">
-          
           <div class="toolbar row">
             <!-- <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
                 data-target="#tambah">Tambah</button></div> -->
-            
+            <div class="col-md-12" id="showMember">
+              <div class="form-group" id="searchmember">
+                <div class="typeahead__container ">
+                  <div class="typeahead__field">
+                    <div class="form-group typeahead__query">
+                      <input class="form-control js-typeahead" name="member" autocomplete="off" placeholder="Cari Member">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
           </div>
           <div class="table-responsive">
             <table class="table">
               <thead class=" text-primary">
-                <th>ID</th>
-                <th>Barang</th>
+                <th>Barang</th>  
                 <th>Qty</th>
+                <th>Harga</th>
                 <th>Subtotal</th>
+                <th> </th>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Dakota Rice</td>
-                  <td>2</td>
-                  <td>$36,738</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Minerva Hooper</td>
-                  <td>5</td>
-                  <td>$23,789</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Sage Rodriguez</td>
-                  <td>1</td>
-                  <td>$56,142</td>
-                </tr>
+              <tbody id="detailBrg">
                 
               </tbody>
+              <tfoot class=" text-secondary" style="font-size:20px;">
+                <th colspan="3">Total</th>  
+                <th id="total">Rp 0</th>
+                <input type="hidden" id="jumlah" name="jumlah">
+                <th> </th>
+              </tfoot>
             </table>
           </div>
           
@@ -114,30 +155,15 @@ active
       </div>
     </div>
   </div>
-  
+  </form>
 </div>
 @endsection
 
 @section('script')
 <script>
-    var oTable;
+    
     var now = moment();
-
-    function edit(self) {
-        var tr = $(self).closest('tr');
-        var data = oTable.row(tr).data();
-        
-        var $modal = $('#sunting');
-        
-        $modal.find('input[name=id]').val(data['id']).change();
-        $modal.find('select[name=idbarang]').val(data['idbarang']).change().blur();
-        $modal.find('input[name=qty]').val(data['qty']).change();
-        $modal.find('input[name=harga_satuan]').val(data['harga_satuan']).change();
-        $modal.find('input[name=total]').val(data['total']).change();
-
-        $('#formedit').attr('action', '{{route("barang_masuk.update", ["id"=>""])}}/'+data['id']);
-        $modal.modal('show')
-    }
+    var total = 0;
 
     function hapus(id){
       $modal=$('#hapus');
@@ -146,6 +172,43 @@ active
       $modal.modal('show');
     }
 
+    function kurangiTotal(jumlah){
+      total = total - jumlah;
+      $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+      $('#jumlah').val(total);
+    }
+
+    function hitungKembali(e){
+      $('input[name=kembali]').val(e.value-total).change();
+    }
+
+    function show(con){
+      if(con.value=='kredit'){
+        $('#showPeriode').attr('hidden', false);
+        $('input[name=periode]').attr('required', true);
+        $('#showBayar').attr('hidden', true);
+        $('input[name=bayar]').attr('required', false);
+        $('#showKembali').attr('hidden', true);
+      } else if(con.value=='cash') {
+        $('#showPeriode').attr('hidden', true);
+        $('input[name=periode]').attr('required', false);
+        $('#showBayar').attr('hidden', false);
+        $('input[name=bayar]').attr('required', true);
+        $('#showKembali').attr('hidden', false);
+      } else {
+        $('#showPeriode').attr('hidden', true);
+        $('input[name=periode]').attr('required', false);
+        $('#showBayar').attr('hidden', true);
+        $('input[name=bayar]').attr('required', false);
+        $('#showKembali').attr('hidden', true);
+      }
+    }
+
+    function closeMember(){
+      $('#searchmember .js-typeahead').val('').change();
+      $('#searchmember').show();
+    }
+    
     $('#searchbarang .js-typeahead').typeahead({
         input: ".js-typeahead",
         dynamic: true, 
@@ -167,23 +230,49 @@ active
             }
         },
         callback: {
-            onClick: function(node, a, item, event){
-               console.log(item);
+          onClick: function(node, a, item, event){
+            
+            var qty = $('#qty').val();
+            var h_sat = 0;
 
-            }
+            if(!qty) qty = 1;
+            if(qty >= 6) h_sat = item.harga_6;
+            else if(qty >= 3) h_sat = item.harga_3;
+            else h_sat = item.harga_1;
+
+            var jumlah = qty * h_sat;
+            total = total + jumlah;
+            $('#detailBrg').append(
+              '<tr>'+
+              '<input type="hidden" readonly name="detail[]" value="' + item.id + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+              '<td>' + item.namabarang + '</td>' +
+              '<td>' + qty + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>' +
+              '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove();kurangiTotal(' + jumlah + ')">' +
+              '<span class="material-icons">close</span>' +
+              '</button></td></tr>'
+            );
+            
+            $('#searchbarang .js-typeahead').val('').change();
+            $('#qty').val('');
+            $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+            $('#jumlah').val(total);
+          }          
+          
         },
         selector:{
             result: 'typeahead__result c-typeahead',
         }
     });
 
-    $('#searchbarang .js-typeahead').typeahead({
+    $('#searchmember .js-typeahead').typeahead({
         input: ".js-typeahead",
         dynamic: true, 
         hint: true,
         order: "asc",
-        display: ["kodebarang", "namabarang"],
-        template: function (query, item) {return '['+item.kodebarang+'] '+item.namabarang},
+        display: ["nama","alamat"],
+        template: function (query, item) {return item.nama+' ('+item.alamat+')'},
         emptyTemplate: "Tidak ditemukan",
         source: {
             faskes: {
@@ -199,8 +288,21 @@ active
         },
         callback: {
             onClick: function(node, a, item, event){
-               console.log(item);
-
+              
+              $('#showMember').append(
+                '<div class="alert alert-primary">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeMember()">' +
+                '<i class="material-icons">close</i>' +
+                '</button>' +
+                '<span><b style="font-size:18px;">'+ item.nama +'</b></span>' +
+                '<span>'+ item.alamat +'</span>' +
+                '<input type="hidden" name="idmember" value="'+ item.id +'">' +
+                '</div>'
+              );
+              
+              $('#searchbarang .js-typeahead').val('').change();
+              $('#searchmember').hide();
+              // $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
             }
         },
         selector:{
@@ -208,24 +310,14 @@ active
         }
     });
 
-    function hitungTotal(e) {
-      var qty = $('#qty').val();
-      var harga = $('#harga_satuan').val();
-      var total = qty*harga;
-      $('#total').val(total).change();
-    }
-
-    $('select[name=kelurahan]').change(function(){
-      var nama_kel = $(this).val();
-      if(nama_kel){
-        var kecamatan = nama_kel.split(",");
-        $('input[name=kecamatan]').val(kecamatan[1]).change();
-      }
-    });
 
     $(document).ready(function () {
-        showTable();
-        $('input[name=kecamatan]').val(" ").change();
+        
+        $('select[name=metode]').val("").change();
+        show('');
+        $('select[name=periode]').val("").change();
+        $('input[name=bayar]').val("").change();
+        $('input[name=kembali]').val("").change();
 
         //event pada tags filter
         $(".filter-tags").each(function(){

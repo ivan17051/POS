@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BarangMasukDetail extends Model
+class BarangKeluarDetail extends Model
 {
-    protected $table = 'barang_masuk_detail';
+    protected $table = 'barang_keluar_detail';
 
     public $timestamps = false;
 
@@ -14,7 +14,6 @@ class BarangMasukDetail extends Model
         "idtransaksi",
         "tanggal",
         "nomor",
-        "idsupplier",
         "idmember",
         "idbarang",
         "qty",

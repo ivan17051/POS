@@ -169,7 +169,7 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Transaksi Barang Masuk</h4>
+            <h4 class="card-title">Transaksi Barang Keluar</h4>
           </div>
         </div>
         <div class="card-body">

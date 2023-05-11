@@ -60,17 +60,20 @@ class BarangMasukController extends Controller
         try{
             $jumlah = 0;
             $barang_masuk = new BarangMasuk($request->all());
+            $barang_masuk->save();
+            
             foreach($request->detail as $unit){
                 $harga = explode("||",$unit);
                 $jumlah += $harga[3];
                 $detail_barang = new BarangMasukDetail([
-                    'tanggal'   => $request->tanggal,
-                    'nomor'     => $request->nomor,
-                    'idsupplier'=> $request->idsupplier,
-                    'idbarang'  => $harga[0],
-                    'qty'       => $harga[1],
-                    'h_sat'     => $harga[2],
-                    'jumlah'    => $harga[3],
+                    'idtransaksi'   => $barang_masuk->id,
+                    'tanggal'       => $barang_masuk->tanggal,
+                    'nomor'         => $barang_masuk->nomor,
+                    'idsupplier'    => $barang_masuk->idsupplier,
+                    'idbarang'      => $harga[0],
+                    'qty'           => $harga[1],
+                    'h_sat'         => $harga[2],
+                    'jumlah'        => $harga[3],
                 ]);
                 
                 $stok = Stok::where('idbarang',$harga[0])->where('idsupplier',$request->idsupplier)->first();

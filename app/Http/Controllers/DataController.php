@@ -4,37 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Spesialisasi;
-use App\Pegawai;
-use App\Faskes;
-use App\Profesi;
-use App\SIP;
-use App\STR;
-use App\Surket;
+use App\Barang;
+use App\Member;
 use DB;
 use Datatables;
 use Validator;
 
 class DataController extends Controller
 {
-    public function getSpesialisasi($idprofesi){
-        $spesialisasi = Spesialisasi::where('idprofesi',$idprofesi)->get();
-        return response()->json($spesialisasi, 200);
-    }
-
-    public function searchFaskes(Request $request){
+    
+    public function getBarang(Request $request){
         $data=$request->input('query');
-        $data = Faskes::where('nama', 'like', '%' . strtolower($request->input('query')) . '%')
-            ->orWhere('alamat', 'like', '%' . strtolower($request->input('query')) . '%')
+        $data = Barang::where('namabarang', 'like', '%' . strtolower($request->input('query')) . '%')
+            ->orWhere('kodebarang', 'like', '%' . strtolower($request->input('query')) . '%')
             ->limit(10)
             ->get();
         return response()->json($data);
     }
 
-    public function searchPegawai(Request $request){
+    public function getMember(Request $request){
         $data=$request->input('query');
-        $data = Pegawai::where('nama', 'like', '%' . strtolower($request->input('query')) . '%')
-            ->orWhere('nip', 'like', '%' . strtolower($request->input('query')) . '%')
+        $data = Member::where('nama', 'like', '%' . strtolower($request->input('query')) . '%')
+            ->orWhere('alamat', 'like', '%' . strtolower($request->input('query')) . '%')
+            ->orWhere('notelp', 'like', '%' . strtolower($request->input('query')) . '%')
             ->limit(5)
             ->get();
         return response()->json($data);
