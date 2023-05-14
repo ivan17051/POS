@@ -82,9 +82,11 @@ class BarangMasukController extends Controller
                     $stok = new Stok([
                         'idbarang'  => $harga[0],
                         'idsupplier'=> $request->idsupplier,
+                        'qtyin'     => $harga[1],
                         'stok'      => $harga[1],
                     ]);
                 } else {
+                    $stok->qtyin += $harga[1];
                     $stok->stok += $harga[1];
                 }
                 $stok->save();
@@ -126,6 +128,7 @@ class BarangMasukController extends Controller
             
             foreach($detail as $unit){
                 $stok = Stok::where('idsupplier',$unit->idsupplier)->where('idbarang',$unit->idbarang)->first();
+                $stok->qtyin -= $unit->qty;
                 $stok->stok -= $unit->qty;
                 $stok->save();
 

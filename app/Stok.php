@@ -13,6 +13,8 @@ class Stok extends Model
     protected $fillable = [
         "idbarang",
         "idsupplier",
+        "qtyin",
+        "qtyout",
         "stok",
     ];
 
