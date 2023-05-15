@@ -29,8 +29,8 @@ active
         <div class="card card-stats bg-warning">
           <div class="card-header card-header-warning card-header-icon pt-3 pb-3">
             <span class="float-left"><i class="material-icons">group</i></span>
-            <p class="card-category text-white "><strong>Akan Expired</strong></p>
-            <h3 class="card-title text-white font-weight-bold"><strong>120</strong></h3>
+            <p class="card-category text-white "><strong>Transaksi Masuk</strong></p>
+            <h3 class="card-title text-white font-weight-bold"><strong>{{$brg_msk}}</strong></h3>
           </div>
         </div>
       </div>
@@ -38,8 +38,8 @@ active
         <div class="card card-stats bg-danger">
           <div class="card-header card-header-warning card-header-icon pt-3 pb-3">
             <span class="float-left"><i class="material-icons">group_off</i></span>
-            <p class="card-category text-white "><strong>Expired</strong></p>
-            <h3 class="card-title text-white font-weight-bold"><strong>120</strong></h3>
+            <p class="card-category text-white "><strong>Transaksi Keluar</strong></p>
+            <h3 class="card-title text-white font-weight-bold"><strong>{{$brg_kel}}</strong></h3>
           </div>
         </div>
       </div>

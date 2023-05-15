@@ -9,6 +9,7 @@ use App\BarangKeluar;
 use App\BarangKeluarDetail;
 use App\Member;
 use App\Stok;
+use App\Pengaturan;
 use Illuminate\Support\Facades\DB;
 
 class BarangKeluarController extends Controller
@@ -61,7 +62,7 @@ class BarangKeluarController extends Controller
             $jumlah = 0;
             $nomorMax = BarangKeluar::whereNotNull('nomor')->orderBy('doc','desc')->first(['nomor']);
             $nomorMax = explode('-',$nomorMax->nomor);
-            // dd(date('Ymd'),trim($nomorMax[0],'BK'));
+            
             if(trim($nomorMax[0],'BK') == date('Ymd')) {
                 $max = base_convert($nomorMax[1],10,10);
             }
@@ -69,7 +70,6 @@ class BarangKeluarController extends Controller
                 $max = 1;
             }
             
-            // dd($nomorMax, $max);
             $barang_keluar = new BarangKeluar($request->all());
             $barang_keluar->tanggal = date('Y-m-d');
             $barang_keluar->nomor = 'BK'.date('Ymd').'-'.sprintf("%04d", $max+1);
@@ -125,7 +125,14 @@ class BarangKeluarController extends Controller
                 
                 $detail_barang->save();
             }
-            
+            if(isset($request->idmember)){
+                $member = Member::findOrFail($request->idmember);
+                $syarat = Pengaturan::where('key','min_belanja')->first();
+                $hitung = $request->jumlah/$syarat->value;
+                $member->poin += floor($hitung);
+                $member->save();
+            }
+
             $barang_keluar->jumlah = $jumlah;
             $barang_keluar->save();
         }catch(Exception $exception){

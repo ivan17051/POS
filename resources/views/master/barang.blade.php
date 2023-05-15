@@ -203,6 +203,8 @@ active
             <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
                 <div class="ripple-container"></div>
             </button>
+            <button type="button" class="btn btn-outline-primary">Cetak</button><div class="ripple-container"></div>
+            </button>
           </div>
         </div>
     </div>

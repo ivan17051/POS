@@ -28,21 +28,26 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('supplier', SupplierController::class)->except('show');
 
     Route::post('/barang/data', 'BarangController@data')->name('barang.data');
+    
     Route::post('/barang_masuk/data', 'BarangMasukController@data')->name('barang_masuk.data');
     Route::get('/barang_masuk/detail/{nomor}', 'BarangMasukController@detail')->name('barang_masuk.detail');
+    
     Route::post('/barang_keluar/data', 'BarangKeluarController@data')->name('barang_keluar.data');
     Route::get('/barang_keluar/detail/{id}', 'BarangKeluarController@detail')->name('barang_keluar.detail');
-
-    Route::get('/stok', 'StokController@index')->name('stok.index');
-    Route::post('stok/data', 'StokController@data')->name('stok.data');
 
     Route::get('/pembelian/getbarang', 'DataController@getBarang')->name('data.searchbarang');
     Route::get('/pembelian/getmember', 'DataController@getMember')->name('data.searchmember');
     Route::get('/pembelian', 'BarangKeluarController@pembelian')->name('barang.pembelian');
     Route::post('/pembelian', 'BarangKeluarController@store')->name('barang_keluar.store');
     
+    Route::get('/stok', 'StokController@index')->name('stok.index');
+    Route::post('stok/data', 'StokController@data')->name('stok.data');
+
     Route::get('/data/laporan', 'DataController@laporan');
     Route::post('/data/laporan', 'DataController@downloadLaporan')->name('data.download');
+
+    Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
+    Route::post('/pengaturan', 'PengaturanController@store')->name('pengaturan.store');
 
     Route::get('/cetak/perstek/{idsip}', 'CetakController@perstek')->name('cetak.perstek');
     Route::get('/cetak/kitir/{idsip}', 'CetakController@kitir')->name('cetak.kitir');

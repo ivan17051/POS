@@ -26,7 +26,7 @@ $role = Auth::user()->role;
         </div>
         <ul class="nav">
             <li class="nav-item @yield('dashboardStatus') ">
-                <a class="nav-link" href="{{url('/dashboard')}}">
+                <a class="nav-link" href="{{url('/')}}">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                 </a>
@@ -120,6 +120,12 @@ $role = Auth::user()->role;
                 <a class="nav-link" href="{{url('/data/laporan')}}">
                     <i class="material-icons">summarize</i>
                     <p> Laporan </p>
+                </a>
+            </li>
+            <li class="nav-item @yield('pengaturanStatus')">
+                <a class="nav-link" href="{{url('/pengaturan')}}">
+                    <i class="material-icons">settings</i>
+                    <p> Pengaturan </p>
                 </a>
             </li>
         </ul>

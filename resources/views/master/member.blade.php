@@ -143,6 +143,7 @@ active
                     <th data-priority="2">Nama</th>
                     <th data-priority="3">Alamat</th>
                     <th data-priority="3">No Telp</th>
+                    <th data-priority="2">Poin</th>
                     <th data-priority="2" class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </thead>
@@ -153,6 +154,7 @@ active
                     <th>Nama</th>
                     <th>Alamat</th>
                     <th>No Telp</th>
+                    <th>Poin</th>
                     <th class="disabled-sorting text-right">Actions</th>
                 </tr>
                 </tfoot>
@@ -164,6 +166,7 @@ active
                     <td>{{$unit->nama}}</td>
                     <td>{{$unit->alamat}}</td>
                     <td>{{$unit->notelp}}</td>
+                    <td>{{$unit->poin}}</td>
                     <td class="text-right">
                         <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
                         <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a>
