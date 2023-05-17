@@ -189,7 +189,7 @@ active
     </div>
 </div>
 <!--  End Modal Hapus  -->
-<!-- Modal Hapus -->
+<!-- Modal View Barcode -->
 <div class="modal fade modal-mini modal-primary" id="view" tabindex="-1" role="dialog" aria-labelledby="myViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-small">
         <div class="modal-content">
@@ -203,13 +203,13 @@ active
             <button type="button" class="btn btn-link" data-dismiss="modal">Tutup</button>
                 <div class="ripple-container"></div>
             </button>
-            <button type="button" class="btn btn-outline-primary">Cetak</button><div class="ripple-container"></div>
-            </button>
+            <a href="" type="button" class="btn btn-outline-primary" id="btnCetak" target="_blank" rel="noreferrer noopener">Cetak</a>
+            
           </div>
         </div>
     </div>
 </div>
-<!--  End Modal Hapus  -->
+<!--  End Modal View Barcode  -->
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -276,14 +276,11 @@ active
     function view(self) {
       var tr = $(self).closest('tr');
       var data = oTable.row(tr).data();
-      console.log(data);
       
-      // let text = document.getElementById("text").value;
       JsBarcode("#barcode", data.kodebarang);
-      
 
       var $modal = $('#view');
-      
+      $('#btnCetak').attr('href','{{route("cetak.barcode",["kode"=>""])}}/'+data.kodebarang);
       // $modal.find('input[name=id]').val(data['id']).change();
       // $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
       

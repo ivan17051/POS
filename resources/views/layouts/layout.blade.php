@@ -9,7 +9,7 @@ $role = explode(', ', $role);
 
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/apple-icon.png')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/favicon.png')}}">
     <link rel="icon" type="image/png" href="{{asset('public/img/favicon.png')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Koperasi POS | @yield('title')</title>

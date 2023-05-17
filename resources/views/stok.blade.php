@@ -106,12 +106,15 @@ active
         { data: 'id', title: 'ID' }, 
         { data: 'get_barang.namabarang', title: 'Barang' },
         { data: 'get_supplier.nama', title: 'Supplier' },
+        { data: 'qtyin', title: 'Qty In' },
+        { data: 'qtyout', title: 'Qty Out' },
         { data: 'stok', title: 'Stok' },
         
       ],
       columnDefs: [
         { responsivePriority: 2, targets: 0 },
-        { orderable: false, responsivePriority: 2, targets: 3 }
+        { orderable: false, searchable: false, targets: 1 },
+        { orderable: false, searchable: false, targets: 2 },
       ]
 
   });

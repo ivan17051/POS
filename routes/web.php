@@ -49,8 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
     Route::post('/pengaturan', 'PengaturanController@store')->name('pengaturan.store');
 
-    Route::get('/cetak/perstek/{idsip}', 'CetakController@perstek')->name('cetak.perstek');
-    Route::get('/cetak/kitir/{idsip}', 'CetakController@kitir')->name('cetak.kitir');
+    Route::get('/cetak/barcode/{kode}', 'CetakController@barcode')->name('cetak.barcode');
     
     Route::get('/customer_view', function(){
         return view('transaksi.customer_view');

@@ -11,6 +11,10 @@ use App\Surket;
 
 class CetakController extends Controller
 {
+    public function barcode($kode){
+        return view('report.barcode', ['kode'=>$kode]);
+    }
+
     public function perstek(Request $request, $idsip){
         $d['sip'] = SIP::where('id',$idsip)->with('pegawai')->first();
         $d['aturan'] = $this->dasarPeraturanPerstek($d['sip']->idprofesi);

@@ -161,7 +161,7 @@ active
 
 @section('script')
 <script>
-    
+    const channel = new BroadcastChannel('cashier');
     var now = moment();
     var total = 0;
 
@@ -206,6 +206,7 @@ active
 
     function closeMember(){
       $('#searchmember .js-typeahead').val('').change();
+      channel.postMessage('removemember||');
       $('#searchmember').show();
     }
     
@@ -242,18 +243,20 @@ active
 
             var jumlah = qty * h_sat;
             total = total + jumlah;
-            $('#detailBrg').append(
-              '<tr>'+
-              '<input type="hidden" readonly name="detail[]" value="' + item.id + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
-              '<td>' + item.namabarang + '</td>' +
+            var cmd = '<td>' + item.namabarang + '</td>' +
               '<td>' + qty + '</td>' +
               '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>';
+            
+              $('#detailBrg').append(
+              '<tr>'+
+              '<input type="hidden" readonly name="detail[]" value="' + item.id + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+              cmd +
               '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove();kurangiTotal(' + jumlah + ')">' +
               '<span class="material-icons">close</span>' +
               '</button></td></tr>'
             );
-            
+            channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
             $('#searchbarang .js-typeahead').val('').change();
             $('#qty').val('');
             $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
@@ -299,7 +302,7 @@ active
                 '<input type="hidden" name="idmember" value="'+ item.id +'">' +
                 '</div>'
               );
-              
+              channel.postMessage('addmember||'+item.nama+'||'+item.alamat+'||'+item.poin);
               $('#searchbarang .js-typeahead').val('').change();
               $('#searchmember').hide();
               // $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
@@ -312,51 +315,56 @@ active
 
 
     $(document).ready(function () {
-        
-        $('select[name=metode]').val("").change();
-        show('');
-        $('select[name=periode]').val("").change();
-        $('input[name=bayar]').val("").change();
-        $('input[name=kembali]').val("").change();
 
-        //event pada tags filter
-        $(".filter-tags").each(function(){
-            var sel= $($(this).data('select'));
-            var put=$($(this).data('tags'));
-            var col=parseInt($(this).data('col'));
-            put.tagsinput('input').attr('hidden',true);
-            
-            // filter selectpicker on change
-            sel.change(function(){
-                put.tagsinput('removeAll');
+      $('select[name=metode]').val("").change();
+      show('');
+      $('select[name=periode]').val("").change();
+      $('input[name=bayar]').val("").change();
+      $('input[name=kembali]').val("").change();
 
-                for (const opt of sel[0].selectedOptions) {
-                    put.tagsinput('add', opt.textContent);
-                }
+      //event pada tags filter
+      $(".filter-tags").each(function(){
+          var sel= $($(this).data('select'));
+          var put=$($(this).data('tags'));
+          var col=parseInt($(this).data('col'));
+          put.tagsinput('input').attr('hidden',true);
+          
+          // filter selectpicker on change
+          sel.change(function(){
+              put.tagsinput('removeAll');
 
-                //search nya pakai regex misal "Pusat|Spesial" artinya boleh Pusat atau Spesial
-                if(!sel.val().length){
-                    oTable.column(col).search( '' ).draw();
-                }
-                else{
-                    var searchStr='^('+sel.val().join('|')+')$';
-                    oTable.column(col).search( searchStr , true, false).draw();
-                }
-            });
+              for (const opt of sel[0].selectedOptions) {
+                  put.tagsinput('add', opt.textContent);
+              }
 
-            // filter tags input on removed
-            put.on('itemRemoved', function(event) {
-                let text = event.item;
-                let items = []
-                for (const opt of sel[0].selectedOptions) {
-                    if(opt.textContent != text){
-                        items.push(opt.value)
-                    }
-                }
-                sel.selectpicker('val', items);
-            });
-        });
+              //search nya pakai regex misal "Pusat|Spesial" artinya boleh Pusat atau Spesial
+              if(!sel.val().length){
+                  oTable.column(col).search( '' ).draw();
+              }
+              else{
+                  var searchStr='^('+sel.val().join('|')+')$';
+                  oTable.column(col).search( searchStr , true, false).draw();
+              }
+          });
+
+          // filter tags input on removed
+          put.on('itemRemoved', function(event) {
+              let text = event.item;
+              let items = []
+              for (const opt of sel[0].selectedOptions) {
+                  if(opt.textContent != text){
+                      items.push(opt.value)
+                  }
+              }
+              sel.selectpicker('val', items);
+          });
+      });
     });
 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/broadcast-channel@5.1.0/dist/lib/index.es5.min.js"></script>
+<script>
+  
+  // channel.postMessage('I am not alone');
 </script>
 @endsection
