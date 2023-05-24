@@ -72,7 +72,8 @@ active
               <select class="selectpicker" name="metode" data-style="select-with-transition" required onchange="show(this)">
                 <option value="" selected disabled>Metode Pembayaran</option>  
                 <option value="cash">Cash</option>
-                <option value="kredit">Kredit</option>
+                <option value="debit/kredit">Debit/Kredit</option>
+                <option value="qris">QRIS</option>
               </select>
             </div>
             

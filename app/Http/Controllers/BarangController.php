@@ -31,9 +31,17 @@ class BarangController extends Controller
         return $datatable->make(true); 
     }
 
+    public function checkKode($kode){
+        
+        $data = Barang::where('kodebarang',$kode)->count();
+        
+        return $data;
+    }
+
     public function store(Request $request){
         try{
             $barang_baru = new Barang($request->all());
+            isset($request->istitipan) ? $barang_baru->istitipan = 1 : $barang_baru->istitipan = 0;
             $barang_baru->save();
         }catch(Exception $exception){
             $this->flashError($exception->getMessage());
@@ -48,6 +56,7 @@ class BarangController extends Controller
         try{
             $barang = Barang::findOrFail($id);
             $barang->fill($request->all());
+            isset($request->istitipan) ? $barang_baru->istitipan = 1 : $barang_baru->istitipan = 0;
             $barang->save();
         }catch(Exception $exception){
             $this->flashError($exception->getMessage());

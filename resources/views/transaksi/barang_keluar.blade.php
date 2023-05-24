@@ -121,7 +121,6 @@ active
       var tr = $(self).closest('tr');
       var data = oTable.row(tr).data();
 
-      console.log(data);
       var $modal = $('#view');
       $('#detail_brg_kel').empty();
       $.ajax({

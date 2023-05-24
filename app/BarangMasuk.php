@@ -14,6 +14,7 @@ class BarangMasuk extends Model
         "tanggal",
         "nomor",
         "idsupplier",
+        "metode",
         "jumlah",
     ];
 

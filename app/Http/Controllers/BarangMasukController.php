@@ -36,6 +36,7 @@ class BarangMasukController extends Controller
                 '<div class="dropdown-menu dropdown-menu-right" >'.
                 '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>'.
                 '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>'.
+                '<a class="dropdown-item" href="#" onclick="cetak('.$t->id.')" >Cetak</a>'.
                 '<div class="dropdown-divider"></div>'.
                 '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
                 '</div>'.
@@ -55,11 +56,30 @@ class BarangMasukController extends Controller
         return $data; 
     }
 
+    public function cetak($id){
+        
+        $d['main'] = BarangMasuk::where('id',$id)->with('getSupplier:id,nama,alamat')->first();
+        $d['detail'] = BarangMasukDetail::where('idtransaksi', $id)->with('getBarang:id,namabarang')->get();
+
+        return view('report.bukti_bm', $d); 
+    }
+
     public function store(Request $request){
         DB::beginTransaction();
         try{
             $jumlah = 0;
+            $nomorMax = BarangMasuk::whereNotNull('nomor')->orderBy('doc','desc')->first(['nomor']);
+            $nomorMax = explode('-',$nomorMax->nomor);
+            
+            if(trim($nomorMax[0],'BM') == date('Ymd')) {
+                $max = base_convert($nomorMax[1],10,10);
+            }
+            else {
+                $max = 0;
+            }
+            
             $barang_masuk = new BarangMasuk($request->all());
+            $barang_masuk->nomor = 'BM'.date('Ymd').'-'.sprintf("%04d", $max+1);
             $barang_masuk->save();
             
             foreach($request->detail as $unit){

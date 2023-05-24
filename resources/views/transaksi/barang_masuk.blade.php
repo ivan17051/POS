@@ -146,22 +146,22 @@ active
             
               <div class="row">
                 <label class="col-sm-2 col-form-label">Tanggal</label>
-                <div class="col-sm-10">
+                <div class="col-sm-4">
                   <div class="form-group">
                     <input type="date" class="form-control" name="tanggal" required>
                     <span class="bmd-help">Masukkan Tanggal Transaksi.</span>
                   </div>
                 </div>
-              </div>
-              <div class="row">
+
                 <label class="col-sm-2 col-form-label">No. Transaksi</label>
-                <div class="col-sm-10">
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <input type="text" class="form-control" name="nomor" required>
+                    <input type="text" class="form-control" name="nomor" readonly>
                     <span class="bmd-help">Masukkan Nomor Transaksi.</span>
                   </div>
                 </div>
               </div>
+              
               <div class="row">
                 <label class="col-sm-2 col-form-label">Supplier</label>
                 <div class="col-sm-10">
@@ -170,6 +170,16 @@ active
                     <option value="{{$unit->id}}">{{$unit->nama}}</option>
                     @endforeach
                   </select>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <label class="col-sm-2 col-form-label">Metode Pembayaran</label>
+                <div class="col-sm-10">
+                  <select class="selectpicker form-control" name="metode" data-style="select-with-transition" title="--Pilih Metode Pembayaran--" required>
+                    <option value="cash">Cash</option>
+                    <option value="kredit">Kredit/Termin</option>
+                  </select>
+                  
                 </div>
               </div>
               <!-- <div class="row">
@@ -305,6 +315,12 @@ active
         
     $modal.modal('show')
   }
+  
+  function cetak(id) {
+    
+    var url = "{{route('barang_masuk.cetak', ['id'=>''])}}/" + id;
+    window.open(url, '_blank');
+  }
 
   function hapus(id) {
     $modal = $('#hapus');
@@ -404,7 +420,14 @@ active
       columnDefs: [
         { responsivePriority: 2, targets: 0 },
         { className: "text-right", targets: 5 }
-      ]
+      ],
+      createdRow: function (row, data, dataIndex) {
+        switch (data['metode']) {
+          case 'kredit':
+              $(row).addClass('bg-info');
+              break;
+        }
+      },
     });
   }
 
