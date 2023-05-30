@@ -28,6 +28,22 @@ class BarangMasukController extends Controller
         $datatable->rawColumns(['action']);
         
         $datatable->addColumn('action', function ($t) { 
+            if($t->metode=='kredit'){
+                return 
+                '<span class="nav-item dropdown ">'.
+                '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
+                '<i class="material-icons">more_vert</i>'.
+                '</a>'.
+                '<div class="dropdown-menu dropdown-menu-right" >'.
+                '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>'.
+                '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>'.
+                '<a class="dropdown-item" href="#" onclick="cetak('.$t->id.')" >Cetak</a>'.
+                '<a class="dropdown-item" href="#" onclick="pembayaran(this)" >Pembayaran</a>'.
+                '<div class="dropdown-divider"></div>'.
+                '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
+                '</div>'.
+                '</span>';
+            } else {
                 return 
                 '<span class="nav-item dropdown ">'.
                 '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.
@@ -41,11 +57,13 @@ class BarangMasukController extends Controller
                 '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
                 '</div>'.
                 '</span>';
-                // '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
-                // '<button type="button" class="btn btn-sm btn-info btn-link" style="padding:5px;" onclick="view(this)"><i class="material-icons">visibility</i></button>&nbsp'.
-                // '<button type="button" class="btn btn-sm btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
-                // '<button type="button" class="btn btn-sm btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
-            });
+            }
+            
+            // '<a href="" class="btn btn-info btn-link" style="padding:5px;" target="_blank" rel="noreferrer noopener"><i class="material-icons">launch</i></a>&nbsp'.
+            // '<button type="button" class="btn btn-sm btn-info btn-link" style="padding:5px;" onclick="view(this)"><i class="material-icons">visibility</i></button>&nbsp'.
+            // '<button type="button" class="btn btn-sm btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp'.
+            // '<button type="button" class="btn btn-sm btn-danger btn-link" style="padding:5px;" onclick="hapus('.$t->id.')"><i class="material-icons">delete</i></button>';
+        });
         
         return $datatable->make(true); 
     }
@@ -80,6 +98,7 @@ class BarangMasukController extends Controller
             
             $barang_masuk = new BarangMasuk($request->all());
             $barang_masuk->nomor = 'BM'.date('Ymd').'-'.sprintf("%04d", $max+1);
+            if($request->metode=='cash') $barang_masuk->islunas=1;
             $barang_masuk->save();
             
             foreach($request->detail as $unit){

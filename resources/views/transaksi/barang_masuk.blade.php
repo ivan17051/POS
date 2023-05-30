@@ -49,6 +49,66 @@ active
 </div>
 <!--  End Modal View Barang Masuk -->
 
+<!-- Modal Pembayaran -->
+<div class="modal fade" id="pembayaran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Pembayaran Barang Masuk</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="material-icons">clear</i>
+        </button>
+      </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-8">
+              <table class="table" style="font-size:14px;">
+                <thead class="text-primary">
+                  <th style="width:30%;font-size:15px;">No. Kwitansi</th>
+                  <th style="width:30%;font-size:15px;">Tanggal</th>
+                  <th style="width:40%;font-size:15px;">Jumlah</th>
+                </thead>
+                <tbody id="detail_pembayaran">
+
+                </tbody>
+              </table>
+            </div>
+              <div class="col-md-4" style="border:1px solid black;border-radius:10px;padding:10px;">
+                <form action="{{route('pembayaran.store')}}" method="POST">
+                @csrf
+                  <div class="bg-secondary text-white" style="padding:5px 5px 0 5px;">
+                    <small>Sisa Pembayaran</small>
+                    <h5 style="padding-bottom:5px;" id="sisaBayar">Rp 0</h5>
+                  </div>
+                  <input type="hidden" name="idbarangmasuk" id="idbarangmasuk">
+                  <div class="form-group" style="margin-top:25px;">
+                    <label for="nokwitansi" class="bmd-label-floating">No. Kwitansi</label>
+                    <input type="text" class="form-control" id="nokwitansi" name="nokwitansi" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="tanggal" class="bmd-label-floating">Tanggal</label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="jumbayar" class="bmd-label-floating">Jumlah Bayar</label>
+                    <input type="text" class="form-control" id="jumbayar" name="jumbayar" required>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block" id="btnBayar">Simpan</button>
+                </form>
+              </div>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
+        </div>
+      
+    </div>
+  </div>
+</div>
+<!--  End Modal Pembayaran -->
+
 <!-- Modal Hapus -->
 <div class="modal fade modal-mini modal-primary" id="hapus" tabindex="-1" role="dialog"
   aria-labelledby="myDeleteModalLabel" aria-hidden="true">
@@ -175,11 +235,17 @@ active
               <div class="row mt-3">
                 <label class="col-sm-2 col-form-label">Metode Pembayaran</label>
                 <div class="col-sm-10">
-                  <select class="selectpicker form-control" name="metode" data-style="select-with-transition" title="--Pilih Metode Pembayaran--" required>
+                  <select class="selectpicker form-control" name="metode" data-style="select-with-transition" title="--Pilih Metode Pembayaran--" required onchange="toggleTglJatuhTempo(this)">
                     <option value="cash">Cash</option>
                     <option value="kredit">Kredit/Termin</option>
                   </select>
                   
+                </div>
+              </div>
+              <div class="row mt-3" id="fieldTglJatuhTempo" style="display:none;">
+                <label class="col-sm-2 col-form-label">Tanggal Jatuh Tempo</label>
+                <div class="col-sm-10">
+                  <input type="date" class="form-control" name="tgljatuhtempo">
                 </div>
               </div>
               <!-- <div class="row">
@@ -329,6 +395,53 @@ active
     $modal.modal('show');
   }
 
+  function pembayaran(self) {
+    var tr = $(self).closest('tr');
+    var data = oTable.row(tr).data();
+    var jumlah = data.jumlah;
+    $('#idbarangmasuk').val(data.id);
+
+    var $modal = $('#pembayaran');
+    $('#detail_pembayaran').empty();
+    $.ajax({
+        url: "{{ route('pembayaran.data',['id'=>'']) }}" + '/' + data.id ,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          var total = 0;
+          data.forEach(e => {
+            $('#detail_pembayaran').append(
+              '<tr>'+
+              '<td>' + e.nokwitansi + '</td>' +
+              '<td>' + e.tanggal + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.jumbayar) + '</td>' +
+              '</tr>'
+            );
+            total = parseInt(total) + parseInt(e.jumbayar);
+          });
+          total = jumlah - total;
+          if(total == 0) {
+            $('#sisaBayar').html('Lunas');
+            $('#nokwitansi').attr('disabled', true);
+            $('#tanggal').attr('disabled', true);
+            $('#jumbayar').attr('disabled', true);
+            $('#btnBayar').attr('disabled', true);
+          } else {
+            $('#sisaBayar').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+            $('#nokwitansi').attr('disabled', false);
+            $('#tanggal').attr('disabled', false);
+            $('#jumbayar').attr('disabled', false);
+            $('#btnBayar').attr('disabled', false);
+          } 
+        },
+        error : function() {
+            // alert("No Data");
+        }
+    });
+        
+    $modal.modal('show')
+  }
+
   function showform(con) {
     if (con == 1) {
       $('#indexMasuk').attr('hidden', true)
@@ -385,6 +498,18 @@ active
     jumDetailMasuk--;
   }
 
+  function toggleTglJatuhTempo(self) {
+    console.log(self.value);
+    var modal = $('#fieldTglJatuhTempo');
+    if(self.value=='kredit'){
+      modal.show();
+      modal.find('input[name=tgljatuhtempo]').attr('required',true);
+    } else if(self.value=='cash'){
+      modal.hide();
+      modal.find('input[name=tgljatuhtempo]').attr('required',false);
+    }
+  }
+
   // Datatable
   function showTable() {
 
@@ -422,11 +547,23 @@ active
         { className: "text-right", targets: 5 }
       ],
       createdRow: function (row, data, dataIndex) {
-        switch (data['metode']) {
-          case 'kredit':
-              $(row).addClass('bg-info');
-              break;
+        var date1 = moment().toDate();
+        var date2 = moment(data['tgljatuhtempo'],"Y-MM-DD");
+        var diff = date2.diff(date1,"days");
+        
+        if(data['metode']=='kredit' && data['islunas']==0){
+          if(diff>30){
+            $(row).addClass('bg-success');
+          } else if(diff>15){
+            $(row).addClass('bg-warning');
+          } else if(diff>=0){
+            $(row).addClass('bg-danger');
+          } 
+        } else if(data['metode']=='kredit' && data['islunas']==1){
+          $(row).addClass('bg-info');
         }
+        
+        
       },
     });
   }

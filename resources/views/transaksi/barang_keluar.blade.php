@@ -253,7 +253,10 @@ active
               { data: 'id', title: 'ID', width:'5%'},
               { data: 'nomor', title: 'Nomor Transaksi', width:'15%' },
               { data: 'tanggal', title: 'Tanggal', width:'12%' },
-              { data: 'get_member.nama', title: 'Member', width: '25%' },
+              { data: 'idmember', title: 'Member', width: '25%', render: function(e,d,r){
+                if(e) return r.get_member.nama;
+                else return '';
+              }},
               { data: 'jenis', title: 'Jenis', width:'13%' },
               { data: 'jumlah', title: 'Jumlah', width:'20%', render: function(e,d,r){
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
