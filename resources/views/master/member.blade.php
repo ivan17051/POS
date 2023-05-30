@@ -168,8 +168,20 @@ active
                     <td>{{$unit->notelp}}</td>
                     <td>{{$unit->poin}}</td>
                     <td class="text-right">
-                        <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
-                        <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a>
+                        <!-- <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
+                        <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a> -->
+                        <span class="nav-item dropdown ">
+                            <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" >
+                                <a class="dropdown-item" href="{{route('member.riwayat',['id'=>$unit->id])}}" >Riwayat</a>
+                                <a class="dropdown-item" href="#" key="{{$key}}" onclick="onEdit(this)" >Edit</a>
+                                <a class="dropdown-item" href="#" onclick="cetak('.$t->id.')" >Cetak</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" key="{{$key}}" onclick="onDelete(this)">Hapus</a>
+                            </div>
+                        </span>
                     </td>
                 </tr>
                 @endforeach

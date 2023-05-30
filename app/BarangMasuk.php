@@ -16,6 +16,8 @@ class BarangMasuk extends Model
         "idsupplier",
         "metode",
         "jumlah",
+        "tgljatuhtempo",
+        "islunas",
     ];
 
     public function getSupplier(){

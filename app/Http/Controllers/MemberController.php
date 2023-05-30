@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Member;
+use App\BarangKeluar;
 
 class MemberController extends Controller
 {
     public function index(){
         $member = Member::all();
         return view('master.member', ['member'=>$member]);
+    }
+
+    public function riwayat($idmember){
+        $data['member'] = Member::findOrFail($idmember);
+        $data['transaksi'] = BarangKeluar::where('idmember',$idmember)->get();
+        $data['jumlah'] = $data['transaksi']->count();
+        $data['total'] = $data['transaksi']->sum('jumlah');
+        // dd($data);
+        return view('riwayat', $data);
     }
 
     public function store(Request $request){
