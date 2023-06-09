@@ -18,6 +18,7 @@ class BarangKeluar extends Model
         "periode",
         "jumlah",
         "diskon",
+        "poin",
         "bayar",
     ];
 

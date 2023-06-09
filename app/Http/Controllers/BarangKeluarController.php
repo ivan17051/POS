@@ -130,6 +130,7 @@ class BarangKeluarController extends Controller
                 $syarat = Pengaturan::where('key','min_belanja')->first();
                 $hitung = $request->jumlah/$syarat->value;
                 $member->poin += floor($hitung);
+                $barang_keluar->poin = floor($hitung);
                 $member->save();
             }
 

@@ -48,6 +48,9 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/stok', 'StokController@index')->name('stok.index');
     Route::post('stok/data', 'StokController@data')->name('stok.data');
+    Route::get('/stokopname', 'StokOpnameController@index')->name('stokopname.index');
+    Route::post('/stokopname/data', 'StokOpnameController@data')->name('stokopname.data');
+
 
     Route::get('/data/laporan', 'DataController@laporan');
     Route::post('/data/laporan', 'DataController@downloadLaporan')->name('data.download');

@@ -2,14 +2,10 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Transaksi Barang Masuk
+Stok Opname
 @endsection
 
-@section('transaksiShow')
-show
-@endsection
-
-@section('barangMasukStatus')
+@section('stokStatus')
 active
 @endsection
 
@@ -49,66 +45,6 @@ active
 </div>
 <!--  End Modal View Barang Masuk -->
 
-<!-- Modal Pembayaran -->
-<div class="modal fade" id="pembayaran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-5">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Pembayaran Barang Masuk</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          <i class="material-icons">clear</i>
-        </button>
-      </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              <table class="table" style="font-size:14px;">
-                <thead class="text-primary">
-                  <th style="width:30%;font-size:15px;">No. Kwitansi</th>
-                  <th style="width:30%;font-size:15px;">Tanggal</th>
-                  <th style="width:40%;font-size:15px;">Jumlah</th>
-                </thead>
-                <tbody id="detail_pembayaran">
-
-                </tbody>
-              </table>
-            </div>
-              <div class="col-md-4" style="border:1px solid black;border-radius:10px;padding:10px;">
-                <form action="{{route('pembayaran.store')}}" method="POST">
-                @csrf
-                  <div class="bg-secondary text-white" style="padding:5px 5px 0 5px;">
-                    <small>Sisa Pembayaran</small>
-                    <h5 style="padding-bottom:5px;" id="sisaBayar">Rp 0</h5>
-                  </div>
-                  <input type="hidden" name="idbarangmasuk" id="idbarangmasuk">
-                  <div class="form-group" style="margin-top:25px;">
-                    <label for="nokwitansi" class="bmd-label-floating">No. Kwitansi</label>
-                    <input type="text" class="form-control" id="nokwitansi" name="nokwitansi" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="tanggal" class="bmd-label-floating">Tanggal</label>
-                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="jumbayar" class="bmd-label-floating">Jumlah Bayar</label>
-                    <input type="text" class="form-control" id="jumbayar" name="jumbayar" required>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary btn-block" id="btnBayar">Simpan</button>
-                </form>
-              </div>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
-        </div>
-      
-    </div>
-  </div>
-</div>
-<!--  End Modal Pembayaran -->
-
 <!-- Modal Hapus -->
 <div class="modal fade modal-mini modal-primary" id="hapus" tabindex="-1" role="dialog"
   aria-labelledby="myDeleteModalLabel" aria-hidden="true">
@@ -143,7 +79,7 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Transaksi Barang Masuk</h4>
+            <h4 class="card-title">Stok Opname</h4>
           </div>
         </div>
         <div class="card-body" id="index-container">
@@ -191,7 +127,7 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Tambah Transaksi Barang Masuk</h4>
+            <h4 class="card-title">Tambah Stok Opname</h4>
           </div>
         </div>
         <form method="POST" action="{{route('barang_masuk.store')}}" class="form-horizontal">
@@ -222,16 +158,6 @@ active
                 </div>
               </div>
               
-              <div class="row">
-                <label class="col-sm-2 col-form-label">Supplier</label>
-                <div class="col-sm-10">
-                  <select class="selectpicker form-control" name="idsupplier" data-style="select-with-transition" title="--Pilih Supplier--" data-size="5" data-live-search="true" required>
-                    @foreach($supplier as $unit)
-                    <option value="{{$unit->id}}">{{$unit->nama}}</option>
-                    @endforeach
-                  </select>
-                </div>
-              </div>
               <div class="row mt-3">
                 <label class="col-sm-2 col-form-label">Metode Pembayaran</label>
                 <div class="col-sm-10">
@@ -283,26 +209,24 @@ active
                     <thead class="">
                       <th style="width:5%;">ID</th>
                       <th>Nama Barang</th>
-                      <th style="width:15%;">Tgl Expired</th>
-                      <th style="width:5%;">QTY</th>
-                      <th style="width:15%;">Harga Satuan</th>
-                      <th style="width:15%;">Total</th>
+                      <th style="width:10%;">Stok</th>
+                      <th style="width:10%;">Stok Real</th>
+                      <th style="width:10%;">Selisih</th>
                       <th style="width:5%;">Aksi</th>
                     </thead>
                     <tbody id="detailBrgMasuk">
                       <tr class="">
                         <td>#</td>
                         <td>
-                          <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true">
+                          <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true" onchange="cekStok(this)">
                             @foreach($barang as $unit)
-                            <option value="{{$unit->id}}|{{$unit->namabarang}}">{{$unit->namabarang}}</option>
+                            <option value="{{$unit->idbarang}}|{{$unit->namabarang}}|{{$unit->stok}}">Stok {{$unit->stok}} | {{$unit->namabarang}}</option>
                             @endforeach
                           </select>
                         </td>
-                        <td><input type="date" id="tglExp" name="tglExp" class="form-control" placeholder="Tgl Exp"></td>
-                        <td><input type="text" id="addQty" name="addQty" class="form-control" placeholder="QTY" onkeyup="hitungTotal()"></td>
-                        <td><input type="text" id="h_sat" name="h_sat" class="form-control" placeholder="Harga Satuan" onkeyup="hitungTotal()"></td>
-                        <td><input type="text" id="jumlah" name="jumlah" class="form-control" placeholder="Total" readonly></td>
+                        <td><input type="text" id="stok" name="stok" class="form-control" placeholder="Stok" readonly onchange="hitungTotal()"></td>
+                        <td><input type="text" id="stokreal" name="stokreal" class="form-control" placeholder="Stok Real" onkeyup="hitungTotal()"></td>
+                        <td><input type="text" id="selisih" name="selisih" class="form-control" placeholder="Selisih" readonly></td>
                         <td class="text-right"><button type="button" class="btn btn-sm btn-primary" onclick="addPengadaan()"
                             style="padding:5px;"><span class="material-icons">add</span></button></td>
                       </tr>
@@ -395,53 +319,6 @@ active
     $modal.modal('show');
   }
 
-  function pembayaran(self) {
-    var tr = $(self).closest('tr');
-    var data = oTable.row(tr).data();
-    var jumlah = data.jumlah;
-    $('#idbarangmasuk').val(data.id);
-
-    var $modal = $('#pembayaran');
-    $('#detail_pembayaran').empty();
-    $.ajax({
-        url: "{{ route('pembayaran.data',['id'=>'']) }}" + '/' + data.id ,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
-          var total = 0;
-          data.forEach(e => {
-            $('#detail_pembayaran').append(
-              '<tr>'+
-              '<td>' + e.nokwitansi + '</td>' +
-              '<td>' + e.tanggal + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.jumbayar) + '</td>' +
-              '</tr>'
-            );
-            total = parseInt(total) + parseInt(e.jumbayar);
-          });
-          total = jumlah - total;
-          if(total == 0) {
-            $('#sisaBayar').html('Lunas');
-            $('#nokwitansi').attr('disabled', true);
-            $('#tanggal').attr('disabled', true);
-            $('#jumbayar').attr('disabled', true);
-            $('#btnBayar').attr('disabled', true);
-          } else {
-            $('#sisaBayar').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
-            $('#nokwitansi').attr('disabled', false);
-            $('#tanggal').attr('disabled', false);
-            $('#jumbayar').attr('disabled', false);
-            $('#btnBayar').attr('disabled', false);
-          } 
-        },
-        error : function() {
-            // alert("No Data");
-        }
-    });
-        
-    $modal.modal('show')
-  }
-
   function showform(con) {
     if (con == 1) {
       $('#indexMasuk').attr('hidden', true)
@@ -452,47 +329,45 @@ active
     }
 
   }
+
+  function cekStok(self){
+    var brg = self.value.split('|');
+    console.log(brg);
+  }
   var jumDetailMasuk=0;
   
   function addPengadaan() {
     var brg = $('[name=addBrg]').val();
     var namaBrg = brg.split('|');
-    var tglExp = $('[name=tglExp]').val();
-    var qty = $('[name=addQty]').val();
-    var h_sat = $('[name=h_sat]').val();
-    var jumlah = $('[name=jumlah]').val();
+    var stok = $('[name=stok]').val();
+    var stokreal = $('[name=stokreal]').val();
+    var selisih = $('[name=selisih]').val();
     
     if (brg == '') {
       alert('Pilih Barang');
       $('[name=addBrg]').focus();
-    } else if (qty == '' || qty <= 0) {
-      alert("Qty harus valid");
-    } else if (h_sat == '' || h_sat <= 0) {
-      alert("Harga harus valid");
-    } else if (h_sat.indexOf(',') >= 0) {
-      alert("Untuk Harga, Gunakan Titik ('.') Bukan Koma (',')");
-    } else if ((h_sat.match(/\./g) || []).length > 1) {
-      alert("Untuk Harga, Titik ('.') Hanya Digunakan Untuk Pecahan Desimal");
+    } else if (stokreal == '' || stokreal <= 0) {
+      alert("Stok Real harus valid");
+    } else if (stokreal.indexOf(',') >= 0 || stokreal.indexOf('.') >= 0) {
+      alert("Stok Real harus bilangan bulat");
     } else {
       jumDetailMasuk++;
       $('#detailBrgMasuk').append(
         '<tr class="table-info">'+
-        '<input type="hidden" readonly name="detail[]" value="' + namaBrg[0] + '||' + tglExp + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+        '<input type="hidden" readonly name="detail[]" value="' + namaBrg[0] + '||' + stok + '||' + stokreal + '||' + selisih +'">' +
         '<td>' + jumDetailMasuk + '</td>' +
         '<td>' + namaBrg[1] + '</td>' +
-        '<td>' + tglExp + '</td>' +
-        '<td>' + qty + '</td>' +
-        '<td>' + h_sat + '</td>' +
-        '<td>' + jumlah + '</td>' +
+        '<td>' + stok + '</td>' +
+        '<td>' + stokreal + '</td>' +
+        '<td>' + selisih + '</td>' +
         '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove(); kurangiJumlahMasuk();">' +
         '<span class="material-icons">close</span>' +
         '</button></td></tr>'
       );
-      $('[name=tglExp]').val('');
+      $('[name=stok]').val('');
       $('[name=addBrg]').val('').change();
-      $('[name=addQty]').val('');
-      $('[name=h_sat]').val('');
-      $('[name=jumlah]').val('');
+      $('[name=stokreal]').val('');
+      $('[name=selisih]').val('');
       
       $('.select').selectpicker('refresh');
     }
@@ -529,22 +404,33 @@ active
       responsive: true,
       ajax: {
         type: "POST",
-        url: '{{route("barang_masuk.data")}}',
+        url: '{{route("stokopname.data")}}',
         data: {
           '_token': @json(csrf_token())
         }
       },
       columns: [
         { data: 'id', title: 'ID', width: '5%' },
-        { data: 'nomor', title: 'Nomor Transaksi', width: '18%' },
+        { data: 'get_barang.namabarang', title: 'Nama Barang', width: '18%' },
         { data: 'tanggal', title: 'Tanggal', width: '15%' },
-        { data: 'get_supplier.nama', title: 'Supplier' },
+        { data: 'stok', title: 'Stok' },
+        { data: 'stokreal', title: 'Stok Real' },
+        { data: 'selisih', title: 'Selisih' },
         {
-          data: 'jumlah', title: 'Jumlah', width: '15%', render: function (e, d, r) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
+          data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
+            return '<span class="nav-item dropdown ">' +
+              '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+              '<i class="material-icons">more_vert</i>' +
+              '</a>' +
+              '<div class="dropdown-menu dropdown-menu-left" >' +
+              '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
+              '<a class="dropdown-item" href="#" onclick="view(this)">Lihat Barcode</a>' +
+              '<div class="dropdown-divider"></div>' +
+              '<a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>' +
+              '</div>' +
+              '</span>'
           }
         },
-        { data: 'action', title: 'Aksi', width: '10%', orderable: false },
       ],
       columnDefs: [
         { responsivePriority: 2, targets: 0 },
@@ -573,7 +459,8 @@ active
   }
 
   function hitungTotal(e) {
-    var qty = $('#addQty').val();
+    console.log(e);
+    var stok = $('#addQty').val();
     var harga = $('#h_sat').val();
     var total = qty * harga;
     $('#jumlah').val(total).change();

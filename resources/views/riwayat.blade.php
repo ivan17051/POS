@@ -29,9 +29,7 @@ active
          <div class="card-icon">
            <i class="material-icons">perm_identity</i>
          </div>
-         <h4 class="card-title">Edit Profile -
-           <small class="category">Complete your profile</small>
-         </h4>
+         <h4 class="card-title">Riwayat Transaksi</h4>
        </div>
        <div class="card-body">
        <div class="material-datatables">
@@ -43,7 +41,7 @@ active
                     <th data-priority="2">Tanggal</th>
                     <th data-priority="3">Total</th>
                     <th data-priority="2">Poin</th>
-                    <th data-priority="2" class="disabled-sorting text-right">Actions</th>
+                    <!-- <th data-priority="2" class="disabled-sorting text-right">Actions</th> -->
                 </tr>
                 </thead>
                 <tfoot>
@@ -53,7 +51,7 @@ active
                     <th>Tanggal</th>
                     <th>Total</th>
                     <th>Poin</th>
-                    <th class="disabled-sorting text-right">Actions</th>
+                    <!-- <th class="disabled-sorting text-right">Actions</th> -->
                 </tr>
                 </tfoot>
                 <tbody>
@@ -62,12 +60,12 @@ active
                     <td hidden>{{$unit->id}}</td>
                     <td>{{$key+1}}</td>
                     <td>{{$unit->tanggal}}</td>
-                    <td>{{$unit->jumlah}}</td>
+                    <td>Rp {{number_format($unit->jumlah)}}</td>
                     <td>{{$unit->poin}}</td>
-                    <td class="text-right">
+                    <!-- <td class="text-right">
                         <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" key="{{$key}}" onclick="onEdit(this)"><i class="material-icons">edit</i></a>
                         <a href="#" class="btn btn-link btn-danger btn-just-icon remove btn-sm" key="{{$key}}" onclick="onDelete(this)"><i class="material-icons">delete</i></a>
-                    </td>
+                    </td> -->
                 </tr>
                 @endforeach
                 </tbody>
@@ -80,16 +78,17 @@ active
      <div class="card card-profile">
        <div class="card-avatar">
          <a href="#pablo">
-           <img class="img" src="../../assets/img/faces/marc.jpg" />
+           <img class="img" src="https://cdn-icons-png.flaticon.com/512/727/727399.png?w=740&t=st=1685457675~exp=1685458275~hmac=262d4d6290f6ae7e4c562a3818ebcc76958747e25301a5bed3b72863538f99bd" />
          </a>
        </div>
        <div class="card-body">
-         <h6 class="card-category text-gray">CEO / Co-Founder</h6>
-         <h4 class="card-title">Alec Thompson</h4>
+         <h6 class="card-category text-gray">Nama Member</h6>
+         <h4 class="card-title">{{$member->nama}}</h4>
          <p class="card-description">
-           Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+            {{$member->alamat}} <br>
+            {{$member->notelp}}
          </p>
-         <a href="#pablo" class="btn btn-rose btn-round">Follow</a>
+         <button type="button" class="btn btn-primary btn-round" disabled>Poin<div style="font-size:25px;">{{$member->poin}}<div></button>
        </div>
      </div>
    </div>

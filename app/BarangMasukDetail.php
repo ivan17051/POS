@@ -17,6 +17,7 @@ class BarangMasukDetail extends Model
         "idsupplier",
         "idmember",
         "idbarang",
+        "tglexp",
         "qty",
         "h_sat",
         "jumlah",

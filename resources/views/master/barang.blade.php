@@ -29,9 +29,9 @@ active
         @csrf
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <div class="form-group">
-                <select name="idkategori" id="idkategori" class="selectpicker" data-size="7"
+                <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7"
                   data-style="select-with-transition" required>
                   <option value="" disabled selected> Kategori </option>
                   @foreach($kategori as $unit)
@@ -40,12 +40,7 @@ active
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="expired" class="bmd-label-floating">Tanggal Expired</label>
-                <input type="date" class="form-control" id="expired" name="expired">
-              </div>
-            </div>
+            
             <div class="col-md-9">
               <div class="form-group">
                 <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
@@ -119,7 +114,7 @@ active
         @method('PUT')
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <div class="form-group">
                 <select name="idkategori" id="idkategori" class="form-control selectpicker" data-size="7"
                   data-style="select-with-transition" required>
@@ -130,12 +125,7 @@ active
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="expired" class="bmd-label-floating">Tanggal Expired</label>
-                <input type="date" class="form-control" id="expired" name="expired">
-              </div>
-            </div>
+            
             <div class="col-md-9">
               <div class="form-group">
                 <label for="namabarang" class="bmd-label-floating">Nama Barang</label>
