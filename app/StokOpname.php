@@ -11,18 +11,10 @@ class StokOpname extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "idbarang",
+        "nomor",
         "tanggal",
-        "stok",
-        "stokreal",
-        "selisih",
-        "isfinal",
+        "petugas",
+        "status",
     ];
 
-    public function getBarang(){
-        return $this->belongsTo(Barang::class, 'idbarang');
-    }
-    public function getSupplier(){
-        return $this->belongsTo(Supplier::class, 'idsupplier');
-    }
 }

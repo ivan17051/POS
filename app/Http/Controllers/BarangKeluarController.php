@@ -39,6 +39,8 @@ class BarangKeluarController extends Controller
                 '</a>'.
                 '<div class="dropdown-menu dropdown-menu-right" >'.
                 '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>'.
+                '<a class="dropdown-item" href="'.route("cetak.struk",["id"=>$t->id]).
+                '" onclick="window.open(this.href, `_blank`, `width=,height=`); return false;">Cetak Struk</a>'.
                 '<div class="dropdown-divider"></div>'.
                 '<a class="dropdown-item" href="#" onclick="hapus('.$t->id.')">Hapus</a>'.
                 '</div>'.

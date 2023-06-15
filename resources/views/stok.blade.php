@@ -21,6 +21,10 @@ active
         </div>
         <div class="card-body">
           <div class="toolbar row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 text-right">
+              <a href="{{route('stokopname.index')}}" class="btn btn-info btn-sm">Stok Opname</a>
+            </div>
           </div>
           
           <div class="anim slide" id="table-container">
@@ -109,6 +113,7 @@ active
         { data: 'qtyin', title: 'Qty In' },
         { data: 'qtyout', title: 'Qty Out' },
         { data: 'stok', title: 'Stok' },
+        
         
       ],
       columnDefs: [
