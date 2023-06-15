@@ -34,11 +34,11 @@ active
                       <i class="material-icons">timeline</i> Poin Member
                     </a>
                   </li>
-                  <!-- <li class="nav-item">
+                  <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#link111" role="tablist">
-                      <i class="material-icons">schedule</i> Settings
+                      <i class="material-icons">image</i> Gambar Tampilan Pembeli
                     </a>
-                  </li> -->
+                  </li>
                 </ul>
               </div>
               <div class="col-md-9">
@@ -65,12 +65,12 @@ active
                     </div>
                     </form>
                   </div>
-                  <!-- <div class="tab-pane" id="link111">
+                  <div class="tab-pane" id="link111">
                     Efficiently unleash cross-media information without cross-media value. Quickly maximize timely
                     deliverables for real-time schemas.
                     <br>
                     <br>Dramatically maintain clicks-and-mortar solutions without functional solutions.
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>

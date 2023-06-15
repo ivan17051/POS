@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('member', MemberController::class);
     Route::apiResource('supplier', SupplierController::class)->except('show');
     Route::apiResource('pembayaran', PembayaranController::class)->only('store','update');
+    Route::apiResource('stokopname', StokOpnameController::class)->except('show');
 
     Route::post('/barang/data', 'BarangController@data')->name('barang.data');
     Route::get('/barang/checkkode/{kode}', 'BarangController@checkKode')->name('barang.check');
@@ -48,17 +49,19 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/stok', 'StokController@index')->name('stok.index');
     Route::post('stok/data', 'StokController@data')->name('stok.data');
-    Route::get('/stokopname', 'StokOpnameController@index')->name('stokopname.index');
+    
     Route::post('/stokopname/data', 'StokOpnameController@data')->name('stokopname.data');
+    Route::get('/stokopname/{id}', 'StokOpnameController@detail')->name('stokopname.detail');
 
+    Route::get('/cetak/barcode/{id}', 'CetakController@barcode')->name('cetak.barcode');
+    Route::get('/cetak/stokopname/{id}', 'CetakController@stokopname')->name('cetak.stokopname');
+    Route::get('/cetak/struk/{id}', 'CetakController@struk')->name('cetak.struk');
 
     Route::get('/data/laporan', 'DataController@laporan');
     Route::post('/data/laporan', 'DataController@downloadLaporan')->name('data.download');
 
     Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
     Route::post('/pengaturan', 'PengaturanController@store')->name('pengaturan.store');
-
-    Route::get('/cetak/barcode/{kode}', 'CetakController@barcode')->name('cetak.barcode');
     
     Route::get('/customer_view', function(){
         return view('transaksi.customer_view');

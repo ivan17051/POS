@@ -33,24 +33,24 @@ active
                 data-target="#tambah">Tambah</button></div> -->
           
           </div>
-          <div class="row">
+          <div class="row mb-2">
             <div class="col-md-3">
-              <div class="typeahead__container ">
-                <div class="typeahead__field">
-                  <div class="form-group typeahead__query">
-                    <input type="text" class="form-control" id="qty" placeholder="Qty">
-                  </div>
-                </div>
-              </div>
+              <input type="text" class="form-control" id="qty" placeholder="Qty">
             </div>
             <div class="col-md-9">
-              <div class="typeahead__container ">
+              <!-- <div class="typeahead__container ">
                 <div class="typeahead__field">
                   <div class="form-group typeahead__query">
-                    <input class="form-control js-typeahead" name="q" id="querybarang" autocomplete="off" onclick="$('#searchbarang .js-typeahead').val('');" placeholder="Cari Barang">
+                    <input class="form-control js-typeahead" name="q" id="querybarang" autocomplete="on" onclick="$('#searchbarang .js-typeahead').val('');" placeholder="Cari Barang">
                   </div>
                 </div>
-              </div>
+              </div> -->
+              <select class="form-control selectpicker" id="selectbarang" data-style="select-with-transition" data-live-search="true" onchange="pilihBarang(this)" data-size="5">
+                <option value="" disabled>Cari Barang</option>
+                @foreach($barang as $unit)
+                <option value="{{$unit->id}}||{{$unit->harga_1}}||{{$unit->harga_3}}||{{$unit->harga_6}}||{{$unit->namabarang}}">{{$unit->kodebarang}} - {{$unit->namabarang}}</option>
+                @endforeach
+              </select>
             </div>
           </div>
           
@@ -96,13 +96,18 @@ active
               <input type="text" class="form-control" name="bayar" onkeyup="hitungKembali(this)"/>
             </div>
           </div>
-          <div class="col-md-12" id="showKembali" hidden>
+          <div class="col-md-6" id="showKembali" hidden>
             <div class="form-group">
               <label for="kembali" class="bmd-label-floating">Uang Kembali</label>
               <input type="text" class="form-control" name="kembali" readonly/>
             </div>
           </div>
-          
+          <div class="col-md-12" id="showKeterangan" hidden>
+            <div class="form-group">
+              <label for="keterangan" class="bmd-label-floating">Keterangan</label>
+              <input type="text" class="form-control" name="keterangan"/>
+            </div>
+          </div>
         </div>
         <div class="card-footer">
           <button class="btn btn-primary">Konfirmasi</button>
@@ -184,24 +189,38 @@ active
     }
 
     function show(con){
-      if(con.value=='kredit'){
-        $('#showPeriode').attr('hidden', false);
-        $('input[name=periode]').attr('required', true);
+      if(con.value=='debit/kredit'){
+        $('#showPeriode').attr('hidden', true);
+        $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
+        $('#showKeterangan').attr('hidden', false);
+        $('input[name=keterangan]').attr('required', true);
         $('#showKembali').attr('hidden', true);
       } else if(con.value=='cash') {
         $('#showPeriode').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', false);
         $('input[name=bayar]').attr('required', true);
+        $('#showKeterangan').attr('hidden', true);
+        $('input[name=keterangan]').attr('required', false);
         $('#showKembali').attr('hidden', false);
+      } else if(con.value=='qris') {
+        $('#showPeriode').attr('hidden', true);
+        $('input[name=periode]').attr('required', false);
+        $('#showBayar').attr('hidden', true);
+        $('input[name=bayar]').attr('required', false);
+        $('#showKeterangan').attr('hidden', false);
+        $('input[name=keterangan]').attr('required', true);
+        $('#showKembali').attr('hidden', true);
       } else {
         $('#showPeriode').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKembali').attr('hidden', true);
+        $('#showKeterangan').attr('hidden', true);
+        $('input[name=keterangan]').attr('required', false);
       }
     }
 
@@ -210,65 +229,101 @@ active
       channel.postMessage('removemember||');
       $('#searchmember').show();
     }
+
+    function pilihBarang(self){
+      var qty = $('#qty').val();
+      var h_sat = 0;
+      // id, harga_1, harga_3, harga_6, namabarang
+      var barang = self.value.split('||');
+
+      if(!qty) qty = 1;
+      if(qty >= 6) h_sat = barang[3];
+      else if(qty >= 3) h_sat = barang[2];
+      else h_sat = barang[1];
+
+      var jumlah = qty * h_sat;
+      total = total + jumlah;
+      var cmd = '<td>' + barang[4] + '</td>' +
+        '<td>' + qty + '</td>' +
+        '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
+        '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>';
+      
+        $('#detailBrg').append(
+        '<tr>'+
+        '<input type="hidden" readonly name="detail[]" value="' + barang[0] + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+        cmd +
+        '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove();kurangiTotal(' + jumlah + ')">' +
+        '<span class="material-icons">close</span>' +
+        '</button></td></tr>'
+      );
+      channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+
+      $('#qty').val('');
+      $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+      $('#jumlah').val(total);
+      $('#selectbarang').val('');
+      $('#selectbarang').select2('open');
+      
+    }
     
-    $('#searchbarang .js-typeahead').typeahead({
-        input: ".js-typeahead",
-        dynamic: true, 
-        hint: true,
-        order: "asc",
-        display: ["kodebarang", "namabarang"],
-        template: function (query, item) {return '['+item.kodebarang+'] '+item.namabarang},
-        emptyTemplate: "Tidak ditemukan",
-        source: {
-            faskes: {
-                // Ajax Request
-                ajax: function (query) {
-                    return {
-                        type: 'GET',
-                        url: '{{route("data.searchbarang")}}',
-                        data: {'query':query}
-                    }
-                }
-            }
-        },
-        callback: {
-          onClick: function(node, a, item, event){
+    // $('#searchbarang .js-typeahead').typeahead({
+    //     input: ".js-typeahead",
+    //     dynamic: true, 
+    //     hint: true,
+    //     order: "asc",
+    //     display: ["kodebarang", "namabarang"],
+    //     template: function (query, item) {return '['+item.kodebarang+'] '+item.namabarang},
+    //     emptyTemplate: "Tidak ditemukan",
+    //     source: {
+    //         faskes: {
+    //             // Ajax Request
+    //             ajax: function (query) {
+    //                 return {
+    //                     type: 'GET',
+    //                     url: '{{route("data.searchbarang")}}',
+    //                     data: {'query':query}
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     callback: {
+    //       onClick: function(node, a, item, event){
             
-            var qty = $('#qty').val();
-            var h_sat = 0;
+    //         var qty = $('#qty').val();
+    //         var h_sat = 0;
 
-            if(!qty) qty = 1;
-            if(qty >= 6) h_sat = item.harga_6;
-            else if(qty >= 3) h_sat = item.harga_3;
-            else h_sat = item.harga_1;
+    //         if(!qty) qty = 1;
+    //         if(qty >= 6) h_sat = item.harga_6;
+    //         else if(qty >= 3) h_sat = item.harga_3;
+    //         else h_sat = item.harga_1;
 
-            var jumlah = qty * h_sat;
-            total = total + jumlah;
-            var cmd = '<td>' + item.namabarang + '</td>' +
-              '<td>' + qty + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>';
+    //         var jumlah = qty * h_sat;
+    //         total = total + jumlah;
+    //         var cmd = '<td>' + item.namabarang + '</td>' +
+    //           '<td>' + qty + '</td>' +
+    //           '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
+    //           '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>';
             
-              $('#detailBrg').append(
-              '<tr>'+
-              '<input type="hidden" readonly name="detail[]" value="' + item.id + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
-              cmd +
-              '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove();kurangiTotal(' + jumlah + ')">' +
-              '<span class="material-icons">close</span>' +
-              '</button></td></tr>'
-            );
-            channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
-            $('#searchbarang .js-typeahead').val('').change();
-            $('#qty').val('');
-            $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
-            $('#jumlah').val(total);
-          }          
+    //           $('#detailBrg').append(
+    //           '<tr>'+
+    //           '<input type="hidden" readonly name="detail[]" value="' + item.id + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+    //           cmd +
+    //           '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove();kurangiTotal(' + jumlah + ')">' +
+    //           '<span class="material-icons">close</span>' +
+    //           '</button></td></tr>'
+    //         );
+    //         channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+    //         $('#searchbarang .js-typeahead').val('').change();
+    //         $('#qty').val('');
+    //         $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+    //         $('#jumlah').val(total);
+    //       }          
           
-        },
-        selector:{
-            result: 'typeahead__result c-typeahead',
-        }
-    });
+    //     },
+    //     selector:{
+    //         result: 'typeahead__result c-typeahead',
+    //     }
+    // });
 
     $('#searchmember .js-typeahead').typeahead({
         input: ".js-typeahead",
@@ -316,7 +371,7 @@ active
 
 
     $(document).ready(function () {
-
+      $('#selectbarang').val('');
       $('select[name=metode]').val("").change();
       show('');
       $('select[name=periode]').val("").change();
@@ -360,8 +415,16 @@ active
               sel.selectpicker('val', items);
           });
       });
-    });
 
+      @if (session()->exists('struk'))
+      struk = @json(session()->pull("struk"));
+      window.open('{{route("cetak.struk",["id"=>'+struk.id+'])}}', '_blank', 'width=,height='); return false;
+      console.log(struk);
+      @php
+      dd($errors->any());
+      @endphp
+      @endif
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/broadcast-channel@5.1.0/dist/lib/index.es5.min.js"></script>
 <script>

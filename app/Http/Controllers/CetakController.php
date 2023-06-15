@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\SIP;
+use App\Barang;
+use App\BarangKeluar;
+use App\BarangKeluarDetail;
 use App\Pejabat;
 use App\Pegawai;
 use App\JenisPermohonan;
@@ -11,17 +13,17 @@ use App\Surket;
 
 class CetakController extends Controller
 {
-    public function barcode($kode){
-        return view('report.barcode', ['kode'=>$kode]);
+    public function barcode($id){
+        $barang = Barang::findOrFail($id);
+        return view('report.barcode', ['barang'=>$barang]);
     }
 
-    public function perstek(Request $request, $idsip){
-        $d['sip'] = SIP::where('id',$idsip)->with('pegawai')->first();
-        $d['aturan'] = $this->dasarPeraturanPerstek($d['sip']->idprofesi);
-        $d['kadinkes'] = Pejabat::where('jabatan','Kepala Dinas')->first();
-        $d['jenispermohonan'] = JenisPermohonan::where('id',$d['sip']['idjenispermohonan'])->first();
-
-        return view('report.perstek', $d);
+    public function struk($id){
+        $d['barang_keluar'] = BarangKeluar::findOrFail($id);
+        $d['detail'] = BarangKeluarDetail::where('idtransaksi', $id)
+            ->with('getBarang:id,namabarang')->get(['idbarang','qty','h_sat','jumlah']);
+        // dd($d);
+        return view('report.struk', $d);
     }
 
     public function kitir(Request $request, $idsip){

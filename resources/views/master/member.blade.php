@@ -177,7 +177,6 @@ active
                             <div class="dropdown-menu dropdown-menu-right" >
                                 <a class="dropdown-item" href="{{route('member.riwayat',['id'=>$unit->id])}}" >Riwayat</a>
                                 <a class="dropdown-item" href="#" key="{{$key}}" onclick="onEdit(this)" >Edit</a>
-                                <a class="dropdown-item" href="#" onclick="cetak('.$t->id.')" >Cetak</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" key="{{$key}}" onclick="onDelete(this)">Hapus</a>
                             </div>

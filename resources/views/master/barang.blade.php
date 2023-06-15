@@ -303,7 +303,7 @@ active
     JsBarcode("#barcode", data.kodebarang);
 
     var $modal = $('#view');
-    $('#btnCetak').attr('href', '{{route("cetak.barcode",["kode"=>""])}}/' + data.kodebarang);
+    $('#btnCetak').attr('href', '{{route("cetak.barcode",["kode"=>""])}}/' + data.id);
     // $modal.find('input[name=id]').val(data['id']).change();
     // $modal.find('select[name=idkategori]').val(data['idkategori']).change().blur();
 
