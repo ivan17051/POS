@@ -45,7 +45,7 @@ $role = explode(', ', $role);
             <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner" style="height:90vh;">
                 <div class="carousel-item active">
-                  <img src="https://images.pexels.com/photos/699459/pexels-photo-699459.jpeg" class="d-block w-100"
+                  <img src="https://images.pexels.com/photos/13572116/pexels-photo-13572116.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="d-block w-100"
                     alt="..." >
                 </div>
                 <div class="carousel-item">
@@ -197,12 +197,21 @@ $role = explode(', ', $role);
       var message = msg.data.split('||');
       console.log(message);
       if(message[0]=='addmember') {
-        $('#member').append('Member:<p class="mb-0" style="font-size:18px;font-weight:bold;">'+message[1]+'</p><p class="mb-0">'+message[2]+'</p>');
+        $('#member').append('<div class="row"><div class="col-md-9">'+
+          'Member:<p class="mb-0" style="font-size:18px;font-weight:bold;">'+message[1]+'</p>'+
+          '<p class="mb-0">'+message[2]+'</p></div>'+
+          '<div class="col-md-3"><button class="btn btn-primary btn-block" style="font-size:23px;" disabled>'+message[3]+'</button></div></div>'
+          );
       }
       else if(message[0]=='removemember') $('#member').empty();
       else if(message[0]=='addbarang') {
         $('#detailBrg').append(message[1]);
         $('#total').html(message[2]);
+      }
+      else if(message[0]=='clear') {
+        $('#member').empty();
+        $('#detailBrg').empty();
+        $('#total').html('Rp 0');
       }
     };
 

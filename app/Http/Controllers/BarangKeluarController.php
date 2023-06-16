@@ -21,7 +21,9 @@ class BarangKeluarController extends Controller
 
     // PEMBELIAN
     public function pembelian(){
-        return view('transaksi.pembelian');
+        $barang = Barang::get(['id','namabarang','kodebarang','harga_1','harga_3','harga_6']);
+        
+        return view('transaksi.pembelian',['barang'=>$barang]);
     }
 
     public function data(){
@@ -145,8 +147,12 @@ class BarangKeluarController extends Controller
         }
 
         DB::commit();
+        // $this->cetakStruk($barang_keluar->id);
         $this->flashSuccess('Transaksi Berhasil Ditambahkan');
-        return back();
+        // return back()->with('struk', $barang_keluar->id);
+        $barang = Barang::get(['id','namabarang','kodebarang','harga_1','harga_3','harga_6']);
+        
+        return view('transaksi.pembelian',['barang'=>$barang])->with('struk', $barang_keluar->id);
     }
 
     public function update(Request $request, $id){

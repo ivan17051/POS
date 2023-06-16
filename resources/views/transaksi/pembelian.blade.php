@@ -104,7 +104,7 @@ active
           </div>
           <div class="col-md-12" id="showKeterangan" hidden>
             <div class="form-group">
-              <label for="keterangan" class="bmd-label-floating">Keterangan</label>
+              <label for="keterangan" class="bmd-label-floating" id="labelket">Keterangan</label>
               <input type="text" class="form-control" name="keterangan"/>
             </div>
           </div>
@@ -196,6 +196,7 @@ active
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
         $('input[name=keterangan]').attr('required', true);
+        $('#labelket').html("No. Kartu Debit/Kredit");
         $('#showKembali').attr('hidden', true);
       } else if(con.value=='cash') {
         $('#showPeriode').attr('hidden', true);
@@ -212,6 +213,7 @@ active
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
         $('input[name=keterangan]').attr('required', true);
+        $('#labelket').html("Keterangan");
         $('#showKembali').attr('hidden', true);
       } else {
         $('#showPeriode').attr('hidden', true);
@@ -353,8 +355,12 @@ active
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeMember()">' +
                 '<i class="material-icons">close</i>' +
                 '</button>' +
+                '<div class="row"><div class="col-md-8 pl-0">' +
                 '<span><b style="font-size:18px;">'+ item.nama +'</b></span>' +
                 '<span>'+ item.alamat +'</span>' +
+                '</div><div class="col-md-4">' +
+                '<div style="height:100%;padding-top:9px;border:2px solid white;border-radius:5px;text-align:center;"><b style="font-size:30px;">'+ item.poin +'</b></div>' +
+                '</div></div>' +
                 '<input type="hidden" name="idmember" value="'+ item.id +'">' +
                 '</div>'
               );
@@ -368,15 +374,22 @@ active
             result: 'typeahead__result c-typeahead',
         }
     });
-
-
+      
     $(document).ready(function () {
+      // window.open('{{ route("cetak.struk",["id"=>"41"]) }}', '_blank', 'width=,height=');
+      
+      @if(isset($struk))
+      window.open('{{route("cetak.struk",["id"=>$struk])}}', '_blank', 'width=,height=');
+      @endif
+
       $('#selectbarang').val('');
       $('select[name=metode]').val("").change();
       show('');
       $('select[name=periode]').val("").change();
+      $('input[name=keterangan]').val("").change();
       $('input[name=bayar]').val("").change();
       $('input[name=kembali]').val("").change();
+      channel.postMessage('clear');
 
       //event pada tags filter
       $(".filter-tags").each(function(){
@@ -415,15 +428,7 @@ active
               sel.selectpicker('val', items);
           });
       });
-
-      @if (session()->exists('struk'))
-      struk = @json(session()->pull("struk"));
-      window.open('{{route("cetak.struk",["id"=>'+struk.id+'])}}', '_blank', 'width=,height='); return false;
-      console.log(struk);
-      @php
-      dd($errors->any());
-      @endphp
-      @endif
+      
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/broadcast-channel@5.1.0/dist/lib/index.es5.min.js"></script>

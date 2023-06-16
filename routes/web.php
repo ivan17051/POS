@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
     Route::post('/pengaturan', 'PengaturanController@store')->name('pengaturan.store');
+    Route::post('/pengaturan/upload_gambar', 'PengaturanController@upload')->name('gambar.upload');
     
     Route::get('/customer_view', function(){
         return view('transaksi.customer_view');

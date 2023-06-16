@@ -15,11 +15,11 @@ class BarangKeluar extends Model
         "nomor",
         "idmember",
         "metode",
-        "periode",
         "jumlah",
         "diskon",
         "poin",
         "bayar",
+        "keterangan",
     ];
 
     public function getBarang(){
