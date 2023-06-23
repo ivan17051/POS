@@ -19,10 +19,12 @@ class StokOpnameDetail extends Model
         "selisih",
     ];
 
-    public function getBarang(){
+    public function getBarang()
+    {
         return $this->belongsTo(Barang::class, 'idbarang');
     }
-    public function getStokOpname(){
+    public function getStokOpname()
+    {
         return $this->belongsTo(StokOpname::class, 'idstokopname');
     }
 }

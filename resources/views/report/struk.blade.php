@@ -23,9 +23,6 @@
 </head>
 
 <body>
-    @php
-    $bulan = ['','I','II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-    @endphp
     <table class="screen" style="width:5.8cm;">
         <tbody>
             <tr>
@@ -34,13 +31,16 @@
                     <table cellspacing="0" cellpadding="0" >
                         <tbody>
                             <tr>
-                              <td class="fontKanan" style="text-align: center;"><img src="{{asset('/public/img/koperasi.png')}}" height="50"></td>
+                              <td class="fontKanan" style="text-align: center;"><img src="{{asset('/public/img/koperasi.png')}}" height="50" style="filter: grayscale(100%);"></td>
                             </tr>
                             <tr>
                               <td>&nbsp;</td>
                             </tr>
                             <tr>
-                              <td class="fontCenter " style="font-size:13px">KPRI SEKDA PROV JATIM</td>
+                              <td class="fontCenter " style="font-size:13px">KKPRI MART</td>
+                            </tr>
+                            <tr>
+                              <td class="fontCenter " style="font-size:12px">SETDA PROV JATIM</td>
                             </tr>
                             <tr>
                               <td class="fontCenter " style="font-size:12px;">JL. PAHLAWAN 110 SURABAYA</td>
@@ -58,19 +58,19 @@
                     <table cellspacing="0" cellpadding="0" >
                         <tbody>
                             <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:15px">-----------------------------------</td>
+                              <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
                             <tr>
-                              <td class="" style="font-size:12px">{{$barang_keluar->tanggal}}</td>
+                              <td colspan="2" class="" style="font-size:12px">{{Carbon\Carbon::parse($barang_keluar->tanggal)->isoformat('DD-MM-Y')}}</td>
                             </tr>
                             <tr>
-                              <td class="" >Kasir: </td>
+                              <td colspan="2" class="" >Kasir: </td>
                             </tr>
                             <tr>
-                              <td>No. {{$barang_keluar->nomor}}</td>
+                              <td colspan="2">No. {{$barang_keluar->nomor}}</td>
                             </tr>
                             <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:15px">-----------------------------------</td>
+                              <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
                             @foreach($detail as $unit)
                             <tr>
@@ -82,7 +82,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:15px">-----------------------------------</td>
+                              <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
                             <tr>
                               <td class="" >Total </td>
@@ -96,12 +96,23 @@
                               <td class="" >Kembali </td>
                               <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar-$barang_keluar->jumlah) : '0'}} </td>
                             </tr>
+                            @if(isset($barang_keluar->getMember))
+                            <tr>
+                              <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
+                            </tr>
                             @if(isset($barang_keluar->poin))
                             <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:15px">-----------------------------------</td>
+                              <td colspan="2" class="fontCenter" style="font-size:12px">Selamat anda mendapat {{$barang_keluar->poin}} poin.</td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            @endif
+                            <tr>
+                              <td style="font-size:12px">Nama</td>
+                              <td style="font-size:12px">: {{$barang_keluar->getMember->nama}} .</td>
                             </tr>
                             <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:12px">Selamat anda mendapat {{$barang_keluar->poin}} poin.</td>
+                              <td style="font-size:12px">Poin</td>
+                              <td style="font-size:12px">: {{$barang_keluar->getMember->poin}} .</td>
                             </tr>
                             @endif
                             <tr>

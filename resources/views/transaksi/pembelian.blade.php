@@ -72,8 +72,9 @@ active
               <select class="selectpicker" name="metode" data-style="select-with-transition" required onchange="show(this)">
                 <option value="" selected disabled>Metode Pembayaran</option>  
                 <option value="cash">Cash</option>
-                <option value="debit/kredit">Debit/Kredit</option>
+                <option value="debit/kredit">Kartu Debit/Kredit</option>
                 <option value="qris">QRIS</option>
+                <option value="transfer">Transfer Bank</option>
               </select>
             </div>
             
@@ -162,6 +163,9 @@ active
     </div>
   </div>
   </form>
+  @if(isset($struk))
+  <a id="cetakStruk" href="{{route('cetak.struk',['id'=>$struk])}}" onclick="window.open(this, '_blank', 'width=,height=');return false;" hidden></a>
+  @endif
 </div>
 @endsection
 
@@ -206,7 +210,7 @@ active
         $('#showKeterangan').attr('hidden', true);
         $('input[name=keterangan]').attr('required', false);
         $('#showKembali').attr('hidden', false);
-      } else if(con.value=='qris') {
+      } else if(con.value=='qris' || con.value=='transfer') {
         $('#showPeriode').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
@@ -379,7 +383,7 @@ active
       // window.open('{{ route("cetak.struk",["id"=>"41"]) }}', '_blank', 'width=,height=');
       
       @if(isset($struk))
-      window.open('{{route("cetak.struk",["id"=>$struk])}}', '_blank', 'width=,height=');
+      document.getElementById('cetakStruk').click();
       @endif
 
       $('#selectbarang').val('');

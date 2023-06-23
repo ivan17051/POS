@@ -5,11 +5,33 @@
 Stok Opname
 @endsection
 
-@section('stokStatus')
+@section('stokopnameStatus')
 active
 @endsection
 
 @section('modal')
+<!-- Modal Camera -->
+<div class="modal fade" id="camera" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Detail Stok Opname </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="material-icons">clear</i>
+        </button>
+      </div>
+        <div class="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
+        </div>
+      
+    </div>
+  </div>
+</div>
+<!--  End Modal Camera -->
+
 <!-- Modal View Stok Opname -->
 <div class="modal fade" id="view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg mt-5">
@@ -186,6 +208,11 @@ active
                   </div>
                 </div>
               </div> -->
+              <div class="input-group">
+                <input type="text" name="kode_barang" id="kode_barang" class="form-control" placeholder="Cari Kode Barang/ Barcode">
+              </div>
+              <div id="qr-reader" style="width: 100%"></div>
+              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera">Scan</button>
               <div class="card-body table-full-width table-hover mt-5">
                 <div class="table-responsive" style="overflow:visible;">
                   <table class="table">
@@ -203,7 +230,7 @@ active
                         <td>
                           <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true" onchange="cekStok(this)">
                             @foreach($barang as $unit)
-                            <option value="{{$unit->idbarang}}|{{$unit->namabarang}}|{{$unit->stok}}">Stok {{$unit->stok}} | {{$unit->namabarang}} [{{$unit->kodebarang}}]</option>
+                            <option value="{{$unit->idbarang}}" data-nama="{{$unit->namabarang}}" data-stok="{{$unit->stok}}">Stok {{$unit->stok}} | {{$unit->namabarang}} [{{$unit->kodebarang}}]</option>
                             @endforeach
                           </select>
                         </td>
@@ -237,6 +264,24 @@ active
 @endsection
 
 @section('script')
+<script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+<script>
+  
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+      /* handle success */
+      // console.log(`Scan result: ${decodedText}`, decodedResult);
+      document.getElementById('kode_barang').value=decodedText;
+      $('#formMasuk').find('select[name=addBrg]').val(decodedText).change().blur();
+      // ...
+      html5QrcodeScanner.clear();
+      html5QrCode.stop();
+  };
+  const config = { fps: 10, qrbox: 200 };// Select front camera or fail with `OverconstrainedError`.
+  html5QrCode.start({ facingMode: { exact: "environment"} }, config, qrCodeSuccessCallback);
+  // html5QrCode.start({ facingMode: { exact: "user"} }, config, qrCodeSuccessCallback);
+
+</script>
 <script>
   var oTable;
   var now = moment();
@@ -317,16 +362,16 @@ active
   }
 
   function cekStok(self){
-    var brg = self.value.split('|');
-    $('#stok').val(brg[2]);
+    var brg = $('[name=addBrg]').find("option:selected").data('stok');;
+    $('#stok').val(brg);
     
   }
   var jumDetailMasuk=0;
   
   function addPengadaan() {
     var brg = $('[name=addBrg]').val();
-    var namaBrg = brg.split('|');
-    var stok = $('[name=stok]').val();
+    var namaBrg = $('[name=addBrg]').find("option:selected").data('nama');
+    var stok = $('[name=addBrg]').find("option:selected").data('stok');
     var stokreal = $('[name=stokreal]').val();
     var selisih = $('[name=selisih]').val();
     
@@ -343,7 +388,7 @@ active
         '<tr class="table-info">'+
         '<input type="hidden" readonly name="detail[]" value="' + namaBrg[0] + '||' + stok + '||' + stokreal + '||' + selisih +'">' +
         '<td>' + jumDetailMasuk + '</td>' +
-        '<td>' + namaBrg[1] + '</td>' +
+        '<td>' + namaBrg + '</td>' +
         '<td>' + stok + '</td>' +
         '<td>' + stokreal + '</td>' +
         '<td>' + selisih + '</td>' +
@@ -415,7 +460,7 @@ active
               '<a class="dropdown-item" href="#" onclick="view(this)">Lihat</a>' +
               '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
               '<a class="dropdown-item" href="#" onclick="cetak(this)">Cetak</a>' +
-              '<a class="dropdown-item" href="#" ">Sesuaikan</a>' +
+              '<a class="dropdown-item" href="{{route("stokopname.sesuai",["id"=>''])}}/'+e+'" ">Sesuaikan</a>' +
               '<div class="dropdown-divider"></div>' +
               '<a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>' +
               '</div>' +

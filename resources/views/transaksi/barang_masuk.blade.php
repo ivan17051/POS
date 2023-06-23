@@ -353,11 +353,12 @@ active
   function view(self) {
     var tr = $(self).closest('tr');
     var data = oTable.row(tr).data();
+    console.log(data);
 
     var $modal = $('#view');
     $('#detail_brg_msk').empty();
     $.ajax({
-        url: "{{ route('barang_masuk.detail',['nomor'=>'']) }}" + '/' + data.nomor ,
+        url: "{{ route('barang_masuk.detail',['id'=>'']) }}" + '/' + data.id ,
         type: "GET",
         dataType: "JSON",
         success: function(data) {
@@ -503,7 +504,7 @@ active
   }
 
   function toggleTglJatuhTempo(self) {
-    console.log(self.value);
+    // console.log(self.value);
     var modal = $('#fieldTglJatuhTempo');
     if(self.value=='kredit'){
       modal.show();

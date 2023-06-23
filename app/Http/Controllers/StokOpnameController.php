@@ -33,6 +33,13 @@ class StokOpnameController extends Controller
         return $data; 
     }
 
+    public function sesuaikan($id){
+        $data['stok'] = StokOpname::where('id', $id)->first();
+        $data['detail'] = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang')->get();
+        // dd($data);
+        return view('stokopname.sesuaikan',$data);
+    }
+
     public function store(Request $request){
         DB::beginTransaction();
         try{

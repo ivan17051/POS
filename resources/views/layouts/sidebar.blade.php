@@ -100,7 +100,7 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> Tampilan Kasir </span>
                             </a>
                         </li>
-                        <li class="nav-item @yield('userStatus')">
+                        <li class="nav-item">
                             <a class="nav-link" href="{{url('/customer_view')}}">
                                 <span class="sidebar-mini"> TP </span>
                                 <span class="sidebar-normal"> Tampilan Pembeli </span>
@@ -114,6 +114,12 @@ $role = Auth::user()->role;
                 <a class="nav-link" href="{{route('stok.index')}}">
                     <i class="material-icons">inventory</i>
                     <p> Stok </p>
+                </a>
+            </li>
+            <li class="nav-item @yield('stokopnameStatus')">
+                <a class="nav-link" href="{{route('stokopname.index')}}">
+                    <i class="material-icons">task</i>
+                    <p> Stok Opname</p>
                 </a>
             </li>
             <li class="nav-item @yield('laporanStatus')">
