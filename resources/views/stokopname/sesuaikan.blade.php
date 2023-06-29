@@ -82,87 +82,103 @@ active
 <div class="container-fluid">
   <div class="row" id="indexMasuk">
     <div class="col-md-12">
-      <div class="card">
-        <div class="card-header card-header-tabs card-header-primary">
-          <div class="subtitle-wrapper">
-            <h4 class="card-title">Penyesuaian</h4>
+      <form action="{{route('sesuai.store')}}" method="POST">
+      @csrf
+        <div class="card">
+          <div class="card-header card-header-tabs card-header-primary">
+            <div class="subtitle-wrapper">
+              <h4 class="card-title">Penyesuaian</h4>
+            </div>
           </div>
-        </div>
-        <div class="card-body" id="index-container">
+          <div class="card-body" id="index-container">
 
-          <div class="toolbar row">
+            <!-- <div class="toolbar row">
             <div class="col">
               <a href="{{route('stokopname.index')}}" class="btn btn-sm btn-dark">Kembali</a>
             </div>
-            <!-- <div class="col text-right">
+            <div class="col text-right">
               <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalTambah">Tambah</button>
-            </div> -->
-          </div>
-          <div class="row">
-            <label class="col-sm-2 col-form-label">No. Penyesuaian</label>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <input type="text" class="form-control" name="nomor" readonly>
+            </div>
+          </div> -->
+            <input type="hidden" value="{{$stok->id}}" name="id">
+            <div class="row">
+              <label class="col-sm-2 col-form-label">No. Penyesuaian</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="nopenyesuaian" readonly value="{{isset($stok->nopenyesuaian) ? $stok->nopenyesuaian : ''}}">
+                </div>
+              </div>
+              <label class="col-sm-2 col-form-label">No. Stok Opname</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="nostokopname" readonly value="{{$stok->nostokopname}}">
+                </div>
               </div>
             </div>
-            <label class="col-sm-2 col-form-label">No. Stok Opname</label>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <input type="text" class="form-control" name="no_stokopname" readonly value="{{$stok->nomor}}">
+            <div class="row mt-3">
+              <label class="col-sm-2 col-form-label">Tanggal Penyesuaian</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <input type="date" class="form-control" name="tglpenyesuaian" 
+                    value="{{isset($stok->tglpenyesuaian) ? $stok->tglpenyesuaian : $stok->tglstokopname}}" 
+                    {{isset($stok->tglpenyesuaian) ? 'readonly' : ''}} required>
+                  <span class="bmd-help">Masukkan Tanggal Penyesuaian.</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row mt-3">
-            <label class="col-sm-2 col-form-label">Tanggal</label>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <input type="date" class="form-control" name="tanggal" required>
-                <span class="bmd-help">Masukkan Tanggal Transaksi.</span>
+            <div class="row mt-3">
+              <label class="col-sm-2 col-form-label">Nama Petugas</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="petugaspenyesuaian" value="{{isset($stok->petugaspenyesuaian) ? $stok->petugaspenyesuaian : $stok->petugasstokopname}}" 
+                    {{isset($stok->petugaspenyesuaian) ? 'readonly' : ''}} required>
+                  <span class="bmd-help">Masukkan Nama Petugas.</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row mt-3">
-            <label class="col-sm-2 col-form-label">Nama Petugas</label>
-            <div class="col-sm-10">
-              <div class="form-group">
-                <input type="text" class="form-control" name="petugas">
-                <span class="bmd-help">Masukkan Nama Petugas.</span>
+            <div class="anim slide" id="table-container">
+              <div class="material-datatables">
+                <table id="datatables" class="table table-striped table-no-bordered table-hover" width="100%"
+                  style="width:100%">
+                  <thead>
+                    <th style="width:5%;">No</th>
+                    <th>Barang</th>
+                    <th style="width:13%;">Selisih</th>
+                    <th style="width:20%;">Hasil Penyesuaian</th>
+                    <th style="width:13%;">Status</th>
+                    <!-- <th style="width:5%;">Aksi</th> -->
+                  </thead>
+                  <tbody>
+                    @foreach($detail as $key=>$unit)
+                    <tr>
+                      <td style="width:5%;">{{$key+1}}</td>
+                      <td>{{$unit->getBarang->namabarang}}</td>
+                      <td>{{$unit->selisih}}</td>
+                      <td>{{$unit->stok}} &rarr; {{$unit->stokreal}}</td>
+                      <td>
+                        @if($stok->status=='draft') <span class="tag badge bg-warning">Draft</span>
+                        @elseif($stok->status=='final') <span class="tag badge bg-info">Final</span>
+                        @endif
+                      </td>
+                      <!-- <td style="width:5%;">
+                    <a href="#" class="btn btn-link btn-warning btn-just-icon edit btn-sm" onclick="onEdit(this)"><i class="material-icons">edit_square</i></a>
+                  </td> -->
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
               </div>
             </div>
+
           </div>
-          <div class="anim slide" id="table-container">
-            <div class="material-datatables">
-              <table id="datatables" class="table table-striped table-no-bordered table-hover" width="100%"
-                style="width:100%">
-                <thead>
-                  <th style="width:5%;">ID</th>
-                  <th style="width:15%;">Nomor</th>
-                  <th>Barang</th>
-                  <th style="width:15%;">Selisih</th>
-                  <th style="width:15%;">Penyesuaian</th>
-                  <th style="width:5%;">Aksi</th>
-                </thead>
-                <tbody>
-                 @foreach($detail as $unit)
-                 <tr>
-                  <td style="width:5%;">{{$unit->id}}</td>
-                  <td style="width:15%;">NOMOR</td>
-                  <td>{{$unit->getBarang->namabarang}}</td>
-                  <td style="width:15%;">{{$unit->selisih}}</td>
-                  <td style="width:15%;">Penyesuaian</td>
-                  <td style="width:5%;">Aksi</td>
-                 </tr>
-                 @endforeach
-                </tbody>
-              </table>
-            </div>
+          <div class="card-footer">
+            <a href="{{route('stokopname.index')}}" class="btn btn-sm btn-dark">Kembali</a>
+            <button type="submit" class="btn btn-sm btn-primary" {{$stok->status=='final' ? 'disabled' : ''}}>Sesuaikan</button>
           </div>
 
+          <!--  end card  -->
         </div>
-
-
-        <!--  end card  -->
-      </div>
+      </form>
       <!-- end col-md-12 -->
     </div>
   </div>

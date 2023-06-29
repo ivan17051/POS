@@ -40,22 +40,64 @@ class StokOpnameController extends Controller
         return view('stokopname.sesuaikan',$data);
     }
 
+    public function sesuaikanStore(Request $request){
+        DB::beginTransaction();
+        try{
+            // PENSTOK/MEI/23/001
+            $nomorMax = StokOpname::whereNotNull('nopenyesuaian')->orderBy('doc','desc')->first(['nopenyesuaian']);
+            if(isset($nomorMax)){
+                $nomorMax = explode('/',$nomorMax->nopenyesuaian);
+
+                if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
+                    $max = base_convert($nomorMax[3],10,10);
+                }  
+            } else {
+                $max = 0;
+            }
+
+            $stokopname = StokOpname::where('id',$request->id)->first();
+            $stokopname->fill($request->all());
+            
+            $stokopname->nopenyesuaian = 'PENSTOK/'.strtoupper(date('M')).'/'.date('y').'/'.sprintf("%03d", $max+1);
+            $stokopname->status='final';
+            $stokopname->save();
+
+            $detail = StokOpnameDetail::where('idstokopname', $request->id)->get();
+            
+            foreach($detail as $unit){
+                $unit->status = 'final';
+                $unit->save();
+            }
+            // dd($request->all(), $stokopname, $detail);
+        }catch(Exception $exception){
+            DB::rollBack();
+            $this->flashError($exception->getMessage());
+            return back();
+        }
+
+        DB::commit();
+        $this->flashSuccess('Penyesuaian Berhasil');
+        return back();
+    }
+
     public function store(Request $request){
         DB::beginTransaction();
         try{
             $jumlah = 0;
             // STOKOPN/MEI/23/001
-            $nomorMax = StokOpname::whereNotNull('nomor')->orderBy('doc','desc')->first(['nomor']);
-            $nomorMax = explode('/',$nomorMax->nomor);
+            $nomorMax = StokOpname::whereNotNull('nostokopname')->orderBy('doc','desc')->first(['nostokopname']);
+            if(isset($nomorMax)){
+                $nomorMax = explode('/',$nomorMax->nostokopname);
             
-            if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
-                $max = base_convert($nomorMax[3],10,10);
-            }
-            else {
+                if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
+                    $max = base_convert($nomorMax[3],10,10);
+                }  
+            } else {
                 $max = 0;
             }
+            
             $stokopname = new StokOpname($request->all());
-            $stokopname->nomor = 'STOKOPN/'.strtoupper(date('M')).'/'.date('y').'/'.sprintf("%03d", $max+1);
+            $stokopname->nostokopname = 'STOKOPN/'.strtoupper(date('M')).'/'.date('y').'/'.sprintf("%03d", $max+1);
             $stokopname->status='draft';
             $stokopname->save();
             
@@ -63,12 +105,13 @@ class StokOpnameController extends Controller
                 $harga = explode("||",$unit);
                 $detail_barang = new StokOpnameDetail([
                     'idstokopname'  => $stokopname->id,
-                    'tanggal'       => $stokopname->tanggal,
-                    'nomor'         => $stokopname->nomor,
+                    'tanggal'       => $stokopname->tglstokponame,
+                    'nomor'         => $stokopname->nostokopname,
                     'idbarang'      => $harga[0],
                     'stok'          => $harga[1],
                     'stokreal'      => $harga[2],
                     'selisih'       => $harga[3],
+                    'status'        => 'draft',
                 ]);
                 
                 $detail_barang->save();

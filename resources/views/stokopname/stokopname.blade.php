@@ -156,7 +156,7 @@ active
                 <label class="col-sm-2 col-form-label">Tanggal</label>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <input type="date" class="form-control" name="tanggal" required>
+                    <input type="date" class="form-control" name="tglstokopname" required>
                     <span class="bmd-help">Masukkan Tanggal Transaksi.</span>
                   </div>
                 </div>
@@ -164,7 +164,7 @@ active
                 <label class="col-sm-2 col-form-label">No. Transaksi</label>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <input type="text" class="form-control" name="nomor" readonly>
+                    <input type="text" class="form-control" name="nostokopname" readonly>
                     <span class="bmd-help">Masukkan Nomor Transaksi.</span>
                   </div>
                 </div>
@@ -174,7 +174,7 @@ active
                 <label class="col-sm-2 col-form-label">Nama Petugas</label>
                 <div class="col-sm-10">
                   <div class="form-group">
-                    <input type="text" class="form-control" name="petugas">
+                    <input type="text" class="form-control" name="petugasstokopname">
                     <span class="bmd-help">Masukkan Nama Petugas.</span>
                   </div>
                 </div>
@@ -386,7 +386,7 @@ active
       jumDetailMasuk++;
       $('#detailBrgMasuk').append(
         '<tr class="table-info">'+
-        '<input type="hidden" readonly name="detail[]" value="' + namaBrg[0] + '||' + stok + '||' + stokreal + '||' + selisih +'">' +
+        '<input type="hidden" readonly name="detail[]" value="' + brg + '||' + stok + '||' + stokreal + '||' + selisih +'">' +
         '<td>' + jumDetailMasuk + '</td>' +
         '<td>' + namaBrg + '</td>' +
         '<td>' + stok + '</td>' +
@@ -443,8 +443,8 @@ active
       },
       columns: [
         { data: 'id', title: 'ID', width: '5%' },
-        { data: 'nomor', title: 'Nomor Transaksi' },
-        { data: 'tanggal', title: 'Tanggal', width: '15%' },
+        { data: 'nostokopname', title: 'Nomor Transaksi' },
+        { data: 'tglstokopname', title: 'Tanggal', width: '15%' },
         { data: 'status', title: 'Status', width: '15%', render: function (e, d, r) {
             if(e == 'final') return '<span class="tag badge bg-info">Final</span>';
             else if(e == 'draft') return '<span class="tag badge bg-warning">Draft</span>';
@@ -452,19 +452,23 @@ active
         },
         {
           data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
-            return '<span class="nav-item dropdown ">' +
+            var where = '';
+            if(r.status=='draft'){
+              where = '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>';
+            }
+            var action = '<span class="nav-item dropdown ">' +
               '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
               '<i class="material-icons">more_vert</i>' +
               '</a>' +
               '<div class="dropdown-menu dropdown-menu-left" >' +
-              '<a class="dropdown-item" href="#" onclick="view(this)">Lihat</a>' +
-              '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
+              '<a class="dropdown-item" href="#" onclick="view(this)">Lihat</a>' + where +
               '<a class="dropdown-item" href="#" onclick="cetak(this)">Cetak</a>' +
               '<a class="dropdown-item" href="{{route("stokopname.sesuai",["id"=>''])}}/'+e+'" ">Sesuaikan</a>' +
               '<div class="dropdown-divider"></div>' +
               '<a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>' +
               '</div>' +
               '</span>'
+            return action;
           }
         },
       ],

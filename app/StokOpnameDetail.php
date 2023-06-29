@@ -17,6 +17,7 @@ class StokOpnameDetail extends Model
         "stok",
         "stokreal",
         "selisih",
+        "status",
     ];
 
     public function getBarang()

@@ -11,9 +11,12 @@ class StokOpname extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "nomor",
-        "tanggal",
-        "petugas",
+        "nostokopname",
+        "nopenyesuaian",
+        "tglstokopname",
+        "tglpenyesuaian",
+        "petugasstokopname",
+        "petugaspenyesuaian",
         "status",
     ];
 
