@@ -24,40 +24,38 @@
 
 <body class="stc">
 
-<table style="font-size: 8pt; border: solid; padding: 5px; width: 100%;">
-            <tbody><tr style="align-content: center;">
-                <td rowspan="6" style="width: 60%; text-align: center;"><img id="barcode" alt=""></td>
-                <!-- <td style="font-weight: bold; text-align: center;">KPRI Sekda Prov Jatim</td> -->
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td style="font-weight: bold; text-align: center; padding: 2px; height: 3px;"></td>
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">1: Rp {{number_format($barang->harga_1)}}</td>
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">3: Rp {{number_format($barang->harga_3)}}</td>
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">6: Rp {{number_format($barang->harga_6)}}</td>
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td style="font-weight: bold; text-align: center; padding: 2px; height: 5px;"></td>
-            </tr>
-            <tr>
-                <!-- <td></td> -->
-                <td rowspan="2" colspan="2" style="font-weight: bold; text-align: center; padding: 2px;font-size:12px;">{{$barang->namabarang}}</td>
-            </tr>
-            
-        </tbody></table>
-        <br>
-    
-
+<table style="font-size: 10pt; border: solid; padding: 5px; width: 100%;height: 100%">
+    <tbody><tr style="align-content: center;">
+        <td rowspan="6" style="width: 60%; text-align: center;"><img id="barcode" alt=""></td>
+        <!-- <td style="font-weight: bold; text-align: center;">KPRI Sekda Prov Jatim</td> -->
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td style="font-weight: bold; text-align: center; padding: 2px; height: 3px;"></td>
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">1: Rp {{number_format($barang->harga_1)}}</td>
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">3: Rp {{number_format($barang->harga_3)}}</td>
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">6: Rp {{number_format($barang->harga_6)}}</td>
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td style="font-weight: bold; text-align: center; padding: 2px; height: 5px;"></td>
+        </tr>
+        <tr>
+            <!-- <td></td> -->
+            <td rowspan="2" colspan="2" style="font-weight: bold; text-align: center; padding: 2px;font-size:15px;">{{$barang->namabarang}}</td>
+        </tr>
+        
+    </tbody></table>
+    <br>
  
  </div>
 

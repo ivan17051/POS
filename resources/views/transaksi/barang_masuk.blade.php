@@ -295,7 +295,7 @@ active
                         <td>
                           <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true">
                             @foreach($barang as $unit)
-                            <option value="{{$unit->id}}|{{$unit->namabarang}}">{{$unit->namabarang}}</option>
+                            <option value="{{$unit->id}}|{{$unit->namabarang}}">{{$unit->kodebarang}} | {{$unit->namabarang}}</option>
                             @endforeach
                           </select>
                         </td>
@@ -541,7 +541,7 @@ active
         { data: 'tanggal', title: 'Tanggal', width: '15%' },
         { data: 'get_supplier.nama', title: 'Supplier' },
         {
-          data: 'jumlah', title: 'Jumlah', width: '15%', render: function (e, d, r) {
+          data: 'jumlah', title: 'Total', width: '15%', render: function (e, d, r) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
           }
         },

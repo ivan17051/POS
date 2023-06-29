@@ -69,10 +69,12 @@ class BarangKeluarController extends Controller
         try {
             $jumlah = 0;
             $nomorMax = BarangKeluar::whereNotNull('nomor')->orderBy('doc', 'desc')->first(['nomor']);
-            $nomorMax = explode('-', $nomorMax->nomor);
-
-            if (trim($nomorMax[0], 'BK') == date('Ymd')) {
-                $max = base_convert($nomorMax[1], 10, 10);
+            
+            if(isset($nomorMax)){
+                $nomorMax = explode('-', $nomorMax->nomor);
+                if (trim($nomorMax[0], 'BK') == date('Ymd')) {
+                    $max = base_convert($nomorMax[1], 10, 10);
+                }
             } else {
                 $max = 1;
             }

@@ -16,7 +16,7 @@ class BarangMasukController extends Controller
     //index, create, store, show, edit, update and destroy
     public function index()
     {
-        $d['barang'] = Barang::get(['id', 'namabarang']);
+        $d['barang'] = Barang::get(['id', 'namabarang', 'kodebarang']);
         $d['supplier'] = Supplier::get(['id', 'nama']);
         return view('transaksi.barang_masuk', $d);
     }
@@ -92,10 +92,12 @@ class BarangMasukController extends Controller
         try {
             $jumlah = 0;
             $nomorMax = BarangMasuk::whereNotNull('nomor')->orderBy('doc', 'desc')->first(['nomor']);
-            $nomorMax = explode('-', $nomorMax->nomor);
-
-            if (trim($nomorMax[0], 'BM') == date('Ymd')) {
-                $max = base_convert($nomorMax[1], 10, 10);
+            if(isset($nomorMax)){
+                $nomorMax = explode('-', $nomorMax->nomor);
+                
+                if (trim($nomorMax[0], 'BM') == date('Ymd')) {
+                    $max = base_convert($nomorMax[1], 10, 10);
+                }
             } else {
                 $max = 0;
             }
@@ -108,14 +110,14 @@ class BarangMasukController extends Controller
 
             foreach ($request->detail as $unit) {
                 $harga = explode("||", $unit);
-                $jumlah += $harga[3];
+                $jumlah += $harga[4];
                 $detail_barang = new BarangMasukDetail([
                     'idtransaksi' => $barang_masuk->id,
                     'tanggal' => $barang_masuk->tanggal,
                     'nomor' => $barang_masuk->nomor,
                     'idsupplier' => $barang_masuk->idsupplier,
                     'idbarang' => $harga[0],
-                    'tglexp' => $harga[1],
+                    'tglexp' => $harga[1]!="" ? $harga[1] : null,
                     'qty' => $harga[2],
                     'h_sat' => $harga[3],
                     'jumlah' => $harga[4],
@@ -134,6 +136,7 @@ class BarangMasukController extends Controller
                     $stok->qtyin += $harga[2];
                     $stok->stok += $harga[2];
                 }
+                // dd($detail_barang);
                 $stok->save();
                 $detail_barang->save();
             }

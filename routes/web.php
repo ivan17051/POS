@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/stokopname/data', 'StokOpnameController@data')->name('stokopname.data');
     Route::get('/stokopname/{id}', 'StokOpnameController@detail')->name('stokopname.detail');
     Route::get('/stokopname/sesuai/{id}', 'StokOpnameController@sesuaikan')->name('stokopname.sesuai');
+    Route::post('/stokopname/sesuai/store', 'StokOpnameController@sesuaikanStore')->name('sesuai.store');
 
     Route::get('/cetak/barcode/{id}', 'CetakController@barcode')->name('cetak.barcode');
     Route::get('/cetak/stokopname/{id}', 'CetakController@stokopname')->name('cetak.stokopname');

@@ -21,7 +21,7 @@ class CetakController extends Controller
 
     public function struk($id)
     {
-        $d['barang_keluar'] = BarangKeluar::where('id', $id)->with('getMember:id,nama,poin')->first();
+        $d['barang_keluar'] = BarangKeluar::where('id', $id)->with('getMember:id,nama,notelp,poin')->first();
         $d['detail'] = BarangKeluarDetail::where('idtransaksi', $id)
             ->with('getBarang:id,namabarang')->get(['idbarang', 'qty', 'h_sat', 'jumlah']);
         // dd($d);

@@ -258,7 +258,7 @@ active
                 else return '';
               }},
               { data: 'jenis', title: 'Jenis', width:'13%' },
-              { data: 'jumlah', title: 'Jumlah', width:'20%', render: function(e,d,r){
+              { data: 'jumlah', title: 'Total', width:'20%', render: function(e,d,r){
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
               }},
               { data: 'action', title: 'Aksi', width:'10%', orderable: false },

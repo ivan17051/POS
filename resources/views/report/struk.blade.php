@@ -46,7 +46,7 @@
                               <td class="fontCenter " style="font-size:12px;">JL. PAHLAWAN 110 SURABAYA</td>
                             </tr>
                             <tr>
-                              <td class="fontCenter " style="font-size:12px">03188188593</td>
+                              <td class="fontCenter " style="font-size:12px">081232679997</td>
                             </tr> 
                             <tr>
                               <td>&nbsp;</td>
@@ -109,6 +109,10 @@
                             <tr>
                               <td style="font-size:12px">Nama</td>
                               <td style="font-size:12px">: {{$barang_keluar->getMember->nama}} .</td>
+                            </tr>
+                            <tr>
+                              <td style="font-size:12px">No. HP</td>
+                              <td style="font-size:12px">: {{$barang_keluar->getMember->notelp}} .</td>
                             </tr>
                             <tr>
                               <td style="font-size:12px">Poin</td>
