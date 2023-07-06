@@ -15,6 +15,7 @@ class Stok extends Model
         "idsupplier",
         "qtyin",
         "qtyout",
+        "penyesuaian",
         "stok",
     ];
 

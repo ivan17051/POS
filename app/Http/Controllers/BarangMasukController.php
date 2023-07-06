@@ -97,6 +97,8 @@ class BarangMasukController extends Controller
                 
                 if (trim($nomorMax[0], 'BM') == date('Ymd')) {
                     $max = base_convert($nomorMax[1], 10, 10);
+                } else {
+                    $max = 0;
                 }
             } else {
                 $max = 0;

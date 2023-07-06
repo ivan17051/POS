@@ -74,9 +74,11 @@ class BarangKeluarController extends Controller
                 $nomorMax = explode('-', $nomorMax->nomor);
                 if (trim($nomorMax[0], 'BK') == date('Ymd')) {
                     $max = base_convert($nomorMax[1], 10, 10);
+                } else {
+                    $max = 0;
                 }
             } else {
-                $max = 1;
+                $max = 0;
             }
 
             $barang_keluar = new BarangKeluar($request->all());

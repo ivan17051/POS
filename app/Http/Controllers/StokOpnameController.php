@@ -33,53 +33,6 @@ class StokOpnameController extends Controller
         return $data; 
     }
 
-    public function sesuaikan($id){
-        $data['stok'] = StokOpname::where('id', $id)->first();
-        $data['detail'] = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang')->get();
-        // dd($data);
-        return view('stokopname.sesuaikan',$data);
-    }
-
-    public function sesuaikanStore(Request $request){
-        DB::beginTransaction();
-        try{
-            // PENSTOK/MEI/23/001
-            $nomorMax = StokOpname::whereNotNull('nopenyesuaian')->orderBy('doc','desc')->first(['nopenyesuaian']);
-            if(isset($nomorMax)){
-                $nomorMax = explode('/',$nomorMax->nopenyesuaian);
-
-                if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
-                    $max = base_convert($nomorMax[3],10,10);
-                }  
-            } else {
-                $max = 0;
-            }
-
-            $stokopname = StokOpname::where('id',$request->id)->first();
-            $stokopname->fill($request->all());
-            
-            $stokopname->nopenyesuaian = 'PENSTOK/'.strtoupper(date('M')).'/'.date('y').'/'.sprintf("%03d", $max+1);
-            $stokopname->status='final';
-            $stokopname->save();
-
-            $detail = StokOpnameDetail::where('idstokopname', $request->id)->get();
-            
-            foreach($detail as $unit){
-                $unit->status = 'final';
-                $unit->save();
-            }
-            // dd($request->all(), $stokopname, $detail);
-        }catch(Exception $exception){
-            DB::rollBack();
-            $this->flashError($exception->getMessage());
-            return back();
-        }
-
-        DB::commit();
-        $this->flashSuccess('Penyesuaian Berhasil');
-        return back();
-    }
-
     public function store(Request $request){
         DB::beginTransaction();
         try{
@@ -91,7 +44,9 @@ class StokOpnameController extends Controller
             
                 if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
                     $max = base_convert($nomorMax[3],10,10);
-                }  
+                } else {
+                    $max = 0;
+                }
             } else {
                 $max = 0;
             }
@@ -139,6 +94,64 @@ class StokOpnameController extends Controller
         }
         
         $this->flashSuccess('Data Supplier Berhasil Diubah');
+        return back();
+    }
+
+    public function sesuaikan($id){
+        $data['stok'] = StokOpname::where('id', $id)->first();
+        $data['detail'] = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang')->get();
+        
+        return view('stokopname.sesuaikan',$data);
+    }
+
+    public function sesuaikanStore(Request $request){
+        DB::beginTransaction();
+        try{
+            // PENSTOK/MEI/23/001
+            $nomorMax = StokOpname::whereNotNull('nopenyesuaian')->orderBy('doc','desc')->first(['nopenyesuaian']);
+            if(isset($nomorMax)){
+                $nomorMax = explode('/',$nomorMax->nopenyesuaian);
+
+                if($nomorMax[1] == strtoupper(date('M')) && $nomorMax[2] == date('y')) {
+                    $max = base_convert($nomorMax[3],10,10);
+                } else {
+                    $max = 0;
+                }
+            } else {
+                $max = 0;
+            }
+
+            $stokopname = StokOpname::where('id',$request->id)->first();
+            $stokopname->fill($request->all());
+            
+            $stokopname->nopenyesuaian = 'PENSTOK/'.strtoupper(date('M')).'/'.date('y').'/'.sprintf("%03d", $max+1);
+            $stokopname->status='final';
+            $stokopname->save();
+
+            $detail = StokOpnameDetail::where('idstokopname', $request->id)->get();
+            
+            foreach($detail as $unit){
+                $unit->status = 'final';
+                $stok = Stok::where('idbarang',$unit->idbarang)->orderBy('doc','desc')->get();
+                if(count($stok)>0 && ){
+
+                }
+                $stok->penyesuaian = $unit->selisih;
+                $stok->stok = $stok->stok + $unit->selisih;
+
+                $stok->save();
+                $unit->save();
+            }
+
+            // dd($request->all(), $stokopname, $detail);
+        }catch(Exception $exception){
+            DB::rollBack();
+            $this->flashError($exception->getMessage());
+            return back();
+        }
+
+        DB::commit();
+        $this->flashSuccess('Penyesuaian Berhasil');
         return back();
     }
 }
