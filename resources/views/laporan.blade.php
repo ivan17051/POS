@@ -39,7 +39,7 @@ active
                   
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="1"> Data Barang Masuk
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="1"> Laporan Penjualan Barang
                       <span class="circle">
                         <span class="check"></span>
                       </span>
@@ -47,19 +47,62 @@ active
                   </div>
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="jenislaporan" value="2"> Laporan Pemasukan
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="2"> Laporan Pendapatan / Pemasukkan
                       <span class="circle">
                         <span class="check"></span>
                       </span>
                     </label>
                   </div>
-                  
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="3"> Laporan Laba / Rugi
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="4"> Laporan Stok
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="5"> Laporan Barang Mendekati / Sudah Expired
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="6"> Laporan Barang Paling Laku & Tidak Laku
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
-              
+              <div class="row" id='tanggal' hidden>
+                <label class="col-sm-2 col-form-label">Pilih Periode</label>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <input type="text" name="tglawal" class="form-control monthyearpicker" placeholder="Awal">
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <input type="text" name="tglakhir" class="form-control monthyearpicker" placeholder="Akhir">
+                  </div>
+                </div>
+              </div>
               <div class="row text-right mt-3">
                 <div class="col">
-                  <button type="button" class="btn btn-primary">Lihat</button>
+                  <button type="submit" class="btn btn-primary">Lihat</button>
                   <!-- <button type="submit" class="btn btn-success">Download</button>                   -->
                 </div>
               </div>
@@ -84,70 +127,10 @@ active
     var tgl = $('#tanggal');
     var spesialisasi = $('#spesialisasi');
     
-    if(e.target.value==1 || e.target.value==6 || e.target.value==8 || e.target.value==9 || e.target.value==12 || e.target.value==13){
-      profesi.attr('hidden', true)
-      profesi.find('select').attr('required', false);
-      profesiman.attr('hidden', true)
-      profesiman.find('select').attr('required', false);
-      spesialisasi.attr('hidden', true)
-      spesialisasi.find('select').attr('required', false);
-      faskes.attr('hidden', true)
-      faskes.find('select').attr('required', false);
-      tgl.attr('hidden', true)
-      tgl.find('input').attr('required', false);
-    }else if(e.target.value==2 || e.target.value==10 || e.target.value==11 || e.target.value==14){
-      profesi.attr('hidden', true)
-      profesi.find('select').attr('required', false);
-      profesiman.attr('hidden', true)
-      profesiman.find('select').attr('required', false);
-      spesialisasi.attr('hidden', true)
-      spesialisasi.find('select').attr('required', false);
-      faskes.attr('hidden', true)
-      faskes.find('select').attr('required', false);
+    if(e.target.value==1 || e.target.value==2 || e.target.value==3 || e.target.value==6 ){
       tgl.attr('hidden', false)
-      tgl.find('input').attr('required', true);
-    }else if(e.target.value==3){
-      profesi.attr('hidden', true)
-      profesi.find('select').attr('required', false);
-      profesiman.attr('hidden', true)
-      profesiman.find('select').attr('required', false);
-      spesialisasi.attr('hidden', true)
-      spesialisasi.find('select').attr('required', false);
-      faskes.attr('hidden', false)
-      faskes.find('select').attr('required', true);
-      tgl.attr('hidden', true)
       tgl.find('input').attr('required', false);
-    }else if(e.target.value==4){
-      profesi.attr('hidden', false)
-      profesi.find('select').attr('required', true);
-      profesiman.attr('hidden', true)
-      profesiman.find('select').attr('required', false);
-      spesialisasi.attr('hidden', true)
-      spesialisasi.find('select').attr('required', false);
-      faskes.attr('hidden', true)
-      faskes.find('select').attr('required', false);
-      tgl.attr('hidden', true)
-      tgl.find('input').attr('required', false);
-    }else if(e.target.value==5){
-      profesi.attr('hidden', true)
-      profesi.find('select').attr('required', false);
-      profesiman.attr('hidden', false)
-      profesiman.find('select').attr('required', true);
-      spesialisasi.attr('hidden', true)
-      spesialisasi.find('select').attr('required', false);
-      faskes.attr('hidden', true)
-      faskes.find('select').attr('required', false);
-      tgl.attr('hidden', false)
-      tgl.find('input').attr('required', true);
-    }else if(e.target.value==7){
-      profesi.attr('hidden', true)
-      profesi.find('select').attr('required', false);
-      profesiman.attr('hidden', true)
-      profesiman.find('select').attr('required', false);
-      spesialisasi.attr('hidden', false)
-      spesialisasi.find('select').attr('required', true);
-      faskes.attr('hidden', true)
-      faskes.find('select').attr('required', false);
+    }else if(e.target.value==4 || e.target.value==5){
       tgl.attr('hidden', true)
       tgl.find('input').attr('required', false);
     }

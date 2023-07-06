@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\BarangMasukDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Stok;
 use App\Barang;
 use App\Member;
+use App\BarangKeluar;
+use App\BarangKeluarDetail;
 use DB;
-use Datatables;
 use Validator;
 
 class DataController extends Controller
@@ -43,43 +46,114 @@ class DataController extends Controller
     public function downloadLaporan(Request $request)
     {
 
-        // Data Nakes Teregistrasi/Tersertifikasi
+        // Laporan Penualan Barang
         if ($request->jenislaporan == 1) {
-            $data = Profesi::join('vw_agregatnakesbyprofesi', 'mprofesi.id', '=', 'vw_agregatnakesbyprofesi.idprofesi')->get();
-            $data2 = STR::selectRaw('idprofesi, count(id) as totalaktif')
-                ->where('isactive', 1)->where('expiry', '>', now())->groupBy('idprofesi')->get();
+            if (isset($request->tglawal))
+                $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
+            if (isset($request->tglakhir))
+                $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
 
-            return view('laporan.laporan1', ['data' => $data, 'datastr' => $data2]);
+            if (isset($periode['tglawal']) && isset($periode['tglakhir']))
+                $data = BarangKeluarDetail::whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->with('getBarang:id,kodebarang,namabarang')->get(['id', 'idbarang', 'qty', 'tanggal']);
+            elseif (isset($periode['tglawal'])) {
+                $periode['tglakhir'] = date('Y-m-d');
+                $data = BarangKeluarDetail::where('tanggal', '>=', $periode['tglawal'])->with('getBarang:id,kodebarang,namabarang')->get(['id', 'idbarang', 'qty', 'tanggal']);
+            } elseif (isset($periode['tglakhir'])) {
+                $data = BarangKeluarDetail::with('getBarang:id,kodebarang,namabarang')->where('tanggal', '<=', $periode['tglakhir'])->oldest('tanggal')->get(['id', 'idbarang', 'qty', 'tanggal']);
+                $periode['tglawal'] = $data[0]->tanggal;
+            } else {
+                $periode = null;
+                $data = BarangKeluarDetail::with('getBarang:id,kodebarang,namabarang')->get(['id', 'idbarang', 'qty']);
+            }
+
+            return view('laporan.laporan1', ['data' => $data, 'periode' => $periode]);
         }
-        // Data Cetak Persetujuan Teknis
+        // Laporan Pendapatan / Pemasukan
         elseif ($request->jenislaporan == 2) {
-            $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
-            $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
+            if (isset($request->tglawal))
+                $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
+            if (isset($request->tglakhir))
+                $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
 
-            $data = SIP::whereBetween('tglverif', [$periode['tglawal'], $periode['tglakhir']])->whereNotIn('idprofesi', [5, 6, 7])
-                ->where('isactive', 1)->orderBy('idprofesi')->with('pegawai:id,nik,nama,profesi')
-                ->get(['id', 'idpegawai', 'nomor', 'nomorstr', 'expirystr', 'tglverif']);
-
-            // Hapus row jika pegawai null
-            for ($i = 0; $i <= count($data); $i++) {
-                if (!isset($data[$i]->pegawai)) {
-                    unset($data[$i]);
-                }
+            if (isset($periode['tglawal']) && isset($periode['tglakhir']))
+                $data = BarangKeluar::where('jenis', 'Pembelian')->whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->with('getMember:id,nama')->get();
+            elseif (isset($periode['tglawal'])) {
+                $periode['tglakhir'] = date('Y-m-d');
+                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '>=', $periode['tglawal'])->with('getMember:id,nama')->get();
+            } elseif (isset($periode['tglakhir'])) {
+                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '<=', $periode['tglakhir'])->with('getMember:id,nama')->oldest('tanggal')->get();
+                $periode['tglawal'] = $data[0]->tanggal;
+            } else {
+                $periode = null;
+                $data = BarangKeluar::where('jenis', 'Pembelian')->with('getMember:id,nama')->get(['id', 'idmember', 'nomor', 'tanggal', 'jumlah']);
             }
 
             return view('laporan.laporan2', ['data' => $data, 'periode' => $periode]);
         }
-        // Data Tenaga Kesehatan di Fasyankes
+        // Laporan Laba / Rugi
         elseif ($request->jenislaporan == 3) {
-            $faskes = Faskes::where('id', $request->idfaskes)->select('nama')->first();
-            $query = 'SELECT A.id, A.idprofesi, A.idspesialisasi, A.nomor, A.expirystr, A.tglverif, B.id AS idpegawai, B.nama, B.tempatlahir, B.tanggallahir, B.spesialisasi, B.profesi AS namaprofesi
-                FROM sip A
-                JOIN mpegawai B ON A.idpegawai = B.id
-                WHERE isactive = 1 AND A.idfaskes = ' . $request->idfaskes . ' AND A.idprofesi NOT IN (5,6,7) AND A.expirystr > "2019-12-31"
-                ORDER BY A.idprofesi ASC, B.idspesialisasi ASC, B.nama ASC';
-            $data = DB::select(DB::raw($query));
+            if (isset($request->tglawal))
+                $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
+            if (isset($request->tglakhir))
+                $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
 
-            return view('laporan.laporan3', ['data' => $data, 'faskes' => $faskes]);
+            if (isset($periode['tglawal']) && isset($periode['tglakhir']))
+                $data = BarangKeluar::where('jenis', 'Pembelian')->whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->with('getMember:id,nama')->get();
+            elseif (isset($periode['tglawal'])) {
+                $periode['tglakhir'] = date('Y-m-d');
+                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '>=', $periode['tglawal'])->with('getMember:id,nama')->get();
+            } elseif (isset($periode['tglakhir'])) {
+                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '<=', $periode['tglakhir'])->with('getMember:id,nama')->oldest('tanggal')->get();
+                $periode['tglawal'] = $data[0]->tanggal;
+            } else {
+                $periode = null;
+                $data = BarangKeluarDetail::with('getBarang:id,kodebarang,namabarang')->get(['id', 'idbarang', 'qty']);
+            }
+
+            return view('laporan.laporan3', ['data' => $data, 'periode' => $periode]);
+        }
+
+        // Laporan Stok
+        elseif ($request->jenislaporan == 4) {
+
+            $data = Stok::with('getBarang:id,namabarang', 'getSupplier:id,nama')->get(['id', 'idbarang', 'idsupplier', 'qtyin', 'qtyout', 'penyesuaian', 'stok']);
+
+            return view('laporan.laporan4', ['data' => $data]);
+        }
+
+        // Laporan Barang Mendekati / Sudah Expired
+        elseif ($request->jenislaporan == 5) {
+
+            $data = BarangMasukDetail::whereNotNull('tglexp')->with('getBarang:id,namabarang', 'getSupplier:id,nama')->orderBy('tglexp', 'desc')->get(['id', 'idbarang', 'idsupplier', 'nomor', 'tglexp', 'qty']);
+
+            return view('laporan.laporan5', ['data' => $data]);
+        }
+
+        // Laporan Barang Paling Laku & Tidak Laku
+        elseif ($request->jenislaporan == 6) {
+
+            if (isset($request->tglawal))
+                $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
+            if (isset($request->tglakhir))
+                $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
+
+            if (isset($periode['tglawal']) && isset($periode['tglakhir']))
+                $data = BarangKeluarDetail::whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->with('getBarang:id,kodebarang,namabarang')->groupBy('idbarang')
+                    ->select('idbarang', DB::raw('sum(qty) as jumlah'))->orderBy('jumlah', 'desc')->get();
+            elseif (isset($periode['tglawal'])) {
+                $periode['tglakhir'] = date('Y-m-d');
+                $data = BarangKeluarDetail::where('tanggal', '>=', $periode['tglawal'])->with('getBarang:id,kodebarang,namabarang')->groupBy('idbarang')
+                    ->select('idbarang', DB::raw('sum(qty) as jumlah'))->orderBy('jumlah', 'desc')->get();
+            } elseif (isset($periode['tglakhir'])) {
+                $data = BarangKeluarDetail::where('tanggal', '<=', $periode['tglakhir'])->with('getBarang:id,kodebarang,namabarang')->groupBy('idbarang')
+                    ->select('idbarang', DB::raw('sum(qty) as jumlah'))->orderBy('jumlah', 'desc')->get();
+                $periode['tglawal'] = '2020-10-10';
+            } else {
+                $periode = null;
+                $data = BarangKeluarDetail::with('getBarang:id,kodebarang,namabarang')->groupBy('idbarang')->select('idbarang', DB::raw('sum(qty) as jumlah'))->orderBy('jumlah', 'desc')->get();
+            }
+
+            return view('laporan.laporan6', ['data' => $data, 'periode' => $periode]);
         }
 
     }
