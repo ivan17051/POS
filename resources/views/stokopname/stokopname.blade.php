@@ -277,7 +277,7 @@ active
       html5QrcodeScanner.clear();
       html5QrCode.stop();
   };
-  const config = { fps: 10, qrbox: 200 };// Select front camera or fail with `OverconstrainedError`.
+  const config = { fps: 10, qrbox: 250 };// Select front camera or fail with `OverconstrainedError`.
   html5QrCode.start({ facingMode: { exact: "environment"} }, config, qrCodeSuccessCallback);
   // html5QrCode.start({ facingMode: { exact: "user"} }, config, qrCodeSuccessCallback);
 

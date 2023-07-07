@@ -112,6 +112,7 @@ active
         { data: 'get_supplier.nama', title: 'Supplier' },
         { data: 'qtyin', title: 'Qty In' },
         { data: 'qtyout', title: 'Qty Out' },
+        { data: 'penyesuaian', title: 'Penyesuaian' },
         { data: 'stok', title: 'Stok' },
         
         
