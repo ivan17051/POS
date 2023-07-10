@@ -97,17 +97,50 @@ class DataController extends Controller
             if (isset($request->tglakhir))
                 $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
 
-            if (isset($periode['tglawal']) && isset($periode['tglakhir']))
-                $data = BarangKeluar::where('jenis', 'Pembelian')->whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->with('getMember:id,nama')->get();
-            elseif (isset($periode['tglawal'])) {
+            if (isset($periode['tglawal']) && isset($periode['tglakhir'])){
+                $query = 'SELECT A.idbarang, A.idsupplier, B.namabarang, Ca.h_sat AS hargabeli, Cb.h_sat AS hargajual, Cb.qty AS qtyjual, Cb.nomor AS nomortransaksi
+                FROM stok A
+                LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                LEFT JOIN barang_keluar_detail Cb ON Cb.idbarang = A.idbarang
+                LEFT JOIN mbarang B ON A.idbarang = B.id
+                WHERE Cb.tanggal BETWEEN \''.$periode['tglawal'].'\' AND \''.$periode['tglakhir'].'\' AND A.qtyout > 0 AND A.stok > 0';
+                
+                $data = DB::select(DB::raw($query));
+
+            } elseif (isset($periode['tglawal'])) {
                 $periode['tglakhir'] = date('Y-m-d');
-                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '>=', $periode['tglawal'])->with('getMember:id,nama')->get();
+                
+                $query = 'SELECT A.idbarang, A.idsupplier, B.namabarang, Ca.h_sat AS hargabeli, Cb.h_sat AS hargajual, Cb.qty AS qtyjual, Cb.nomor AS nomortransaksi
+                FROM stok A
+                LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                LEFT JOIN barang_keluar_detail Cb ON Cb.idbarang = A.idbarang
+                LEFT JOIN mbarang B ON A.idbarang = B.id
+                WHERE Cb.tanggal BETWEEN \''.$periode['tglawal'].'\' AND \''.$periode['tglakhir'].'\' AND A.qtyout > 0 AND A.stok > 0';
+                
+                $data = DB::select(DB::raw($query));
             } elseif (isset($periode['tglakhir'])) {
-                $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '<=', $periode['tglakhir'])->with('getMember:id,nama')->oldest('tanggal')->get();
-                $periode['tglawal'] = $data[0]->tanggal;
+                $tglawal = BarangKeluarDetail::oldest('tanggal')->first(['tanggal']);
+                $periode['tglawal'] = $tglawal->tanggal;
+
+                $query = 'SELECT A.idbarang, A.idsupplier, B.namabarang, Ca.h_sat AS hargabeli, Cb.h_sat AS hargajual, Cb.qty AS qtyjual, Cb.nomor AS nomortransaksi
+                FROM stok A
+                LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                LEFT JOIN barang_keluar_detail Cb ON Cb.idbarang = A.idbarang
+                LEFT JOIN mbarang B ON A.idbarang = B.id
+                WHERE Cb.tanggal BETWEEN \''.$periode['tglawal'].'\' AND \''.$periode['tglakhir'].'\' AND A.qtyout > 0 AND A.stok > 0';
+                
+                $data = DB::select(DB::raw($query));
             } else {
                 $periode = null;
-                $data = BarangKeluarDetail::with('getBarang:id,kodebarang,namabarang')->get(['id', 'idbarang', 'qty']);
+                $query = 'SELECT A.idbarang, A.idsupplier, B.namabarang, Ca.h_sat AS hargabeli, Cb.h_sat AS hargajual, Cb.qty AS qtyjual, Cb.nomor AS nomortransaksi
+                FROM stok A
+                LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                LEFT JOIN barang_keluar_detail Cb ON Cb.idbarang = A.idbarang
+                LEFT JOIN mbarang B ON A.idbarang = B.id
+                WHERE A.qtyout > 0 AND A.stok > 0';
+
+                $data = DB::select(DB::raw($query));
+                
             }
 
             return view('laporan.laporan3', ['data' => $data, 'periode' => $periode]);

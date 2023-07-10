@@ -132,7 +132,7 @@ class StokOpnameController extends Controller
             
             foreach($detail as $unit){
                 $unit->status = 'final';
-                $stok = Stok::where('idbarang',$unit->idbarang)->orderBy('doc','desc')->get();
+                $stok = Stok::where('idbarang',$unit->idbarang)->orderBy('doc','desc')->first();
                 
                 $stok->penyesuaian = $unit->selisih;
                 $stok->stok = $stok->stok + $unit->selisih;

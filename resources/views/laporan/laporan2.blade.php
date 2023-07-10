@@ -72,7 +72,7 @@
               <tr>
                 <td class=" fontJustify">{{$key+1}}. </td>
                 <td class=" fontJustify">{{Carbon\Carbon::make($unit->tanggal)->translatedFormat('d F Y')}}</td>
-                <td class=" fontJustify">{{$unit->getMember->nama}}</td>
+                <td class=" fontJustify">{{isset($unit->getMember->nama) ? $unit->getMember->nama : ''}}</td>
                 <td class=" fontCenter">{{$unit->nomor}}</td>
                 <td class=" fontCenter">{{number_format($unit->jumlah)}}</td>
               </tr>
