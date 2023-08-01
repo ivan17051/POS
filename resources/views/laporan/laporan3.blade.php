@@ -74,7 +74,7 @@
               @foreach($data as $key=>$unit)
               <tr>
                 @php
-                $subtotal = $unit->qtyjual * $unit->hargajual - $unit->hargabeli;
+                $subtotal = ($unit->qtyjual * $unit->hargajual) - ($unit->qtyjual * $unit->hargabeli);
                 $total += $subtotal;
                 @endphp
                 <td class=" fontJustify">{{$key+1}}. </td>
