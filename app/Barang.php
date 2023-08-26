@@ -18,6 +18,7 @@ class Barang extends Model
         "harga_1",
         "harga_3",
         "harga_6",
+        "lokasi",
         "istitipan",
     ];
 

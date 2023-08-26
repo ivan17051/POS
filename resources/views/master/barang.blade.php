@@ -85,7 +85,14 @@ active
                 <input type="text" class="form-control" id="harga_6" name="harga_6" required>
               </div>
             </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                  <label for="lokasi" class="bmd-label-floating">Lokasi</label>
+                  <input type="text" class="form-control" id="lokasi" name="lokasi">
+                </div>
+            </div>
           </div>
+          
         </div>
 
         <div class="modal-footer">
@@ -166,6 +173,12 @@ active
                 <label for="harga_6" class="bmd-label-floating">Harga 6</label>
                 <input type="text" class="form-control" id="harga_6" name="harga_6" required>
               </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                  <label for="lokasi" class="bmd-label-floating">Lokasi</label>
+                  <input type="text" class="form-control" id="lokasi" name="lokasi">
+                </div>
             </div>
           </div>
 
@@ -324,7 +337,7 @@ active
     $modal.find('input[name=harga_1]').val(data['harga_1']).change();
     $modal.find('input[name=harga_3]').val(data['harga_3']).change();
     $modal.find('input[name=harga_6]').val(data['harga_6']).change();
-    $modal.find('input[name=expired]').val(data['expired']).change();
+    $modal.find('input[name=lokasi]').val(data['lokasi']).change();
 
     $('#formedit').attr('action', '{{route("barang.update", ["barang"=>''])}}/' + data['id']);
     $modal.modal('show')
