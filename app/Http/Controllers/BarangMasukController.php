@@ -38,7 +38,7 @@ class BarangMasukController extends Controller
                     '</a>' .
                     '<div class="dropdown-menu dropdown-menu-right" >' .
                     '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>' .
-                    '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>' .
+                    '<a class="dropdown-item" href="'. route('barang_masuk.edit', ['id'=>$t->id]) .'">Edit</a>' .
                     '<a class="dropdown-item" href="#" onclick="cetak(' . $t->id . ')" >Cetak</a>' .
                     '<a class="dropdown-item" href="#" onclick="pembayaran(this)" >Pembayaran</a>' .
                     '<div class="dropdown-divider"></div>' .
@@ -53,7 +53,7 @@ class BarangMasukController extends Controller
                     '</a>' .
                     '<div class="dropdown-menu dropdown-menu-right" >' .
                     '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>' .
-                    '<a class="dropdown-item" href="#" onclick="edit(this)" >Edit</a>' .
+                    '<a class="dropdown-item" href="'. route('barang_masuk.edit', ['id'=>$t->id]) .'">Edit</a>' .
                     '<a class="dropdown-item" href="#" onclick="cetak(' . $t->id . ')" >Cetak</a>' .
                     '<div class="dropdown-divider"></div>' .
                     '<a class="dropdown-item" href="#" onclick="hapus(' . $t->id . ')">Hapus</a>' .
@@ -154,6 +154,16 @@ class BarangMasukController extends Controller
         DB::commit();
         $this->flashSuccess('Barang Masuk Berhasil Ditambahkan');
         return back();
+    }
+
+    public function edit($id){
+        
+        $d['barang_masuk'] = BarangMasuk::findOrFail($id);
+        $d['detail'] = BarangMasukDetail::where('idtransaksi', $id)->with('getBarang:id,namabarang')->get();
+        $d['barang'] = Barang::get(['id', 'namabarang', 'kodebarang']);
+        $d['supplier'] = Supplier::get(['id', 'nama']);
+        
+        return view('transaksi.barang_masuk_edit', $d);
     }
 
     public function update(Request $request, $id)

@@ -138,60 +138,12 @@ active
 @endsection
 @section('content')
 <div class="container-fluid">
-  <div class="row" id="indexMasuk">
+  <div class="row" id="formMasuk">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Transaksi Barang Masuk</h4>
-          </div>
-        </div>
-        <div class="card-body" id="index-container">
-
-          <div class="toolbar row">
-            <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary"
-                onclick="showform(1)">Tambah</button></div>
-
-          </div>
-          <div class="anim slide" id="table-container">
-            <div class="material-datatables">
-              <table id="datatables" class="table table-striped table-no-bordered table-hover" width="100%"
-                style="width:100%">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="card-body" id="form-container" hidden>
-
-          <div class="toolbar row">
-            <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
-                data-target="#tambah">Tambah</button></div>
-
-          </div>
-          <div class="anim slide" id="table-container">
-            <div class="material-datatables">
-
-            </div>
-          </div>
-
-        </div>
-        <!--  end card  -->
-      </div>
-      <!-- end col-md-12 -->
-    </div>
-  </div>
-  <div class="row" id="formMasuk" hidden>
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header card-header-tabs card-header-primary">
-          <div class="subtitle-wrapper">
-            <h4 class="card-title">Tambah Transaksi Barang Masuk</h4>
+            <h4 class="card-title">Edit Transaksi Barang Masuk</h4>
           </div>
         </div>
         <form method="POST" action="{{route('barang_masuk.store')}}" class="form-horizontal">
@@ -208,7 +160,7 @@ active
                 <label class="col-sm-2 col-form-label">Tanggal</label>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <input type="date" class="form-control" name="tanggal" required>
+                    <input type="date" class="form-control" name="tanggal" required value="{{$barang_masuk->tanggal}}">
                     <span class="bmd-help">Masukkan Tanggal Transaksi.</span>
                   </div>
                 </div>
@@ -216,7 +168,7 @@ active
                 <label class="col-sm-2 col-form-label">No. Transaksi</label>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <input type="text" class="form-control" name="nomor" readonly>
+                    <input type="text" class="form-control" name="nomor" readonly value="{{$barang_masuk->nomor}}">
                     <span class="bmd-help">Masukkan Nomor Transaksi.</span>
                   </div>
                 </div>
@@ -306,7 +258,17 @@ active
                         <td class="text-right"><button type="button" class="btn btn-sm btn-primary" onclick="addPengadaan()"
                             style="padding:5px;"><span class="material-icons">add</span></button></td>
                       </tr>
-
+                      @foreach($detail as $unit)
+                      <tr>
+                        <td>#</td>
+                        <td>{{$unit->getBarang->namabarang}}</td>
+                        <td>{{$unit->tglexp}}</td>
+                        <td>{{$unit->qty}}</td>
+                        <td>{{number_format($unit->h_sat)}}</td>
+                        <td>{{number_format($unit->jumlah)}}</td>
+                        <td class="text-right"></td>
+                      </tr>
+                      @endforeach
                     </tbody>
                   </table>
                 </div>
@@ -316,8 +278,8 @@ active
 
         </div>
         <div class="card-footer">
-          <button class="btn btn-sm btn-dark" onclick="showform(0)">Kembali</button>
-          <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+          <a href="{{route('barang_masuk.index')}}" class="btn btn-sm btn-dark">Kembali</a>
+          <!-- <button type="submit" class="btn btn-sm btn-primary">Simpan</button> -->
         </div>
         </form>
         <!--  end card  -->
@@ -515,113 +477,13 @@ active
     }
   }
 
-  // Datatable
-  function showTable() {
-
-    if ($.fn.dataTable.isDataTable('#datatables')) {
-      $('#datatables').DataTable().clear();
-      $('#datatables').DataTable().destroy();
-      $('#datatables').empty();
-    }
-
-    oTable = $("#datatables").DataTable({
-      processing: true,
-      serverSide: true,
-      responsive: true,
-      ajax: {
-        type: "POST",
-        url: '{{route("barang_masuk.data")}}',
-        data: {
-          '_token': @json(csrf_token())
-        }
-      },
-      columns: [
-        { data: 'id', title: 'ID', width: '5%' },
-        { data: 'nomor', title: 'Nomor Transaksi', width: '18%' },
-        { data: 'tanggal', title: 'Tanggal', width: '15%' },
-        { data: 'get_supplier.nama', title: 'Supplier', searchable: false },
-        {
-          data: 'jumlah', title: 'Total', width: '15%', render: function (e, d, r) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR'}).format(e);
-          }
-        },
-        { data: 'action', title: 'Aksi', width: '10%', orderable: false },
-      ],
-      columnDefs: [
-        { responsivePriority: 2, targets: 0 },
-        { className: "text-right", targets: 5 }
-      ],
-      createdRow: function (row, data, dataIndex) {
-        var date1 = moment().toDate();
-        var date2 = moment(data['tgljatuhtempo'],"Y-MM-DD");
-        var diff = date2.diff(date1,"days");
-        
-        if(data['metode']=='kredit' && data['islunas']==0){
-          if(diff>30){
-            $(row).addClass('bg-success');
-          } else if(diff>15){
-            $(row).addClass('bg-warning');
-          } else if(diff>=0){
-            $(row).addClass('bg-danger');
-          } 
-        } else if(data['metode']=='kredit' && data['islunas']==1){
-          $(row).addClass('bg-info');
-        }
-        
-        
-      },
-    });
-  }
-
+  
   function hitungTotal(e) {
     var qty = $('#addQty').val();
     var harga = $('#h_sat').val();
     var total = qty * harga;
     $('#jumlah').val(total).change();
   }
-
-  $(document).ready(function () {
-    showTable();
-    $('input[name=kecamatan]').val(" ").change();
-
-    //event pada tags filter
-    $(".filter-tags").each(function () {
-      var sel = $($(this).data('select'));
-      var put = $($(this).data('tags'));
-      var col = parseInt($(this).data('col'));
-      put.tagsinput('input').attr('hidden', true);
-
-      // filter selectpicker on change
-      sel.change(function () {
-        put.tagsinput('removeAll');
-
-        for (const opt of sel[0].selectedOptions) {
-          put.tagsinput('add', opt.textContent);
-        }
-
-        //search nya pakai regex misal "Pusat|Spesial" artinya boleh Pusat atau Spesial
-        if (!sel.val().length) {
-          oTable.column(col).search('').draw();
-        }
-        else {
-          var searchStr = '^(' + sel.val().join('|') + ')$';
-          oTable.column(col).search(searchStr, true, false).draw();
-        }
-      });
-
-      // filter tags input on removed
-      put.on('itemRemoved', function (event) {
-        let text = event.item;
-        let items = []
-        for (const opt of sel[0].selectedOptions) {
-          if (opt.textContent != text) {
-            items.push(opt.value)
-          }
-        }
-        sel.selectpicker('val', items);
-      });
-    });
-  });
 
 </script>
 @endsection
