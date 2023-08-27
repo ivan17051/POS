@@ -168,9 +168,64 @@ class BarangMasukController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         try {
             $barang_masuk = BarangMasuk::findOrFail($id);
+            $jumlah = $barang_masuk->jumlah;
+            // dd($barang_masuk);
             $barang_masuk->fill($request->all());
+            
+            $list_hapus = explode('|', $request->list_hapus);
+            foreach($list_hapus as $unit){
+                if($unit!=''){
+                    $detail = BarangMasukDetail::findOrFail($unit);
+    
+                    $stok = Stok::where('idbarang', $detail->idbarang)->where('idsupplier', $detail->idsupplier)->first();
+                    $stok->qtyin -= $detail->qty;
+                    $stok->stok -= $detail->qty;
+                    $jumlah -= $detail->jumlah;
+
+                    $detail->delete();
+                    $stok->save();
+                }
+            }
+            // dd($request->all(), $id, $list_hapus);
+
+            if(isset($request->detail)){
+                foreach ($request->detail as $unit) {
+                    $harga = explode("||", $unit);
+                    $jumlah += $harga[4];
+                    $detail_barang = new BarangMasukDetail([
+                        'idtransaksi' => $barang_masuk->id,
+                        'tanggal' => $barang_masuk->tanggal,
+                        'nomor' => $barang_masuk->nomor,
+                        'idsupplier' => $barang_masuk->idsupplier,
+                        'idbarang' => $harga[0],
+                        'tglexp' => $harga[1]!="" ? $harga[1] : null,
+                        'qty' => $harga[2],
+                        'h_sat' => $harga[3],
+                        'jumlah' => $harga[4],
+                    ]);
+    
+                    $stok = Stok::where('idbarang', $harga[0])->where('idsupplier', $request->idsupplier)->first();
+    
+                    if (!$stok) {
+                        $stok = new Stok([
+                            'idbarang' => $harga[0],
+                            'idsupplier' => $request->idsupplier,
+                            'qtyin' => $harga[2],
+                            'stok' => $harga[2],
+                        ]);
+                    } else {
+                        $stok->qtyin += $harga[2];
+                        $stok->stok += $harga[2];
+                    }
+                    // dd($detail_barang);
+                    $stok->save();
+                    $detail_barang->save();
+                }
+            }
+            $barang_masuk->jumlah = $jumlah;
             $barang_masuk->save();
         } catch (Exception $exception) {
             $this->flashError($exception->getMessage());

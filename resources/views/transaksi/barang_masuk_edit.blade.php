@@ -14,127 +14,7 @@ active
 @endsection
 
 @section('modal')
-<!-- Modal View Barang Masuk -->
-<div class="modal fade" id="view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-5">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Detail Barang Masuk </h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          <i class="material-icons">clear</i>
-        </button>
-      </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-            <table class="table" style="font-size:14px;">
-              <thead class="text-primary">
-                <th style="width:50%;font-size:15px;">Nama Barang</th>
-                <th style="width:10%;font-size:15px;">QTY</th>
-                <th style="width:20%;font-size:15px;">Harga Satuan</th>
-                <th style="width:20%;font-size:15px;">Total</th>
-              </thead>
-              <tbody id="detail_brg_msk">
 
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
-        </div>
-      
-    </div>
-  </div>
-</div>
-<!--  End Modal View Barang Masuk -->
-
-<!-- Modal Pembayaran -->
-<div class="modal fade" id="pembayaran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg mt-5">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Pembayaran Barang Masuk</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          <i class="material-icons">clear</i>
-        </button>
-      </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              <table class="table" style="font-size:14px;">
-                <thead class="text-primary">
-                  <th style="width:30%;font-size:15px;">No. Kwitansi</th>
-                  <th style="width:30%;font-size:15px;">Tanggal</th>
-                  <th style="width:40%;font-size:15px;">Jumlah</th>
-                </thead>
-                <tbody id="detail_pembayaran">
-
-                </tbody>
-              </table>
-            </div>
-              <div class="col-md-4" style="border:1px solid black;border-radius:10px;padding:10px;">
-                <form action="{{route('pembayaran.store')}}" method="POST">
-                @csrf
-                  <div class="bg-secondary text-white" style="padding:5px 5px 0 5px;">
-                    <small>Sisa Pembayaran</small>
-                    <h5 style="padding-bottom:5px;" id="sisaBayar">Rp 0</h5>
-                  </div>
-                  <input type="hidden" name="idbarangmasuk" id="idbarangmasuk">
-                  <div class="form-group" style="margin-top:25px;">
-                    <label for="nokwitansi" class="bmd-label-floating">No. Kwitansi</label>
-                    <input type="text" class="form-control" id="nokwitansi" name="nokwitansi" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="tanggal" class="bmd-label-floating">Tanggal</label>
-                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="jumbayar" class="bmd-label-floating">Jumlah Bayar</label>
-                    <input type="text" class="form-control" id="jumbayar" name="jumbayar" required>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary btn-block" id="btnBayar">Simpan</button>
-                </form>
-              </div>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
-        </div>
-      
-    </div>
-  </div>
-</div>
-<!--  End Modal Pembayaran -->
-
-<!-- Modal Hapus -->
-<div class="modal fade modal-mini modal-primary" id="hapus" tabindex="-1" role="dialog"
-  aria-labelledby="myDeleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-small">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
-            class="material-icons">clear</i></button>
-      </div>
-      <form class="" method="POST" action="">
-        @method('DELETE')
-        @csrf
-        <div class="modal-body text-center">
-          <p>Yakin ingin menghapus?</p>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-link" data-dismiss="modal">Tidak</button>
-          <button type="submit" class="btn btn-danger btn-link">Ya, Hapus
-            <div class="ripple-container"></div>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!--  End Modal Hapus  -->
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -146,8 +26,9 @@ active
             <h4 class="card-title">Edit Transaksi Barang Masuk</h4>
           </div>
         </div>
-        <form method="POST" action="{{route('barang_masuk.store')}}" class="form-horizontal">
+        <form method="POST" action="{{route('barang_masuk.update', ['id'=>$barang_masuk->id])}}" class="form-horizontal">
         @csrf
+        @method('PUT')
         <div class="card-body">
 
           <!-- <div class="toolbar row">
@@ -179,7 +60,7 @@ active
                 <div class="col-sm-10">
                   <select class="selectpicker form-control" name="idsupplier" data-style="select-with-transition" title="--Pilih Supplier--" data-size="5" data-live-search="true" required>
                     @foreach($supplier as $unit)
-                    <option value="{{$unit->id}}">{{$unit->nama}}</option>
+                    <option value="{{$unit->id}}" @if($unit->id==$barang_masuk->idsupplier) selected @endif>{{$unit->nama}}</option>
                     @endforeach
                   </select>
                 </div>
@@ -188,8 +69,8 @@ active
                 <label class="col-sm-2 col-form-label">Metode Pembayaran</label>
                 <div class="col-sm-10">
                   <select class="selectpicker form-control" name="metode" data-style="select-with-transition" title="--Pilih Metode Pembayaran--" required onchange="toggleTglJatuhTempo(this)">
-                    <option value="cash">Cash</option>
-                    <option value="kredit">Kredit/Termin</option>
+                    <option value="cash" @if($barang_masuk->metode=='cash') selected @endif>Cash</option>
+                    <option value="kredit" @if($barang_masuk->metode=='kredit') selected @endif>Kredit/Termin</option>
                   </select>
                   
                 </div>
@@ -200,35 +81,7 @@ active
                   <input type="date" class="form-control" name="tgljatuhtempo">
                 </div>
               </div>
-              <!-- <div class="row">
-                <label class="col-sm-2 col-form-label label-checkbox">Inline checkboxes</label>
-                <div class="col-sm-10 checkbox-radios">
-                  <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" value=""> a
-                      <span class="form-check-sign">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" value=""> b
-                      <span class="form-check-sign">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" value=""> c
-                      <span class="form-check-sign">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div> -->
+              <input type="hidden" name="list_hapus" id="list_hapus">
               <div class="card-body table-full-width table-hover mt-5">
                 <div class="table-responsive" style="overflow:visible;">
                   <table class="table">
@@ -266,7 +119,8 @@ active
                         <td>{{$unit->qty}}</td>
                         <td>{{number_format($unit->h_sat)}}</td>
                         <td>{{number_format($unit->jumlah)}}</td>
-                        <td class="text-right"></td>
+                        <td class="text-right"><button type="button" class="btn btn-sm btn-danger" onclick="delBarang(this, {{$unit->id}})"
+                            style="padding:5px;"><span class="material-icons">close</span></button></td>
                       </tr>
                       @endforeach
                     </tbody>
@@ -279,7 +133,7 @@ active
         </div>
         <div class="card-footer">
           <a href="{{route('barang_masuk.index')}}" class="btn btn-sm btn-dark">Kembali</a>
-          <!-- <button type="submit" class="btn btn-sm btn-primary">Simpan</button> -->
+          <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
         </div>
         </form>
         <!--  end card  -->
@@ -310,110 +164,6 @@ active
 
     $('#formedit').attr('action', '{{route("barang_masuk.update", ["id"=>""])}}/' + data['id']);
     $modal.modal('show')
-  }
-
-  function view(self) {
-    var tr = $(self).closest('tr');
-    var data = oTable.row(tr).data();
-    console.log(data);
-
-    var $modal = $('#view');
-    $('#detail_brg_msk').empty();
-    $.ajax({
-        url: "{{ route('barang_masuk.detail',['id'=>'']) }}" + '/' + data.id ,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
-          
-          data.forEach(e => {
-            $('#detail_brg_msk').append(
-              '<tr>'+
-              '<td>' + e.get_barang.namabarang + '</td>' +
-              '<td>' + e.qty + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.h_sat) + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.jumlah) + '</td>' +
-              '</tr>'
-            );
-          })
-
-        },
-        error : function() {
-            alert("No Data");
-        }
-    });
-        
-    $modal.modal('show')
-  }
-  
-  function cetak(id) {
-    
-    var url = "{{route('barang_masuk.cetak', ['id'=>''])}}/" + id;
-    window.open(url, '_blank');
-  }
-
-  function hapus(id) {
-    $modal = $('#hapus');
-    $modal.find('form').attr('action', "{{route('barang_masuk.destroy', ['id'=>''])}}/" + id);
-
-    $modal.modal('show');
-  }
-
-  function pembayaran(self) {
-    var tr = $(self).closest('tr');
-    var data = oTable.row(tr).data();
-    var jumlah = data.jumlah;
-    $('#idbarangmasuk').val(data.id);
-
-    var $modal = $('#pembayaran');
-    $('#detail_pembayaran').empty();
-    $.ajax({
-        url: "{{ route('pembayaran.data',['id'=>'']) }}" + '/' + data.id ,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
-          var total = 0;
-          data.forEach(e => {
-            $('#detail_pembayaran').append(
-              '<tr>'+
-              '<td>' + e.nokwitansi + '</td>' +
-              '<td>' + e.tanggal + '</td>' +
-              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.jumbayar) + '</td>' +
-              '</tr>'
-            );
-            total = parseInt(total) + parseInt(e.jumbayar);
-          });
-          total = jumlah - total;
-          if(total == 0) {
-            $('#sisaBayar').html('Lunas');
-            $('#nokwitansi').attr('disabled', true);
-            $('#tanggal').attr('disabled', true);
-            $('#jumbayar').attr('disabled', true);
-            $('#btnBayar').attr('disabled', true);
-          } else {
-            $('#sisaBayar').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
-            $('#nokwitansi').attr('disabled', false);
-            $('#tanggal').attr('disabled', false);
-            $('#jumbayar').attr('disabled', false);
-            $('#btnBayar').attr('disabled', false);
-          } 
-        },
-        error : function() {
-            // alert("No Data");
-        }
-    });
-        
-    $modal.modal('show')
-  }
-
-  function showform(con) {
-    if (con == 1) {
-      $('#indexMasuk').attr('hidden', true)
-      $('#formMasuk').attr('hidden', false)
-    } else {
-      $('#indexMasuk').attr('hidden', false)
-      $('#formMasuk').attr('hidden', true)
-    }
-
   }
   var jumDetailMasuk=0;
   
@@ -459,6 +209,13 @@ active
       
       $('.select').selectpicker('refresh');
     }
+  }
+
+  function delBarang(self, id) {
+   var tr = $(self).closest('tr');
+   tr.remove();
+   
+   $('#list_hapus').val($('#list_hapus').val()+'|'+id);
   }
 
   function kurangiJumlahMasuk() {
