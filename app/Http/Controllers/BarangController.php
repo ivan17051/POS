@@ -7,6 +7,7 @@ use App\Barang;
 use App\Kategori;
 use Exception;
 use Datatables;
+use DB;
 
 class BarangController extends Controller
 {
@@ -19,8 +20,8 @@ class BarangController extends Controller
     public function data()
     {
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
-        // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = Barang::with('getKategori');
+        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namakategori FROM mbarang A LEFT JOIN mkategori B ON A.idkategori = B.id'));
+        // $data = Barang::with('getKategori');
         $datatable = Datatables::of($data);
         $datatable->rawColumns(['action']);
 
@@ -29,7 +30,7 @@ class BarangController extends Controller
                 '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="material-icons">edit</i></button>&nbsp' .
                 '<button type="button" class="btn btn-danger btn-link" style="padding:5px;" onclick="hapus(this)"><i class="material-icons">close</i></button>';
         });
-
+        
         return $datatable->make(true);
     }
 

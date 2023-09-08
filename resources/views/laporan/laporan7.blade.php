@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="{{asset('/public/css/report.css')}}" rel="stylesheet" type="text/css" media="all">
     <link href="{{asset('/public/css/report-screen.css')}}" rel="stylesheet" type="text/css" media="screen">
-    <title>STRUK</title>
+    <title>LAPORAN PENDAPATAN BERDASAR METODE BAYAR</title>
     <style media="all" type="text/css">
         body{
             font-family:Arial;
@@ -57,76 +57,84 @@
                     <!-- KOP SURAT -->
                     <table cellspacing="0" cellpadding="0" >
                         <tbody>
+                            @if(isset($periode))
                             <tr>
                               <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
                             <tr>
-                              <td colspan="2" class="" style="font-size:12px">{{Carbon\Carbon::parse($barang_keluar->tanggal)->isoformat('DD-MM-Y')}}</td>
+                              <td colspan="2" class="fontBold" style="font-size:12px">Periode :</td>
                             </tr>
                             <tr>
-                              <td colspan="2" class="" >Kasir: </td>
+                              <td colspan="2" class="" style="font-size:12px">{{Carbon\Carbon::parse($periode['tglawal'])->isoformat('DD-MM-Y')}} s/d {{Carbon\Carbon::parse($periode['tglakhir'])->isoformat('DD-MM-Y')}}</td>
                             </tr>
+                            @endif
+                            @php
+                            $tglnow = '';
+                            $totcash = 0;
+                            $totdebit = 0;
+                            $totqris = 0;
+                            $tottf = 0;
+                            @endphp
+                            @foreach($data as $unit)
+                            @php
+                            if($unit->metode == 'cash') $totcash += $unit->total;
+                            elseif($unit->metode == 'debit/kredit') $totdebit += $unit->total;
+                            elseif($unit->metode == 'qris') $totqris += $unit->total;
+                            elseif($unit->metode == 'transfer') $tottf += $unit->total;
+                            @endphp
+                            @if($unit->tanggal != $tglnow)
+                            @php
+                            $tglnow = $unit->tanggal;
+                            @endphp
                             <tr>
-                              <td colspan="2">No. {{$barang_keluar->nomor}}</td>
+                              <td colspan="2"></td>
                             </tr>
                             <tr>
                               <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
-                            @foreach($detail as $unit)
                             <tr>
-                              <td colspan="2" class="" style="font-size:12px">{{$unit->getBarang->namabarang}} [{{$unit->getBarang->kodebarang}}]</td>
+                              <td class="">Tanggal</td>
+                              <td class="fontKanan" style="font-size:12px">{{Carbon\Carbon::parse($unit->tanggal)->isoformat('DD-MM-Y')}}</td>
                             </tr>
                             <tr>
-                              <td class="" >{{$unit->qty}} x {{number_format($unit->h_sat)}} </td>
-                              <td class="fontKanan" >{{number_format($unit->jumlah)}} </td>
+                              <td colspan="2"></td>
                             </tr>
+                            <tr>
+                              <td class="">Subtot. {{ucfirst($unit->metode)}}</td>
+                              <td class="fontKanan" >{{number_format($unit->total)}} </td>
+                            </tr>
+                            @else
+                            <tr>
+                              <td class="">Subtot. {{ucfirst($unit->metode)}}</td>
+                              <td class="fontKanan" >{{number_format($unit->total)}} </td>
+                            </tr>
+                            @endif
                             @endforeach
                             <tr>
                               <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
                             </tr>
                             <tr>
-                              <td class="" >Total </td>
-                              <td class="fontKanan" >{{number_format($barang_keluar->jumlah)}} </td>
+                              <td class="fontBold" colspan="2">Total </td>
                             </tr>
                             <tr>
-                              <td class="" >Bayar </td>
-                              <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar) : number_format($barang_keluar->jumlah)}} </td>
+                              <td class="">Total Cash</td>
+                              <td class="fontKanan" >{{number_format($totcash)}} </td>
                             </tr>
                             <tr>
-                              <td class="" >Kembali </td>
-                              <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar-$barang_keluar->jumlah) : '0'}} </td>
-                            </tr>
-                            @if(isset($barang_keluar->getMember))
-                            <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
-                            </tr>
-                            @if(isset($barang_keluar->poin))
-                            <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:12px">Selamat anda mendapat {{$barang_keluar->poin}} poin.</td>
-                            </tr>
-                            <tr><td>&nbsp;</td></tr>
-                            @endif
-                            <tr>
-                              <td style="font-size:12px">Nama</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->nama}} .</td>
+                              <td class="">Total Debit/Kredit</td>
+                              <td class="fontKanan" >{{number_format($totdebit)}} </td>
                             </tr>
                             <tr>
-                              <td style="font-size:12px">No. HP</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->notelp}} .</td>
+                              <td class="">Total QRIS</td>
+                              <td class="fontKanan" >{{number_format($totqris)}} </td>
                             </tr>
                             <tr>
-                              <td style="font-size:12px">Poin</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->poin}} .</td>
+                              <td class="">Total Transfer</td>
+                              <td class="fontKanan" >{{number_format($tottf)}} </td>
                             </tr>
-                            @endif
+                            
                             <tr>
                               <td colspan="2"style="font-size:15px">&nbsp;</td>
-                            </tr>
-                            <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:12px">Terima Kasih</td>
-                            </tr>
-                            <tr>
-                              <td colspan="2" class="fontCenter" style="font-size:11px">Barang yang sudah dibeli tidak dapat ditukar atau dikembalikan</td>
                             </tr>
                         </tbody>
                     </table>

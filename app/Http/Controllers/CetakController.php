@@ -23,7 +23,7 @@ class CetakController extends Controller
     {
         $d['barang_keluar'] = BarangKeluar::where('id', $id)->with('getMember:id,nama,notelp,poin')->first();
         $d['detail'] = BarangKeluarDetail::where('idtransaksi', $id)
-            ->with('getBarang:id,namabarang')->get(['idbarang', 'qty', 'h_sat', 'jumlah']);
+            ->with('getBarang:id,kodebarang,namabarang')->get(['idbarang', 'qty', 'h_sat', 'jumlah']);
         // dd($d);
         return view('report.struk', $d);
     }

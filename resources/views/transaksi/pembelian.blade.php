@@ -353,7 +353,7 @@ active
         },
         callback: {
             onClick: function(node, a, item, event){
-              
+              var poin = (item.poin === null) ? 0 : item.poin;
               $('#showMember').append(
                 '<div class="alert alert-primary">' +
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeMember()">' +
@@ -363,7 +363,7 @@ active
                 '<span><b style="font-size:18px;">'+ item.nama +'</b></span>' +
                 '<span>'+ item.alamat +'</span>' +
                 '</div><div class="col-md-4">' +
-                '<div style="height:100%;padding-top:9px;border:2px solid white;border-radius:5px;text-align:center;"><b style="font-size:30px;">'+ item.poin +'</b></div>' +
+                '<div style="height:100%;padding-top:9px;border:2px solid white;border-radius:5px;text-align:center;"><b style="font-size:30px;">'+ poin +'</b></div>' +
                 '</div></div>' +
                 '<input type="hidden" name="idmember" value="'+ item.id +'">' +
                 '</div>'

@@ -386,7 +386,7 @@ active
 
       columns: [
         { data: 'id', title: 'ID' },
-        { data: 'get_kategori.nama', title: 'Kategori' },
+        { data: 'namakategori', title: 'Kategori' },
         { data: 'kodebarang', title: 'Kode Barang' },
         { data: 'namabarang', title: 'Nama Barang' },
         {

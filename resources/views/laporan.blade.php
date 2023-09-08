@@ -55,6 +55,14 @@ active
                   </div>
                   <div class="form-check">
                     <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="7"> Laporan Pendapatan / Pemasukkan Per Metode Pembayaran
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
                       <input class="form-check-input" type="radio" name="jenislaporan" value="3"> Laporan Laba / Rugi
                       <span class="circle">
                         <span class="check"></span>
@@ -127,7 +135,7 @@ active
     var tgl = $('#tanggal');
     var spesialisasi = $('#spesialisasi');
     
-    if(e.target.value==1 || e.target.value==2 || e.target.value==3 || e.target.value==6 ){
+    if(e.target.value==1 || e.target.value==2 || e.target.value==3 || e.target.value==6 || e.target.value==7 ){
       tgl.attr('hidden', false)
       tgl.find('input').attr('required', false);
     }else if(e.target.value==4 || e.target.value==5){

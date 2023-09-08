@@ -188,6 +188,51 @@ class DataController extends Controller
 
             return view('laporan.laporan6', ['data' => $data, 'periode' => $periode]);
         }
+        // Laporan Pendapatan / Pemasukan Per Jenis Pembayaran
+        elseif ($request->jenislaporan == 7) {
+            if (isset($request->tglawal))
+                $periode['tglawal'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglawal)->format('Y-m-d');
+            if (isset($request->tglakhir))
+                $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
+
+            if (isset($periode['tglawal']) && isset($periode['tglakhir'])){
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                FROM barang_keluar A
+                WHERE A.jenis = "Pembelian" AND A.tanggal BETWEEN \''. $periode['tglawal'].'\' AND \''. $periode['tglakhir'].'\'
+                GROUP BY tanggal, metode';
+                $data = DB::select(DB::raw($query));
+                // $data = BarangKeluar::where('jenis', 'Pembelian')->whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->get();
+                
+            } elseif (isset($periode['tglawal'])) {
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                FROM barang_keluar A
+                WHERE A.jenis = "Pembelian" AND A.tanggal >= \''. $periode['tglawal'].'\'
+                GROUP BY tanggal, metode';
+                $data = DB::select(DB::raw($query));
+                $periode['tglakhir'] = date('Y-m-d');
+
+            } elseif (isset($periode['tglakhir'])) {
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                FROM barang_keluar A
+                WHERE A.jenis = "Pembelian" AND A.tanggal <= \''. $periode['tglakhir'].'\'
+                GROUP BY tanggal, metode';
+                $data = DB::select(DB::raw($query));
+                // $data = BarangKeluar::where('jenis', 'Pembelian')->where('tanggal', '<=', $periode['tglakhir'])->oldest('tanggal')->get();
+                // $periode['tglawal'] = $data[0]->tanggal;
+
+            } else {
+                $periode = null;
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                FROM barang_keluar A
+                WHERE A.jenis = "Pembelian"
+                GROUP BY tanggal, metode';
+
+                $data = DB::select(DB::raw($query));
+                // $data = BarangKeluar::where('jenis', 'Pembelian')->orderBy('')->get(['id', 'idmember', 'nomor', 'tanggal', 'jumlah']);
+            }
+            // dd($data, $periode);
+            return view('laporan.laporan7', ['data' => $data, 'periode' => $periode]);
+        }
 
     }
 
