@@ -196,7 +196,7 @@ class DataController extends Controller
                 $periode['tglakhir'] = \Carbon\Carbon::createFromFormat('d/m/Y', $request->tglakhir)->format('Y-m-d');
 
             if (isset($periode['tglawal']) && isset($periode['tglakhir'])){
-                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(A.id) AS jumTransaksi
                 FROM barang_keluar A
                 WHERE A.jenis = "Pembelian" AND A.tanggal BETWEEN \''. $periode['tglawal'].'\' AND \''. $periode['tglakhir'].'\'
                 GROUP BY tanggal, metode';
@@ -204,7 +204,7 @@ class DataController extends Controller
                 // $data = BarangKeluar::where('jenis', 'Pembelian')->whereBetween('tanggal', [$periode['tglawal'], $periode['tglakhir']])->get();
                 
             } elseif (isset($periode['tglawal'])) {
-                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(A.id) AS jumTransaksi
                 FROM barang_keluar A
                 WHERE A.jenis = "Pembelian" AND A.tanggal >= \''. $periode['tglawal'].'\'
                 GROUP BY tanggal, metode';
@@ -212,7 +212,7 @@ class DataController extends Controller
                 $periode['tglakhir'] = date('Y-m-d');
 
             } elseif (isset($periode['tglakhir'])) {
-                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(A.id) AS jumTransaksi
                 FROM barang_keluar A
                 WHERE A.jenis = "Pembelian" AND A.tanggal <= \''. $periode['tglakhir'].'\'
                 GROUP BY tanggal, metode';
@@ -222,7 +222,7 @@ class DataController extends Controller
 
             } else {
                 $periode = null;
-                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(a.id) AS jumTransaksi
+                $query = 'SELECT A.tanggal, A.metode, SUM(A.jumlah) AS total, COUNT(A.id) AS jumTransaksi
                 FROM barang_keluar A
                 WHERE A.jenis = "Pembelian"
                 GROUP BY tanggal, metode';
