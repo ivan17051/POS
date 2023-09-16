@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('supplier', SupplierController::class)->except('show');
     Route::apiResource('pembayaran', PembayaranController::class)->only('store', 'update');
     Route::apiResource('stokopname', StokOpnameController::class)->except('show');
+    Route::apiResource('retur', ReturController::class)->except('show');
 
     Route::post('/barang/data', 'BarangController@data')->name('barang.data');
     Route::get('/barang/checkkode/{kode}', 'BarangController@checkKode')->name('barang.check');
@@ -46,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pembelian/getmember', 'DataController@getMember')->name('data.searchmember');
     Route::get('/pembelian', 'BarangKeluarController@pembelian')->name('barang.pembelian');
     Route::post('/pembelian', 'BarangKeluarController@store')->name('barang_keluar.store');
+
+    Route::post('/retur/data', 'ReturController@data')->name('retur.data');
+    Route::get('/retur/detail/{id}', 'ReturController@detail')->name('retur.detail');
 
     Route::get('/stok', 'StokController@index')->name('stok.index');
     Route::post('stok/data', 'StokController@data')->name('stok.data');

@@ -94,6 +94,12 @@ $role = Auth::user()->role;
                                 <span class="sidebar-normal"> Barang Keluar </span>
                             </a>
                         </li>
+                        <li class="nav-item @yield('returStatus')">
+                            <a class="nav-link" href="{{route('retur.index')}}">
+                                <span class="sidebar-mini">BR</span>
+                                <span class="sidebar-normal"> Barang Retur </span>
+                            </a>
+                        </li>
                         <li class="nav-item @yield('pembelianStatus')">
                             <a class="nav-link" href="{{route('barang.pembelian')}}">
                                 <span class="sidebar-mini"> TK </span>
