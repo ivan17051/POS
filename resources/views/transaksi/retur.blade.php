@@ -66,7 +66,7 @@ active
    </div>
    <div class="modal-footer">
     <button type="button" class="btn btn-default btn-link" data-dismiss="modal">TUTUP</button>
-    <button type="submit" class="btn btn-link text-primary">Simpan</button>
+    <!-- <button type="submit" class="btn btn-link text-primary">Simpan</button> -->
    </div>
   </div>
  </div>
