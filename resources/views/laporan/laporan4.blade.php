@@ -25,7 +25,7 @@
 </head>
 
 <body>
-  <table class="screen panjang lebarKertasTidur">
+  <table class="screen panjang lebarKertasTegak">
     <tbody>
       <tr>
         <td class="jarak">
@@ -46,31 +46,32 @@
           <!-- END OF KOP SURAT -->
           <!-- CONTENT -->
 
-          <table class="w-85">
+          <table class="">
             <thead class="tb-header">
               <tr>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:5%;" rowspan="2">NO</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:25%;" rowspan="2">NAMA BARANG</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:30%;" rowspan="2">NAMA SUPPLIER</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:40%;" colspan="4">STOK</th>
-              </tr>
-              <tr>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; ">MASUK</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; ">KELUAR</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; ">PENYESUAIAN</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; ">JUMLAH</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:5%;">NO</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:35%;">NAMA BARANG</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:20%;">KODE BARANG</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:15%;">HARGA PEROLEHAN</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:10%;">STOK SISTEM</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:15%;">JUMLAH TOTAL</th>
               </tr>
             </thead>
             <tbody class="tb-body font-13">
+              @php
+              $total = 0;
+              @endphp
               @foreach($data as $key=>$unit)
+              @php
+                $total += ($unit->hargabeli * $unit->stok);
+              @endphp
               <tr>
                 <td class=" fontJustify">{{$key+1}}. </td>
-                <td class=" fontJustify">{{$unit->getBarang->namabarang}}</td>
-                <td class=" fontCenter">{{$unit->getSupplier->nama}}</td>
-                <td class=" fontCenter">{{$unit->qtyin}}</td>
-                <td class=" fontCenter">{{$unit->qtyout}}</td>
-                <td class=" fontCenter">{{$unit->penyesuaian}}</td>
+                <td class=" fontJustify">{{$unit->namabarang}}</td>
+                <td class=" fontCenter">{{$unit->kodebarang}}</td>
+                <td class=" fontCenter">{{number_format($unit->hargabeli)}}</td>
                 <td class=" fontCenter">{{$unit->stok}}</td>
+                <td class=" fontCenter">{{number_format($total)}}</td>
               </tr>
               @endforeach
             </tbody>

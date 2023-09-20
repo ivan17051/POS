@@ -64,9 +64,6 @@
                               <td colspan="2" class="" style="font-size:12px">{{Carbon\Carbon::parse($barang_keluar->tanggal)->isoformat('DD-MM-Y')}}</td>
                             </tr>
                             <tr>
-                              <td colspan="2" class="" >Kasir: </td>
-                            </tr>
-                            <tr>
                               <td colspan="2">No. {{$barang_keluar->nomor}}</td>
                             </tr>
                             <tr>
@@ -96,6 +93,16 @@
                               <td class="" >Kembali </td>
                               <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar-$barang_keluar->jumlah) : '0'}} </td>
                             </tr>
+                            <tr>
+                              <td colspan="2" class="fontCenter" style="font-size:15px"'>--------------------------------------</td>
+                            </tr>
+                            <tr>
+                              <td class="" style="font-size:12px" colspan="2">Jenis Pembayaran :</td>
+                            </tr>
+                            <tr>
+                              <td class="" style="font-size:12px" colspan="2">{{ucwords($barang_keluar->metode)}} {{isset($barang_keluar->keterangan) ? '('.$barang_keluar->keterangan.')' : ''}}</td>
+                            </tr>
+                            
                             @if(isset($barang_keluar->getMember))
                             <tr>
                               <td colspan="2" class="fontCenter" style="font-size:15px">--------------------------------------</td>
@@ -107,16 +114,16 @@
                             <tr><td>&nbsp;</td></tr>
                             @endif
                             <tr>
-                              <td style="font-size:12px">Nama</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->nama}} .</td>
+                              <td style="font-size:12px" colspan="2">Detail Member :</td>
                             </tr>
                             <tr>
-                              <td style="font-size:12px">No. HP</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->notelp}} .</td>
+                              <td style="font-size:12px;" colspan="2">&#9900; {{$barang_keluar->getMember->nama}}</td>
                             </tr>
                             <tr>
-                              <td style="font-size:12px">Poin</td>
-                              <td style="font-size:12px">: {{$barang_keluar->getMember->poin}} .</td>
+                              <td style="font-size:12px" colspan="2">&#9900; {{$barang_keluar->getMember->notelp}}</td>
+                            </tr>
+                            <tr>
+                              <td style="font-size:12px" colspan="2">&#8473; <b>{{$barang_keluar->getMember->poin}} Poin</b></td>
                             </tr>
                             @endif
                             <tr>

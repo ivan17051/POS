@@ -108,6 +108,19 @@ active
                   </div>
                 </div>
               </div>
+              <div class="row" id="lokasi">
+                <label class="col-sm-2 col-form-label">Lokasi</label>
+                <div class="col-sm-10">
+                  <div class="form-group">
+                    <select name="lokasi" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Lokasi">
+                      <option value="semua">Semua Lokasi</option>
+                      @foreach($lokasi as $unit)
+                      <option value="{{$unit->lokasi}}">{{$unit->lokasi}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div class="row text-right mt-3">
                 <div class="col">
                   <button type="submit" class="btn btn-primary">Lihat</button>
@@ -129,18 +142,14 @@ active
 <script>
   $('#formlaporan [name=jenislaporan]').change(function(e){
     // console.log(e.target.value);
-    var profesi = $('#profesi');
-    var profesiman = $('#profesiman');
-    var faskes = $('#faskes');
-    var tgl = $('#tanggal');
-    var spesialisasi = $('#spesialisasi');
+    var lokasi = $('#lokasi');
     
-    if(e.target.value==1 || e.target.value==2 || e.target.value==3 || e.target.value==6 || e.target.value==7 ){
-      tgl.attr('hidden', false)
-      tgl.find('input').attr('required', false);
-    }else if(e.target.value==4 || e.target.value==5){
-      tgl.attr('hidden', true)
-      tgl.find('input').attr('required', false);
+    if(e.target.value==4 ){
+      lokasi.attr('hidden', false)
+      lokasi.find('select').attr('required', true);
+    }else {
+      lokasi.attr('hidden', true)
+      lokasi.find('select').attr('required', false);
     }
   })
 

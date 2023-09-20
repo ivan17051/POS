@@ -39,8 +39,9 @@ class DataController extends Controller
 
     public function laporan()
     {
-
-        return view('laporan');
+        $lokasi = Barang::whereNotNull('lokasi')->groupBy('lokasi')->get(['lokasi']);
+        
+        return view('laporan', ['lokasi'=>$lokasi]);
     }
 
     public function downloadLaporan(Request $request)
@@ -148,9 +149,24 @@ class DataController extends Controller
 
         // Laporan Stok
         elseif ($request->jenislaporan == 4) {
+            // dd($request->all());
+            if($request->lokasi == 'semua'){
+                // $data = Stok::with('getBarang:id,namabarang,kodebarang')->get(['id', 'idbarang', 'stok']);
+                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
+                    FROM stok A
+                    LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                    LEFT JOIN mbarang B ON A.idbarang = B.id
+                    WHERE A.stok > 0';
+            } else {
+                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
+                    FROM stok A
+                    LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                    LEFT JOIN mbarang B ON A.idbarang = B.id
+                    WHERE A.stok > 0 AND B.lokasi =\''.$request->lokasi.'\'';
+            }
 
-            $data = Stok::with('getBarang:id,namabarang', 'getSupplier:id,nama')->get(['id', 'idbarang', 'idsupplier', 'qtyin', 'qtyout', 'penyesuaian', 'stok']);
-
+            $data = DB::select(DB::raw($query));
+            // dd($data);
             return view('laporan.laporan4', ['data' => $data]);
         }
 

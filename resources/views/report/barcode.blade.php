@@ -35,15 +35,15 @@
         </tr>
         <tr>
             <!-- <td></td> -->
-            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">1: Rp {{number_format($barang->harga_1)}}</td>
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;font-size:15px;">1: Rp {{number_format($barang->harga_1)}}</td>
         </tr>
         <tr>
             <!-- <td></td> -->
-            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">3: Rp {{number_format($barang->harga_3)}}</td>
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;font-size:15px;">3: Rp {{number_format($barang->harga_3)}}</td>
         </tr>
         <tr>
             <!-- <td></td> -->
-            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;">6: Rp {{number_format($barang->harga_6)}}</td>
+            <td style="font-weight: bold; text-align: center; background-color: #d2d2d2; padding: 2px; height: 17px;font-size:15px;">6: Rp {{number_format($barang->harga_6)}}</td>
         </tr>
         <tr>
             <!-- <td></td> -->

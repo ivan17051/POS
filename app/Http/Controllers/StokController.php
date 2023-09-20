@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Supplier;
 use App\Stok;
 use Datatables;
+use DB;
 
 class StokController extends Controller
 {
@@ -17,7 +18,11 @@ class StokController extends Controller
     public function data(){
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = Stok::with('getSupplier:id,nama','getBarang:id,namabarang');
+        // $data = Stok::with('getSupplier:id,nama','getBarang:id,namabarang');
+        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namasupplier, C.namabarang AS namabarang 
+            FROM stok A 
+            LEFT JOIN msupplier B ON A.idsupplier = B.id
+            LEFT JOIN mbarang C ON A.idbarang = C.id'));
         $datatable = Datatables::of($data);
         
         return $datatable->make(true); 
