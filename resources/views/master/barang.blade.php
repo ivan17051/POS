@@ -388,6 +388,7 @@ active
         { data: 'id', title: 'ID' },
         { data: 'namakategori', title: 'Kategori' },
         { data: 'kodebarang', title: 'Kode Barang' },
+        { data: 'lokasi', title: 'Lokasi/Rak' },
         { data: 'namabarang', title: 'Nama Barang' },
         {
           data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
@@ -409,7 +410,6 @@ active
         responsivePriority: 2,
         targets: 0
       }, {
-        orderable: false,
         responsivePriority: 2,
         targets: 3
       }

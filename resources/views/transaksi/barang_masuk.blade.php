@@ -135,6 +135,40 @@ active
   </div>
 </div>
 <!--  End Modal Hapus  -->
+
+<!-- Modal Hapus -->
+<div class="modal fade modal-mini modal-primary" id="retur" tabindex="-1" role="dialog"
+  aria-labelledby="myDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+            class="material-icons">clear</i></button>
+      </div>
+      <form class="" method="POST" action="">
+        @csrf
+        <div class="modal-body">
+          <input type="text" name="id_barangmasuk">
+          <div class="form-group">
+            <label for="tanggal">Tanggal</label>
+            <input type="date" name="tanggal" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="jumlah">Nominal</label>
+            <input type="text" name="jumlah" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-link" data-dismiss="modal">Tidak</button>
+          <button type="submit" class="btn btn-danger btn-link">Ya, Hapus
+            <div class="ripple-container"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--  End Modal Hapus  -->
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -353,7 +387,7 @@ active
   function view(self) {
     var tr = $(self).closest('tr');
     var data = oTable.row(tr).data();
-    console.log(data);
+    // console.log(data);
 
     var $modal = $('#view');
     $('#detail_brg_msk').empty();
@@ -392,6 +426,14 @@ active
   function hapus(id) {
     $modal = $('#hapus');
     $modal.find('form').attr('action', "{{route('barang_masuk.destroy', ['id'=>''])}}/" + id);
+
+    $modal.modal('show');
+  }
+
+  function retur(id){
+    $modal = $('#retur');
+    $modal.find('form').attr('action', "{{route('retur.store')}}");
+    $modal.find('input[name=id_barangmasuk]').val(id);
 
     $modal.modal('show');
   }

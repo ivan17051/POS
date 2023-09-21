@@ -41,6 +41,7 @@ class BarangMasukController extends Controller
                     '<a class="dropdown-item" href="'. route('barang_masuk.edit', ['id'=>$t->id]) .'">Edit</a>' .
                     '<a class="dropdown-item" href="#" onclick="cetak(' . $t->id . ')" >Cetak</a>' .
                     '<a class="dropdown-item" href="#" onclick="pembayaran(this)" >Pembayaran</a>' .
+                    '<a class="dropdown-item" href="#" onclick="retur(' . $t->id . ')" >Retur</a>' .
                     '<div class="dropdown-divider"></div>' .
                     '<a class="dropdown-item" href="#" onclick="hapus(' . $t->id . ')">Hapus</a>' .
                     '</div>' .
@@ -55,6 +56,7 @@ class BarangMasukController extends Controller
                     '<a class="dropdown-item" href="#" onclick="view(this)" >Detail</a>' .
                     '<a class="dropdown-item" href="'. route('barang_masuk.edit', ['id'=>$t->id]) .'">Edit</a>' .
                     '<a class="dropdown-item" href="#" onclick="cetak(' . $t->id . ')" >Cetak</a>' .
+                    '<a class="dropdown-item" href="#" onclick="retur(' . $t->id . ')" >Retur</a>' .
                     '<div class="dropdown-divider"></div>' .
                     '<a class="dropdown-item" href="#" onclick="hapus(' . $t->id . ')">Hapus</a>' .
                     '</div>' .

@@ -113,8 +113,8 @@ active
     <div class="card-body">
 
      <div class="toolbar row">
-      <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
-        data-target="#tambah">Tambah</button></div>
+      <!-- <div class="col text-right"><button id="btntambah" class="btn btn-sm btn-primary" data-toggle="modal"
+        data-target="#tambah">Tambah</button></div> -->
 
      </div>
      <div class="anim slide" id="table-container">

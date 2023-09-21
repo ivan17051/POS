@@ -68,11 +68,11 @@ class BarangKeluarController extends Controller
         DB::beginTransaction();
         try {
             $jumlah = 0;
-            $nomorMax = BarangKeluar::whereNotNull('nomor')->orderBy('doc', 'desc')->first(['nomor']);
-            
+            $nomorMax = BarangKeluar::whereNotNull('nomor')->where('tanggal', $request->tanggal)->orderBy('doc', 'desc')->first(['nomor']);
+            // dd($request->all(), $nomorMax, \Carbon\Carbon::make($request->tanggal)->format('Ymd'));       
             if(isset($nomorMax)){
                 $nomorMax = explode('-', $nomorMax->nomor);
-                if (trim($nomorMax[0], 'BK') == date('Ymd')) {
+                if (trim($nomorMax[0], 'BK') == \Carbon\Carbon::make($request->tanggal)->format('Ymd')) {
                     $max = base_convert($nomorMax[1], 10, 10);
                 } else {
                     $max = 0;
@@ -82,8 +82,8 @@ class BarangKeluarController extends Controller
             }
 
             $barang_keluar = new BarangKeluar($request->all());
-            $barang_keluar->tanggal = date('Y-m-d');
-            $barang_keluar->nomor = 'BK' . date('Ymd') . '-' . sprintf("%04d", $max + 1);
+            $barang_keluar->tanggal = \Carbon\Carbon::make($request->tanggal)->format('Y-m-d');
+            $barang_keluar->nomor = 'BK' . \Carbon\Carbon::make($request->tanggal)->format('Ymd') . '-' . sprintf("%04d", $max + 1);
             $barang_keluar->jenis = 'Pembelian';
             $barang_keluar->save();
 

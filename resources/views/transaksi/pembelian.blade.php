@@ -65,6 +65,9 @@ active
           </div>
         </div>
         <div class="card-body row">
+          <div class="col-md-12">
+            <input type="date" class="form-control" name="tanggal" id="tanggal">
+          </div>
           <div class="col-md-6">
             <div class="form-group">
               <!-- <label for="metode" class="bmd-label-floating">Metode Pembayaran</label> -->
