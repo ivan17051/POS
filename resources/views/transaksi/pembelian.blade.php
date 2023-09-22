@@ -66,7 +66,7 @@ active
         </div>
         <div class="card-body row">
           <div class="col-md-12">
-            <input type="date" class="form-control" name="tanggal" id="tanggal">
+            <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{date('Y-m-d')}}">
           </div>
           <div class="col-md-6">
             <div class="form-group">

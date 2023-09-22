@@ -148,7 +148,7 @@ active
       <form class="" method="POST" action="">
         @csrf
         <div class="modal-body">
-          <input type="text" name="id_barangmasuk">
+          <input type="hidden" name="id_barangmasuk">
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
             <input type="date" name="tanggal" class="form-control">
@@ -160,7 +160,7 @@ active
         </div>
         <div class="modal-footer justify-content-center">
           <button type="button" class="btn btn-link" data-dismiss="modal">Tidak</button>
-          <button type="submit" class="btn btn-danger btn-link">Ya, Hapus
+          <button type="submit" class="btn btn-primary btn-link">Simpan
             <div class="ripple-container"></div>
           </button>
         </div>
