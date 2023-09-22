@@ -108,7 +108,7 @@ active
                   </div>
                 </div>
               </div>
-              <div class="row" id="lokasi">
+              <div class="row" id="lokasi" hidden>
                 <label class="col-sm-2 col-form-label">Lokasi</label>
                 <div class="col-sm-10">
                   <div class="form-group">

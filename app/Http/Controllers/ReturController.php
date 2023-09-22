@@ -47,7 +47,7 @@ class ReturController extends Controller
             $barang_masuk = BarangMasuk::findOrFail($request->id_barangmasuk);
 
             $retur->fill($request->all());
-            $retur->nomor = $barang_masuk->nomor.'_RE';
+            $retur->nomor = $barang_masuk->nomor.'-RE';
             
             // $list_hapus = explode('|', $request->list_hapus);
             // foreach($list_hapus as $unit){

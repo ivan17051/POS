@@ -145,7 +145,7 @@ active
  function cari(self) {
   var tr = $(self).closest('tr');
   var data = oTable.row(tr).data();
-  console.log(data, self.value);
+  // console.log(data, self.value);
 
   var $modal = $('#tambah');
   $('#id_detailbarangmasuk').empty();
@@ -189,7 +189,7 @@ active
 
  function hapus(id) {
   $modal = $('#hapus');
-  $modal.find('form').attr('action', "{{route('barang_keluar.destroy', ['id'=>''])}}/" + id);
+  $modal.find('form').attr('action', "{{route('retur.destroy', ['id'=>''])}}/" + id);
 
   $modal.modal('show');
  }
@@ -229,7 +229,6 @@ active
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
      }
     },
-    { data: 'action', title: 'Aksi', width: '10%', orderable: false },
    ],
    columnDefs: [
     { responsivePriority: 2, targets: 0 },

@@ -63,7 +63,7 @@
               @endphp
               @foreach($data as $key=>$unit)
               @php
-                $total += ($unit->hargabeli * $unit->stok);
+                $total = ($unit->hargabeli * $unit->stok);
               @endphp
               <tr>
                 <td class=" fontJustify">{{$key+1}}. </td>
