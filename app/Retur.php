@@ -15,7 +15,7 @@ class Retur extends Model
         "id_detailbarangmasuk",
         "tanggal",
         "nomor",
-        "jumlah",
+        "jumretur",
     ];
 
     public function getNomor(){

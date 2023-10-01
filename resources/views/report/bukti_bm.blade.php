@@ -149,17 +149,17 @@
                           <td class="fontKanan">{{number_format($total)}}</td>
                         </tr>
                         <tr>
-                          <td style="width:50%;" rowspan="3">TERBILANG ##{{strtoupper(terbilang($total))}}##</td>
+                          <td style="width:50%;" rowspan="3">TERBILANG ##{{strtoupper(terbilang($total-$main->disc+$main->ppn))}}##</td>
                           <td class="fontKanan" style="width:20%;">Disc :</td>
-                          <td class="fontKanan">0</td>
+                          <td class="fontKanan">{{number_format($main->disc)}}</td>
                         </tr>
                         <tr>
                           <td class="fontKanan" style="width:20%;">PPN :</td>
-                          <td class="fontKanan">0</td>
+                          <td class="fontKanan">{{number_format($main->ppn)}}</td>
                         </tr>
                         <tr>
                           <td class="fontKanan" style="width:20%;">Total :</td>
-                          <td class="fontKanan">{{number_format($total)}}</td>
+                          <td class="fontKanan">{{number_format($total-$main->disc+$main->ppn)}}</td>
                         </tr>
                       </tbody>
                     </table>

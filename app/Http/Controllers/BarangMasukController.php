@@ -110,6 +110,7 @@ class BarangMasukController extends Controller
             $barang_masuk->nomor = 'BM' . date('Ymd') . '-' . sprintf("%04d", $max + 1);
             if ($request->metode == 'cash')
                 $barang_masuk->islunas = 1;
+            // dd($barang_masuk, $request->all());
             $barang_masuk->save();
 
             foreach ($request->detail as $unit) {

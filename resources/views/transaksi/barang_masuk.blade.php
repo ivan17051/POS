@@ -136,12 +136,13 @@ active
 </div>
 <!--  End Modal Hapus  -->
 
-<!-- Modal Hapus -->
+<!-- Modal Retur -->
 <div class="modal fade modal-mini modal-primary" id="retur" tabindex="-1" role="dialog"
   aria-labelledby="myDeleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-small">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title">Retur Barang Masuk</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
             class="material-icons">clear</i></button>
       </div>
@@ -151,14 +152,26 @@ active
           <input type="hidden" name="id_barangmasuk">
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
-            <input type="date" name="tanggal" class="form-control">
+            <input type="date" name="tanggal" class="form-control" required>
           </div>
-          <div class="form-group">
-            <label for="jumlah">Nominal</label>
-            <input type="text" name="jumlah" class="form-control">
+          <div class="table-full-width table-hover mt-5">
+            <div class="table-responsive" style="overflow:visible;">
+              <table class="table">
+                <thead class="">
+                  <th style="width:5%;">ID</th>
+                  <th>Nama Barang</th>
+                  <th style="width:10%;">QTY</th>
+                  <th style="width:15%;">Harga Satuan</th>
+                  <th style="width:10%;">QTY Retur</th>
+                </thead>
+                <tbody id="detailRetur">
+                </tbody>
+              </table>
+
+            </div>
           </div>
         </div>
-        <div class="modal-footer justify-content-center">
+        <div class="modal-footer">
           <button type="button" class="btn btn-link" data-dismiss="modal">Tidak</button>
           <button type="submit" class="btn btn-primary btn-link">Simpan
             <div class="ripple-container"></div>
@@ -168,7 +181,7 @@ active
     </div>
   </div>
 </div>
-<!--  End Modal Hapus  -->
+<!--  End Modal Retur  -->
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -343,6 +356,30 @@ active
 
                     </tbody>
                   </table>
+
+                  <div class="row">
+                    <div class="col-sm-6"></div>
+                    
+                    <label class="col-sm-2 col-form-label">PPN</label>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="ppn">
+                        <span class="bmd-help">Masukkan Nominal PPN.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-6"></div>
+                    <label class="col-sm-2 col-form-label">Disc</label>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="disc">
+                        <span class="bmd-help">Masukkan Nominal Diskon.</span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             
@@ -360,6 +397,7 @@ active
     </div>
   </div>
 </div>
+
 
 @endsection
 
@@ -434,8 +472,45 @@ active
     $modal = $('#retur');
     $modal.find('form').attr('action', "{{route('retur.store')}}");
     $modal.find('input[name=id_barangmasuk]').val(id);
+    
+    $('#detailRetur').empty();
+    $.ajax({
+        url: "{{ route('barang_masuk.detail',['id'=>'']) }}" + '/' + id ,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          var total = 0;
+          
+          data.forEach(e => {
+            $('#detailRetur').append(
+              '<tr>'+
+              '<td>' + e.id + '</td>' +
+              '<td>' + e.get_barang.namabarang + '</td>' +
+              '<td>' + e.qty + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.h_sat) + '</td>' +
+              '<td><input type="number" class="form-control" name="stok[]" value="0" min="0" max="'+ e.qty +'" data-hsat="'+ e.h_sat +'" onchange="hitungTotal(this)"></td>'+
+              '</tr>'
+            );
+            
+          });
+          
+          totretur = 0;
+          $('#jumretur').val('0').change();
+          
+        },
+        error : function() {
+            // alert("No Data");
+        }
+    });
 
     $modal.modal('show');
+  }
+
+  function hitungTotal(self) {
+    var qty = $('#addQty').val();
+    var harga = $('#h_sat').val();
+    var total = qty * harga;
+    $('#jumlah').val(total).change();
   }
 
   function pembayaran(self) {
@@ -613,13 +688,6 @@ active
         
       },
     });
-  }
-
-  function hitungTotal(e) {
-    var qty = $('#addQty').val();
-    var harga = $('#h_sat').val();
-    var total = qty * harga;
-    $('#jumlah').val(total).change();
   }
 
   $(document).ready(function () {

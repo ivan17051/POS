@@ -16,6 +16,8 @@ class BarangMasuk extends Model
         "idsupplier",
         "metode",
         "jumlah",
+        "disc",
+        "ppn",
         "tgljatuhtempo",
         "islunas",
     ];

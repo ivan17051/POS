@@ -126,6 +126,30 @@ active
                     </tbody>
                   </table>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    
+                    <label class="col-sm-2 col-form-label">PPN</label>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="ppn" value="{{$barang_masuk->ppn}}">
+                        <span class="bmd-help">Masukkan Nominal PPN.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-6"></div>
+                    <label class="col-sm-2 col-form-label">Disc</label>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="disc" value="{{$barang_masuk->disc}}">
+                        <span class="bmd-help">Masukkan Nominal Diskon.</span>
+                      </div>
+                    </div>
+                  </div>
+
               </div>
             
           </div>

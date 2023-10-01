@@ -225,15 +225,14 @@ active
      }
     },
     {
-     data: 'jumlah', title: 'Total', width: '20%', render: function (e, d, r) {
+     data: 'jumretur', title: 'Total', width: '20%', render: function (e, d, r) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
      }
     },
    ],
    columnDefs: [
     { responsivePriority: 2, targets: 0 },
-    { orderable: false, responsivePriority: 2, targets: 3 },
-    { className: "text-right", targets: 5 }
+    { className: "text-right", targets: 4 }
    ]
 
   });

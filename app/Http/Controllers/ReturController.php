@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Retur;
 use App\BarangMasuk;
 use App\BarangMasukDetail;
+use App\Stok;
 use Datatables;
 
 class ReturController extends Controller
@@ -45,29 +46,29 @@ class ReturController extends Controller
         try {
             $retur = new Retur();
             $barang_masuk = BarangMasuk::findOrFail($request->id_barangmasuk);
+            $total = 0;
 
             $retur->fill($request->all());
-            $retur->nomor = $barang_masuk->nomor.'-RE';
+            $detail = BarangMasukDetail::where('idtransaksi',$request->id_barangmasuk)->get();
             
-            // $list_hapus = explode('|', $request->list_hapus);
-            // foreach($list_hapus as $unit){
-            //     if($unit!=''){
-            //         $detail = BarangMasukDetail::findOrFail($unit);
-    
-            //         $stok = Stok::where('idbarang', $detail->idbarang)->where('idsupplier', $detail->idsupplier)->first();
-            //         $stok->qtyin -= $detail->qty;
-            //         $stok->stok -= $detail->qty;
-            //         $jumlah -= $detail->jumlah;
+            for($x=0;$x<count($detail);$x++){
+                $detail[$x]->qty -= $request->stok[$x];
+                $detail[$x]->jumlah = $detail[$x]->qty * $detail[$x]->h_sat;
+                $total += $request->stok[$x] * $detail[$x]->h_sat;
 
-            //         $detail->delete();
-            //         $stok->save();
-            //     }
-            // }
-            // dd($request->all(), $id, $list_hapus);
+                $stok = Stok::where('idbarang', $detail[$x]->idbarang)->where('idsupplier', $detail[$x]->idsupplier)->first();
+                $stok->qtyin -= $request->stok[$x];
+                $stok->stok -= $request->stok[$x];
+                
+                $stok->save();
+                $detail[$x]->save();
+            }
+            // dd($detail, $request->all(), $stok);
+            $retur->nomor = $barang_masuk->nomor.'_RE';
+            $retur->jumretur = $total;
 
+            $barang_masuk->jumlah -= $total;
             
-            $barang_masuk->jumlah -= $request->jumlah;
-            // dd($barang_masuk, $retur);
             $barang_masuk->save();
             $retur->save();
         } catch (Exception $exception) {
