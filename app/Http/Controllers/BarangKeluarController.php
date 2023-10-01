@@ -85,6 +85,8 @@ class BarangKeluarController extends Controller
             $barang_keluar->tanggal = \Carbon\Carbon::make($request->tanggal)->format('Y-m-d');
             $barang_keluar->nomor = 'BK' . \Carbon\Carbon::make($request->tanggal)->format('Ymd') . '-' . sprintf("%04d", $max + 1);
             $barang_keluar->jenis = 'Pembelian';
+            $barang_keluar->diskon = $request->voucher;
+            
             $barang_keluar->save();
 
             foreach ($request->detail as $unit) {

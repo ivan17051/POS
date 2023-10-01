@@ -143,13 +143,20 @@ active
   $('#formlaporan [name=jenislaporan]').change(function(e){
     // console.log(e.target.value);
     var lokasi = $('#lokasi');
+    var tanggal = $('#tanggal');
     
     if(e.target.value==4 ){
       lokasi.attr('hidden', false)
       lokasi.find('select').attr('required', true);
+      tanggal.attr('hidden', true)
+    }else if(e.target.value==5) {
+      lokasi.attr('hidden', true)
+      lokasi.find('select').attr('required', false);
+      tanggal.attr('hidden', true)
     }else {
       lokasi.attr('hidden', true)
       lokasi.find('select').attr('required', false);
+      tanggal.attr('hidden', false)
     }
   })
 

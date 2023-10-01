@@ -86,12 +86,16 @@
                               <td class="fontKanan" >{{number_format($barang_keluar->jumlah)}} </td>
                             </tr>
                             <tr>
+                              <td class="" >Potongan </td>
+                              <td class="fontKanan" >{{number_format($barang_keluar->diskon)}} </td>
+                            </tr>
+                            <tr>
                               <td class="" >Bayar </td>
                               <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar) : number_format($barang_keluar->jumlah)}} </td>
                             </tr>
                             <tr>
                               <td class="" >Kembali </td>
-                              <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->bayar-$barang_keluar->jumlah) : '0'}} </td>
+                              <td class="fontKanan" >{{isset($barang_keluar->bayar) ? number_format($barang_keluar->diskon + $barang_keluar->bayar - $barang_keluar->jumlah) : '0'}} </td>
                             </tr>
                             <tr>
                               <td colspan="2" class="fontCenter" style="font-size:15px"'>--------------------------------------</td>

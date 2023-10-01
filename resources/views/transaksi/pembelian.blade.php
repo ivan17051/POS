@@ -72,26 +72,36 @@ active
             <div class="form-group">
               <!-- <label for="metode" class="bmd-label-floating">Metode Pembayaran</label> -->
               <!-- <input type="text" class="form-control" id="metode" name="metode"> -->
-              <select class="selectpicker" name="metode" data-style="select-with-transition" required onchange="show(this)">
+              <select class="selectpicker" name="metode" id="metode" data-style="select-with-transition" required onchange="show(this)">
                 <option value="" selected disabled>Metode Pembayaran</option>  
                 <option value="cash">Cash</option>
                 <option value="debit/kredit">Kartu Debit/Kredit</option>
                 <option value="qris">QRIS</option>
                 <option value="transfer">Transfer Bank</option>
+                <option value="voucher">Voucher</option>
+                <option value="poin" id="pilihPoin">Poin Member</option>
               </select>
             </div>
             
           </div>
-          <div class="col-md-6" id="showPeriode" hidden>
+          <div class="col-md-6" id="showVoucher" hidden>
             <div class="form-group">
               <!-- Periode muncul jika metode = kredit -->
               <!-- <label for="periode" class="bmd-label-floating">Periode Kredit</label> -->
-              <select class="selectpicker" name="periode" data-style="select-with-transition" >
-                <option value="" selected disabled>Periode Kredit</option>
-                <option value="1">1 Bulan</option>
-                <option value="2">2 Bulan</option>
-                <option value="3">3 Bulan</option>
+              <select class="selectpicker" name="voucher" data-style="select-with-transition" onchange="hitungKurang(this)">
+                <option value="" selected disabled>Voucher</option>
+                <option value="20000">Rp. 20.000</option>
+                <option value="50000">Rp. 50.000</option>
+                <option value="100000">Rp. 100.000</option>
+                <option value="150000">Rp. 150.000</option>
+                <option value="200000">Rp. 200.000</option>
               </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="showKurang" hidden>
+            <div class="form-group">
+              <label for="kurang" class="bmd-label-floating">Kurang</label>
+              <input type="text" class="form-control" name="kurang" id="kurang" readonly/>
             </div>
           </div>
           <div class="col-md-6" id="showBayar" hidden>
@@ -192,43 +202,73 @@ active
     }
 
     function hitungKembali(e){
-      $('input[name=kembali]').val(e.value-total).change();
+      var con = $('#metode').val();
+      
+      if(con=='voucher' | con=='poin'){
+        var kurang = $('#kurang').val();
+        $('input[name=kembali]').val(e.value-kurang).change();
+      }else {
+        $('input[name=kembali]').val(e.value-total).change();
+      }
+      
+    }
+
+    function hitungKurang(e){
+      $('input[name=kurang]').val(total-e.value).change();
+    }
+
+    function cekVoucher(e){
+      
     }
 
     function show(con){
       if(con.value=='debit/kredit'){
-        $('#showPeriode').attr('hidden', true);
+        $('#showVoucher').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
         $('input[name=keterangan]').attr('required', true);
         $('#labelket').html("No. Kartu Debit/Kredit");
+        $('#showKurang').attr('hidden', true);
         $('#showKembali').attr('hidden', true);
       } else if(con.value=='cash') {
-        $('#showPeriode').attr('hidden', true);
+        $('#showVoucher').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', false);
         $('input[name=bayar]').attr('required', true);
         $('#showKeterangan').attr('hidden', true);
         $('input[name=keterangan]').attr('required', false);
+        $('#showKurang').attr('hidden', true);
         $('#showKembali').attr('hidden', false);
       } else if(con.value=='qris' || con.value=='transfer') {
-        $('#showPeriode').attr('hidden', true);
+        $('#showVoucher').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
         $('input[name=keterangan]').attr('required', true);
         $('#labelket').html("Keterangan");
+        $('#showKurang').attr('hidden', true);
         $('#showKembali').attr('hidden', true);
-      } else {
-        $('#showPeriode').attr('hidden', true);
+      } else if(con.value=='voucher') {
+        $('#showVoucher').attr('hidden', false);
+        $('input[name=voucher]').attr('required', true);
+        $('#showBayar').attr('hidden', false);
+        $('input[name=bayar]').attr('required', true);
+        $('#showKeterangan').attr('hidden', true);
+        $('input[name=keterangan]').attr('required', false);
+        $('#labelket').html("Keterangan");
+        $('#showKurang').attr('hidden', false);
+        $('#showKembali').attr('hidden', false);
+      }else {
+        $('#showVoucher').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKembali').attr('hidden', true);
         $('#showKeterangan').attr('hidden', true);
+        $('#showKurang').attr('hidden', true);
         $('input[name=keterangan]').attr('required', false);
       }
     }
@@ -267,6 +307,7 @@ active
       );
       channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
 
+      // $('option[value=voucher]').attr('disabled', true);
       $('#qty').val('');
       $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
       $('#jumlah').val(total);
@@ -392,7 +433,7 @@ active
       $('#selectbarang').val('');
       $('select[name=metode]').val("").change();
       show('');
-      $('select[name=periode]').val("").change();
+      $('select[name=voucher]').val("").change();
       $('input[name=keterangan]').val("").change();
       $('input[name=bayar]').val("").change();
       $('input[name=kembali]').val("").change();
