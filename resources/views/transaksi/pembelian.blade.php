@@ -66,7 +66,7 @@ active
         </div>
         <div class="card-body row">
           <div class="col-md-12">
-            <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{date('Y-m-d')}}">
+            <input type="date" class="form-control mb-3" name="tanggal" id="tanggal" value="{{date('Y-m-d')}}">
           </div>
           <div class="col-md-6">
             <div class="form-group">
@@ -79,7 +79,7 @@ active
                 <option value="qris">QRIS</option>
                 <option value="transfer">Transfer Bank</option>
                 <option value="voucher">Voucher</option>
-                <option value="poin" id="pilihPoin">Poin Member</option>
+                <option value="poin" id="optPoin" disabled>Poin Member</option>
               </select>
             </div>
             
@@ -96,6 +96,13 @@ active
                 <option value="150000">Rp. 150.000</option>
                 <option value="200000">Rp. 200.000</option>
               </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="showPoin" hidden>
+            <div class="form-group">
+              <!-- Periode muncul jika metode = kredit -->
+              <label for="poinPakai" class="bmd-label-floating">Poin Digunakan</label>
+              <input type="text" class="form-control" name="poinPakai" onchange="hitungKurang(this)">
             </div>
           </div>
           <div class="col-md-6" id="showKurang" hidden>
@@ -224,7 +231,9 @@ active
     function show(con){
       if(con.value=='debit/kredit'){
         $('#showVoucher').attr('hidden', true);
-        $('input[name=periode]').attr('required', false);
+        $('input[name=voucher]').attr('required', false);
+        $('#showPoin').attr('hidden', true);
+        $('input[name=poinPakai]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
@@ -234,7 +243,9 @@ active
         $('#showKembali').attr('hidden', true);
       } else if(con.value=='cash') {
         $('#showVoucher').attr('hidden', true);
-        $('input[name=periode]').attr('required', false);
+        $('input[name=voucher]').attr('required', false);
+        $('#showPoin').attr('hidden', true);
+        $('input[name=poinPakai]').attr('required', false);
         $('#showBayar').attr('hidden', false);
         $('input[name=bayar]').attr('required', true);
         $('#showKeterangan').attr('hidden', true);
@@ -243,7 +254,9 @@ active
         $('#showKembali').attr('hidden', false);
       } else if(con.value=='qris' || con.value=='transfer') {
         $('#showVoucher').attr('hidden', true);
-        $('input[name=periode]').attr('required', false);
+        $('input[name=voucher]').attr('required', false);
+        $('#showPoin').attr('hidden', true);
+        $('input[name=poinPakai]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKeterangan').attr('hidden', false);
@@ -254,6 +267,20 @@ active
       } else if(con.value=='voucher') {
         $('#showVoucher').attr('hidden', false);
         $('input[name=voucher]').attr('required', true);
+        $('#showPoin').attr('hidden', true);
+        $('input[name=Pakai]').attr('required', false);
+        $('#showBayar').attr('hidden', false);
+        $('input[name=bayar]').attr('required', true);
+        $('#showKeterangan').attr('hidden', true);
+        $('input[name=keterangan]').attr('required', false);
+        $('#labelket').html("Keterangan");
+        $('#showKurang').attr('hidden', false);
+        $('#showKembali').attr('hidden', false);
+      } else if(con.value=='poin') {
+        $('#showVoucher').attr('hidden', true);
+        $('input[name=voucher]').attr('required', false);
+        $('#showPoin').attr('hidden', false);
+        $('input[name=poinPakai]').attr('required', true);
         $('#showBayar').attr('hidden', false);
         $('input[name=bayar]').attr('required', true);
         $('#showKeterangan').attr('hidden', true);
@@ -264,6 +291,8 @@ active
       }else {
         $('#showVoucher').attr('hidden', true);
         $('input[name=periode]').attr('required', false);
+        $('#showPoin').attr('hidden', true);
+        $('input[name=poinPakai]').attr('required', false);
         $('#showBayar').attr('hidden', true);
         $('input[name=bayar]').attr('required', false);
         $('#showKembali').attr('hidden', true);
@@ -307,7 +336,6 @@ active
       );
       channel.postMessage('addbarang||'+'<tr>'+cmd+'</tr>||'+new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
 
-      // $('option[value=voucher]').attr('disabled', true);
       $('#qty').val('');
       $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
       $('#jumlah').val(total);
@@ -415,6 +443,7 @@ active
               channel.postMessage('addmember||'+item.nama+'||'+item.alamat+'||'+item.poin);
               $('#searchbarang .js-typeahead').val('').change();
               $('#searchmember').hide();
+              $('#optPoin').attr('disabled', false).change();
               // $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
             }
         },
@@ -434,6 +463,7 @@ active
       $('select[name=metode]').val("").change();
       show('');
       $('select[name=voucher]').val("").change();
+      $('input[name=poinPakai]').val("").change();
       $('input[name=keterangan]').val("").change();
       $('input[name=bayar]').val("").change();
       $('input[name=kembali]').val("").change();

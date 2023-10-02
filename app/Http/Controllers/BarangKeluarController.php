@@ -85,7 +85,7 @@ class BarangKeluarController extends Controller
             $barang_keluar->tanggal = \Carbon\Carbon::make($request->tanggal)->format('Y-m-d');
             $barang_keluar->nomor = 'BK' . \Carbon\Carbon::make($request->tanggal)->format('Ymd') . '-' . sprintf("%04d", $max + 1);
             $barang_keluar->jenis = 'Pembelian';
-            $barang_keluar->diskon = $request->voucher;
+            $barang_keluar->diskon = $request->metode=='voucher' ? $request->voucher : $request->poinPakai;
             
             $barang_keluar->save();
 
@@ -144,6 +144,11 @@ class BarangKeluarController extends Controller
                 $hitung = $request->jumlah / $syarat->value;
                 $member->poin += floor($hitung);
                 $barang_keluar->poin = floor($hitung);
+
+                if($request->metode=='poin'){
+                    $member->poin -= $request->poinPakai;
+                    // dd($member);
+                }
                 $member->save();
             }
 

@@ -233,7 +233,7 @@ active
    ],
    columnDefs: [
     { responsivePriority: 2, targets: 0 },
-    { className: "text-right", targets: 4 }
+    { className: "text-right", targets: 5 }
    ]
 
   });
