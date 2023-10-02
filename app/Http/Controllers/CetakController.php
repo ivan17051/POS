@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use App\Barang;
 use App\BarangKeluar;
 use App\BarangKeluarDetail;
-use App\Pejabat;
-use App\Pegawai;
-use App\JenisPermohonan;
+use App\Retur;
+use App\BarangMasuk;
+use App\BarangMasukDetail;
+use App\Supplier;
 use App\Surket;
 
 class CetakController extends Controller
@@ -26,6 +27,26 @@ class CetakController extends Controller
             ->with('getBarang:id,kodebarang,namabarang')->get(['idbarang', 'qty', 'h_sat', 'jumlah']);
         // dd($d);
         return view('report.struk', $d);
+    }
+
+    public function retur($id)
+    {
+        $d['retur'] = Retur::findOrFail($id);
+        $d['barang_masuk'] = BarangMasuk::findOrFail($d['retur']->id_barangmasuk);
+        $d['supplier'] = Supplier::findOrFail($d['barang_masuk']->idsupplier);
+        $barang = explode('|', $d['retur']->id_detailbarangmasuk);
+        $d['listBarang'] = [];
+        foreach($barang as $unit){
+            if($unit!=''){
+                $temp = explode(',', $unit);
+                $tempBrg = Barang::findOrFail($temp[0]);
+                $tempHarga = BarangMasukDetail::where('idtransaksi',$d['retur']->id_barangmasuk)->where('idbarang',$temp[0])->first();
+                array_push($d['listBarang'], $tempBrg->namabarang.'|'.$temp[1].'|'.$tempHarga->h_sat);
+            }
+            
+        }
+        // dd($d);
+        return view('report.retur', $d);
     }
 
     public function kitir(Request $request, $idsip)
@@ -56,15 +77,6 @@ class CetakController extends Controller
         }
 
         return view('report.kitir', $d);
-    }
-
-    public function sip(Request $request, $idsip)
-    {
-        $d['sip'] = SIP::where('id', $idsip)->with('pegawai')->first();
-        $d['kadinkes'] = Pejabat::where('jabatan', 'Kepala Dinas')->first();
-        $d['jenispermohonan'] = JenisPermohonan::where('id', $d['sip']->idjenispermohonan)->first();
-
-        return view('report.sipinterkon', $d);
     }
 
     public function surket($idsurket)

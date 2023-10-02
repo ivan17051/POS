@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cetak/barcode/{id}', 'CetakController@barcode')->name('cetak.barcode');
     Route::get('/cetak/stokopname/{id}', 'CetakController@stokopname')->name('cetak.stokopname');
     Route::get('/cetak/struk/{id}', 'CetakController@struk')->name('cetak.struk');
+    Route::get('/cetak/retur/{id}', 'CetakController@retur')->name('cetak.retur');
 
     Route::get('/data/laporan', 'DataController@laporan');
     Route::post('/data/laporan', 'DataController@downloadLaporan')->name('data.download');

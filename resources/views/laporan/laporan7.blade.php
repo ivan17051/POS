@@ -74,6 +74,8 @@
                             $totdebit = 0;
                             $totqris = 0;
                             $tottf = 0;
+                            $totvoucher = 0;
+                            $totpoin = 0;
                             @endphp
                             @foreach($data as $unit)
                             @php
@@ -81,6 +83,8 @@
                             elseif($unit->metode == 'debit/kredit') $totdebit += $unit->total;
                             elseif($unit->metode == 'qris') $totqris += $unit->total;
                             elseif($unit->metode == 'transfer') $tottf += $unit->total;
+                            elseif($unit->metode == 'voucher') $totvoucher += $unit->total;
+                            elseif($unit->metode == 'poin') $totpoin += $unit->total;
                             @endphp
                             @if($unit->tanggal != $tglnow)
                             @php
@@ -131,6 +135,14 @@
                             <tr>
                               <td class="">Total Transfer</td>
                               <td class="fontKanan" >{{number_format($tottf)}} </td>
+                            </tr>
+                            <tr>
+                              <td class="">Total Voucher</td>
+                              <td class="fontKanan" >{{number_format($totvoucher)}} </td>
+                            </tr>
+                            <tr>
+                              <td class="">Total Potong Poin</td>
+                              <td class="fontKanan" >{{number_format($totpoin)}} </td>
                             </tr>
                             
                             <tr>

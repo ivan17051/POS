@@ -26,8 +26,7 @@ class ReturController extends Controller
                 '<i class="material-icons">more_vert</i>' .
                 '</a>' .
                 '<div class="dropdown-menu dropdown-menu-right" >' .
-                '<div class="dropdown-divider"></div>' .
-                '<a class="dropdown-item" href="#" onclick="hapus(' . $t->id . ')">Hapus</a>' .
+                '<a class="dropdown-item" href="'.route('cetak.retur',['id'=>$t->id]).'">Cetak</a>' .
                 '</div>' .
                 '</span>';
 
@@ -47,12 +46,15 @@ class ReturController extends Controller
             $retur = new Retur();
             $barang_masuk = BarangMasuk::findOrFail($request->id_barangmasuk);
             $total = 0;
+            $idbarang = '';
 
             $retur->fill($request->all());
             $detail = BarangMasukDetail::where('idtransaksi',$request->id_barangmasuk)->get();
             
             for($x=0;$x<count($detail);$x++){
                 $detail[$x]->qty -= $request->stok[$x];
+
+                if($request->stok[$x]>0) $idbarang = $idbarang.'|'.$detail[$x]->idbarang.','.$request->stok[$x];
                 $detail[$x]->jumlah = $detail[$x]->qty * $detail[$x]->h_sat;
                 $total += $request->stok[$x] * $detail[$x]->h_sat;
 
@@ -65,6 +67,7 @@ class ReturController extends Controller
             }
             // dd($detail, $request->all(), $stok);
             $retur->nomor = $barang_masuk->nomor.'_RE';
+            $retur->id_detailbarangmasuk = $idbarang;
             $retur->jumretur = $total;
 
             $barang_masuk->jumlah -= $total;
