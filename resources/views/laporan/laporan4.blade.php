@@ -60,10 +60,12 @@
             <tbody class="tb-body font-13">
               @php
               $total = 0;
+              $totall = 0;
               @endphp
               @foreach($data as $key=>$unit)
               @php
                 $total = ($unit->hargabeli * $unit->stok);
+                $totall += $total;
               @endphp
               <tr>
                 <td class=" fontJustify">{{$key+1}}. </td>
@@ -74,6 +76,10 @@
                 <td class=" fontCenter">{{number_format($total)}}</td>
               </tr>
               @endforeach
+              <tr>
+                <td class=" fontJustify" colspan="5">TOTAL </td>
+                <td class=" fontCenter">{{number_format($totall)}}</td>
+              </tr>
             </tbody>
           </table>
 

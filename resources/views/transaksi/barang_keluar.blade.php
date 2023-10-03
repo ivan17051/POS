@@ -257,7 +257,7 @@ active
                 if(e) return r.get_member.nama;
                 else return '';
               }},
-              { data: 'jenis', title: 'Jenis', width:'13%' },
+              { data: 'metode', title: 'Metode', width:'13%' },
               { data: 'jumlah', title: 'Total', width:'20%', render: function(e,d,r){
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e);
               }},
