@@ -93,6 +93,14 @@ active
                       </span>
                     </label>
                   </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="jenislaporan" value="8"> Laporan Harga Jual Barang
+                      <span class="circle">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
               <div class="row" id='tanggal' hidden>
@@ -149,7 +157,7 @@ active
       lokasi.attr('hidden', false)
       lokasi.find('select').attr('required', true);
       tanggal.attr('hidden', true)
-    }else if(e.target.value==5) {
+    }else if(e.target.value==5 || e.target.value==8) {
       lokasi.attr('hidden', true)
       lokasi.find('select').attr('required', false);
       tanggal.attr('hidden', true)

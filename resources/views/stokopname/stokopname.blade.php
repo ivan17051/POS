@@ -208,11 +208,11 @@ active
                   </div>
                 </div>
               </div> -->
-              <div class="input-group">
+              <!-- <div class="input-group">
                 <input type="text" name="kode_barang" id="kode_barang" class="form-control" placeholder="Cari Kode Barang/ Barcode">
               </div>
               <div id="qr-reader" style="width: 100%"></div>
-              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera">Scan</button>
+              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera">Scan</button> -->
               <div class="card-body table-full-width table-hover mt-5">
                 <div class="table-responsive" style="overflow:visible;">
                   <table class="table">

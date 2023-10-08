@@ -156,7 +156,7 @@ active
           </div>
           <div class="table-full-width table-hover mt-5">
             <div class="table-responsive" style="overflow:visible;">
-              <table class="table">
+              <table class="table" id="datatables2">
                 <thead class="">
                   <th style="width:5%;">ID</th>
                   <th>Nama Barang</th>
@@ -496,7 +496,7 @@ active
           
           totretur = 0;
           $('#jumretur').val('0').change();
-          
+          $("#datatables2").DataTable();
         },
         error : function() {
             // alert("No Data");

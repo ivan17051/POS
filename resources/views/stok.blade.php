@@ -109,6 +109,7 @@ active
       columns: [
         { data: 'id', title: 'ID' }, 
         { data: 'namabarang', title: 'Barang' },
+        { data: 'kodebarang', title: 'Kode Barang' },
         { data: 'namasupplier', title: 'Supplier' },
         { data: 'qtyin', title: 'Qty In' },
         { data: 'qtyout', title: 'Qty Out' },

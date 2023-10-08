@@ -16,7 +16,7 @@ active
 
 @section('content')
 <div class="container-fluid">
-  <form action="{{route('barang_keluar.store')}}" method="POST">
+  <form action="{{route('barang_keluar.store')}}" method="POST" id="formBeli">
   @csrf
   <div class="row">
     <div class="col-md-6">
@@ -131,7 +131,7 @@ active
           </div>
         </div>
         <div class="card-footer">
-          <button class="btn btn-primary">Konfirmasi</button>
+          <button type="submit" class="btn btn-primary">Konfirmasi</button>
         </div>
       </div>
       <!-- end col-md-12 -->
@@ -184,7 +184,7 @@ active
   </div>
   </form>
   @if(isset($struk))
-  <a id="cetakStruk" href="{{route('cetak.struk',['id'=>$struk])}}" onclick="window.open(this, '_blank', 'width=,height=');return false;" hidden></a>
+  <a id="cetakStruk" href="{{route('cetak.struk',['id'=>$struk])}}" onclick="window.open(this, '_blank');return false;" hidden></a>
   @endif
 </div>
 @endsection
@@ -507,6 +507,10 @@ active
           });
       });
       
+    });
+
+    $('#formBeli').one('submit', function() {
+        $(this).find('button[type="submit"]').attr('disabled', true);
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/broadcast-channel@5.1.0/dist/lib/index.es5.min.js"></script>

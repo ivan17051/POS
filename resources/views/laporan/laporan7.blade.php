@@ -148,6 +148,10 @@
                             <tr>
                               <td colspan="2"style="font-size:15px">&nbsp;</td>
                             </tr>
+                            <tr>
+                              <td class=""><b>GRAND TOTAL</b></td>
+                              <td class="fontKanan" ><b>{{number_format($totcash+$totdebit+$totqris+$tottf+$totvoucher+$totpoin)}} </b></td>
+                            </tr>
                         </tbody>
                     </table>
                     <!-- END OF KOP SURAT -->

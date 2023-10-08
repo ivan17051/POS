@@ -19,7 +19,7 @@ class StokController extends Controller
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
         // $data = Stok::with('getSupplier:id,nama','getBarang:id,namabarang');
-        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namasupplier, C.namabarang AS namabarang 
+        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namasupplier, C.namabarang AS namabarang, C.kodebarang AS kodebarang 
             FROM stok A 
             LEFT JOIN msupplier B ON A.idsupplier = B.id
             LEFT JOIN mbarang C ON A.idbarang = C.id'));

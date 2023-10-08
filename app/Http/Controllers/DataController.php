@@ -249,6 +249,17 @@ class DataController extends Controller
             // dd($data, $periode);
             return view('laporan.laporan7', ['data' => $data, 'periode' => $periode]);
         }
+        // Laporan Harga Jual Barang
+        elseif ($request->jenislaporan == 8) {
+
+            $query = 'SELECT A.kodebarang, A.namabarang, B.stok AS qty, A.harga_1, A.harga_3, A.harga_6
+            FROM mbarang A
+            LEFT JOIN (SELECT Ba.idbarang AS idbarang, SUM(Ba.stok) AS stok FROM stok Ba GROUP BY Ba.idbarang) B ON A.id = B.idbarang';
+            
+            $data = DB::select(DB::raw($query));
+            // dd($data);
+            return view('laporan.laporan8', ['data' => $data]);
+        }
 
     }
 
