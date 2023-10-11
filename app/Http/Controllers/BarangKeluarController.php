@@ -23,7 +23,12 @@ class BarangKeluarController extends Controller
     // PEMBELIAN
     public function pembelian()
     {
-        $barang = Barang::get(['id', 'namabarang', 'kodebarang', 'harga_1', 'harga_3', 'harga_6']);
+        // $barang = Barang::get(['id', 'namabarang', 'kodebarang', 'harga_1', 'harga_3', 'harga_6']);
+        $query = 'SELECT A.id, A.kodebarang, A.namabarang, B.stok AS qty, A.harga_1, A.harga_3, A.harga_6
+            FROM mbarang A
+            LEFT JOIN (SELECT Ba.idbarang AS idbarang, SUM(Ba.stok) AS stok FROM stok Ba GROUP BY Ba.idbarang) B ON A.id = B.idbarang';
+            
+        $barang = DB::select(DB::raw($query));
 
         return view('transaksi.pembelian', ['barang' => $barang]);
     }
