@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/barang/data', 'BarangController@data')->name('barang.data');
     Route::get('/barang/checkkode/{kode}', 'BarangController@checkKode')->name('barang.check');
+    Route::get('/barang/checkharga/{idbarang}', 'BarangController@checkHarga')->name('barang.cekharga');
     Route::get('/member/riwayat/{id}', 'MemberController@riwayat')->name('member.riwayat');
 
     Route::post('/barang_masuk/data', 'BarangMasukController@data')->name('barang_masuk.data');

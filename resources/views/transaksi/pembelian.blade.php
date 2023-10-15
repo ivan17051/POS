@@ -415,8 +415,8 @@ active
       dynamic: true,
       hint: true,
       order: "asc",
-      display: ["nama", "alamat"],
-      template: function (query, item) { return item.nama + ' (' + item.alamat + ')' },
+      display: ["nama", "alamat", "notelp"],
+      template: function (query, item) { return '['+ item.notelp +'] ' + item.nama + ' (' + item.alamat + ')' },
       emptyTemplate: "Tidak ditemukan",
       source: {
         faskes: {

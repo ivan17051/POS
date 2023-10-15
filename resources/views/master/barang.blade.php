@@ -243,6 +243,41 @@ active
   </div>
 </div>
 <!--  End Modal View Barcode  -->
+
+<!-- Modal View Harga -->
+<div class="modal fade" id="cekharga" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Harga Perolehan Barang </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="material-icons">clear</i>
+        </button>
+      </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table" style="font-size:14px;">
+              <thead class="text-primary">
+                <th style="width:10%;font-size:15px;">ID</th>
+                <th style="width:25%;font-size:15px;">Tanggal</th>
+                <th style="width:35%;font-size:15px;">Supplier</th>
+                <th style="width:30%;font-size:15px;">Harga</th>
+              </thead>
+              <tbody id="listBarangMasuk">
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Tutup</button>
+        </div>
+      
+    </div>
+  </div>
+</div>
+<!--  End Modal View Harga  -->
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -363,6 +398,40 @@ active
     $modal.modal('show');
   }
 
+  function cekharga(id){
+    $modal = $('#cekharga');
+    // $modal.find('input[name=id_barangmasuk]').val(id);
+    
+    $('#listBarangMasuk').empty();
+    $.ajax({
+        url: "{{ route('barang.cekharga',['idbarang'=>'']) }}" + '/' + id._id ,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          var total = 0;
+          
+          data.forEach(e => {
+            console.log(e);
+            $('#listBarangMasuk').append(
+              '<tr>'+
+              '<td>' + e.id + '</td>' +
+              '<td>' + e.tanggal + '</td>' +
+              '<td>' + e.get_supplier.nama + '</td>' +
+              '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(e.h_sat) + '</td>' +
+              '</tr>'
+            );
+            
+          });
+          
+        },
+        error : function() {
+            // alert("No Data");
+        }
+    });
+
+    $modal.modal('show');
+  }
+
   // Datatable
   function showTable() {
 
@@ -399,6 +468,7 @@ active
               '<div class="dropdown-menu dropdown-menu-left" >' +
               '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>' +
               '<a class="dropdown-item" href="#" onclick="view(this)">Lihat Barcode</a>' +
+              '<a class="dropdown-item" href="#" onclick="cekharga(this)">Harga Perolehan</a>' +
               '<div class="dropdown-divider"></div>' +
               '<a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>' +
               '</div>' +

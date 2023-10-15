@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BarangMasukDetail;
 use Illuminate\Http\Request;
 use App\Barang;
 use App\Kategori;
@@ -37,6 +38,11 @@ class BarangController extends Controller
     public function checkKode($kode)
     {
         $data = Barang::where('kodebarang', $kode)->count();
+        return $data;
+    }
+
+    public function checkHarga($idbarang){
+        $data = BarangMasukDetail::where('idbarang', $idbarang)->with('getSupplier:id,nama')->get();
         return $data;
     }
 
