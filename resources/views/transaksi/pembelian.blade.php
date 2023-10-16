@@ -464,6 +464,7 @@ active
 
       @if (isset($struk))
         document.getElementById('cetakStruk').click();
+        window.location.replace("{{route('barang.pembelian')}}");
       @endif
 
       $('#selectbarang').val('');
