@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/retur/data', 'ReturController@data')->name('retur.data');
     Route::get('/retur/detail/{id}', 'ReturController@detail')->name('retur.detail');
+    Route::get('/retur/create/{id}', 'ReturController@create')->name('retur.create');
 
     Route::get('/stok', 'StokController@index')->name('stok.index');
     Route::post('stok/data', 'StokController@data')->name('stok.data');

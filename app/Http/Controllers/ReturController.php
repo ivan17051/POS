@@ -40,17 +40,26 @@ class ReturController extends Controller
         return $data;
     }
 
+    public function create($id){
+        $data = BarangMasukDetail::where('idtransaksi', $id)->with('getBarang:id,namabarang')->get();
+        return view('transaksi.retur_add', ['barang'=>$data]);
+    }
+
     public function store(Request $request)
     { 
         try {
+            // dd($request->all());
             $retur = new Retur();
             $barang_masuk = BarangMasuk::findOrFail($request->id_barangmasuk);
             $total = 0;
             $idbarang = '';
 
-            $retur->fill($request->all());
+            $retur->fill([
+                'id_barangmasuk'    => $request->id_barangmasuk,
+                'tanggal'           => $request->tanggal,
+            ]);
             $detail = BarangMasukDetail::where('idtransaksi',$request->id_barangmasuk)->get();
-            
+            dd($detail, $request->all());
             for($x=0;$x<count($detail);$x++){
                 $detail[$x]->qty -= $request->stok[$x];
 
