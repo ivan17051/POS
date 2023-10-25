@@ -68,7 +68,7 @@ active
       <div class="card">
         <div class="card-header card-header-tabs card-header-primary">
           <div class="subtitle-wrapper">
-            <h4 class="card-title">Tambah Retur Barang Masuk</h4>
+            <h4 class="card-title">Tambah Retur Barang</h4>
           </div>
         </div>
         <form method="POST" action="{{route('retur.store')}}" class="form-horizontal">
@@ -80,7 +80,7 @@ active
 
           </div> -->
           <div class="anim slide">
-            
+            <input type="hidden" name="id_barangmasuk" value="{{$barang[0]->idtransaksi}}">
               <div class="row">
                 <label class="col-sm-2 col-form-label">Tanggal</label>
                 <div class="col-sm-4">
@@ -105,24 +105,24 @@ active
                     <thead class="">
                       <th style="width:5%;">ID</th>
                       <th>Nama Barang</th>
-                      <th style="width:5%;">QTY</th>
+                      <th style="width:10%;">QTY</th>
                       <th style="width:15%;">Harga Satuan</th>
-                      <th style="width:15%;">QTY Retur</th>
+                      <th style="width:10%;">QTY Retur</th>
                       <th style="width:5%;">Aksi</th>
                     </thead>
-                    <tbody id="detailBrgMasuk">
+                    <tbody id="detailBrgRetur">
                       <tr class="">
                         <td>#</td>
                         <td>
-                          <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true">
+                          <select class="selectpicker form-control" name="addBrg" data-style="select-with-transition" title="--Pilih Barang--" data-size="3" data-live-search="true" id="selectBarang" onchange="setqty(this)">
                             @foreach($barang as $unit)
-                            <option value="{{$unit->id}}|{{$unit->namabarang}}">{{$unit->kodebarang}} | {{$unit->namabarang}}</option>
+                            <option value="{{$unit->id}}" data-nama="{{$unit->getBarang->namabarang}}" data-qty="{{$unit->qty}}" data-h_sat="{{$unit->h_sat}}">{{$unit->getBarang->kodebarang}} | {{$unit->getBarang->namabarang}}</option>
                             @endforeach
                           </select>
                         </td>
-                        <td><input type="text" id="qty" name="qty" class="form-control" placeholder="QTY"></td>
-                        <td><input type="text" id="h_sat" name="h_sat" class="form-control" placeholder="Harga Satuan" onkeyup="hitungTotal()"></td>
-                        <td><input type="text" id="qtyretur" name="jumlah" class="form-control" placeholder="Total" readonly></td>
+                        <td><input type="text" id="qty" name="qty" class="form-control" placeholder="QTY" readonly></td>
+                        <td><input type="text" id="h_sat" name="h_sat" class="form-control" placeholder="Harga Satuan" readonly></td>
+                        <td><input type="text" id="qtyretur" name="qtyretur" class="form-control" placeholder="QTY Retur"></td>
                         <td class="text-right"><button type="button" class="btn btn-sm btn-primary" onclick="addPengadaan()"
                             style="padding:5px;"><span class="material-icons">add</span></button></td>
                       </tr>
@@ -160,7 +160,7 @@ active
 
         </div>
         <div class="card-footer">
-          <button class="btn btn-sm btn-dark" onclick="showform(0)">Kembali</button>
+          <a href="{{route('barang_masuk.index')}}" class="btn btn-sm btn-dark">Kembali</a>
           <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
         </div>
         </form>
@@ -281,11 +281,13 @@ active
     $modal.modal('show');
   }
 
-  function hitungTotal(self) {
-    var qty = $('#addQty').val();
-    var harga = $('#h_sat').val();
-    var total = qty * harga;
-    $('#jumlah').val(total).change();
+  function setqty(self) {
+    var qty = $('#selectBarang option:selected').data('qty');
+    var nama = $('#selectBarang option:selected').data('nama');
+    var h_sat = $('#selectBarang option:selected').data('h_sat');
+    
+    $('#qty').val(qty).change();
+    $('#h_sat').val(h_sat).change();
   }
 
   function pembayaran(self) {
@@ -348,44 +350,38 @@ active
   var jumDetailMasuk=0;
   
   function addPengadaan() {
-    var brg = $('[name=addBrg]').val();
-    var namaBrg = brg.split('|');
-    var tglExp = $('[name=tglExp]').val();
-    var qty = $('[name=addQty]').val();
+    var idbrg = $('#selectBarang option:selected').val();
+    var nama = $('#selectBarang option:selected').data('nama');
+    var qty = $('[name=qty]').val();
     var h_sat = $('[name=h_sat]').val();
-    var jumlah = $('[name=jumlah]').val();
+    var qtyretur = $('[name=qtyretur]').val();
     
-    if (brg == '') {
+    if (idbrg == '') {
       alert('Pilih Barang');
       $('[name=addBrg]').focus();
-    } else if (qty == '' || qty <= 0) {
+    } else if (qtyretur == '' || qtyretur <= 0) {
       alert("Qty harus valid");
-    } else if (h_sat == '' || h_sat <= 0) {
-      alert("Harga harus valid");
-    } else if (h_sat.indexOf(',') >= 0) {
-      alert("Untuk Harga, Gunakan Titik ('.') Bukan Koma (',')");
-    } else if ((h_sat.match(/\./g) || []).length > 1) {
-      alert("Untuk Harga, Titik ('.') Hanya Digunakan Untuk Pecahan Desimal");
+    } else if (qtyretur > qty) {
+      alert("Qty tidak boleh lebih dari stok");
     } else {
       jumDetailMasuk++;
-      $('#detailBrgMasuk').append(
+      $('#detailBrgRetur').append(
         '<tr class="table-info">'+
-        '<input type="hidden" readonly name="detail[]" value="' + namaBrg[0] + '||' + tglExp + '||' + qty + '||' + h_sat +'||' + jumlah +'">' +
+        '<input type="hidden" readonly name="detail[]" value="' + idbrg + ',' + qtyretur + '">' +
         '<td>' + jumDetailMasuk + '</td>' +
-        '<td>' + namaBrg[1] + '</td>' +
-        '<td>' + tglExp + '</td>' +
+        '<td>' + nama + '</td>' +
         '<td>' + qty + '</td>' +
         '<td>' + h_sat + '</td>' +
-        '<td>' + jumlah + '</td>' +
+        '<td>' + qtyretur + '</td>' +
         '<td class="text-right"><button class="btn btn-danger btn-link" style="padding:5px;margin:0;" onclick="$(this).parent().parent().remove(); kurangiJumlahMasuk();">' +
         '<span class="material-icons">close</span>' +
         '</button></td></tr>'
       );
-      $('[name=tglExp]').val('');
+      
       $('[name=addBrg]').val('').change();
-      $('[name=addQty]').val('');
+      $('[name=qty]').val('');
       $('[name=h_sat]').val('');
-      $('[name=jumlah]').val('');
+      $('[name=qtyretur]').val('');
       
       $('.select').selectpicker('refresh');
     }

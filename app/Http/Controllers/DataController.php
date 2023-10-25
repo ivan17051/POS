@@ -154,14 +154,14 @@ class DataController extends Controller
                 // $data = Stok::with('getBarang:id,namabarang,kodebarang')->get(['id', 'idbarang', 'stok']);
                 $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
                     FROM stok A
-                    LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
-                    LEFT JOIN mbarang B ON A.idbarang = B.id
+                    JOIN barang_masuk_detail Ca ON (A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier)
+                    JOIN mbarang B ON A.idbarang = B.id
                     WHERE A.stok > 0';
             } else {
                 $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
                     FROM stok A
-                    LEFT JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
-                    LEFT JOIN mbarang B ON A.idbarang = B.id
+                    JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
+                    JOIN mbarang B ON A.idbarang = B.id
                     WHERE A.stok > 0 AND B.lokasi =\''.$request->lokasi.'\'';
             }
 

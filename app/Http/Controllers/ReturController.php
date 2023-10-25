@@ -41,7 +41,7 @@ class ReturController extends Controller
     }
 
     public function create($id){
-        $data = BarangMasukDetail::where('idtransaksi', $id)->with('getBarang:id,namabarang')->get();
+        $data = BarangMasukDetail::where('idtransaksi', $id)->with('getBarang:id,kodebarang,namabarang')->get();
         return view('transaksi.retur_add', ['barang'=>$data]);
     }
 
@@ -52,35 +52,49 @@ class ReturController extends Controller
             $retur = new Retur();
             $barang_masuk = BarangMasuk::findOrFail($request->id_barangmasuk);
             $total = 0;
-            $idbarang = '';
+            $idbarang = implode('|',$request->detail);
 
             $retur->fill([
                 'id_barangmasuk'    => $request->id_barangmasuk,
                 'tanggal'           => $request->tanggal,
             ]);
-            $detail = BarangMasukDetail::where('idtransaksi',$request->id_barangmasuk)->get();
-            dd($detail, $request->all());
-            for($x=0;$x<count($detail);$x++){
-                $detail[$x]->qty -= $request->stok[$x];
+            
+            // dd($detail, $request->all());
+            
+            foreach($request->detail as $unit){
+                $barang = explode(',', $unit); // 0 -> id & 1 -> qtyretur
+                $detail = BarangMasukDetail::findOrFail($barang[0]);
+                $detail->qty -= $barang[1];
+                $total += ($barang[1] * $detail->h_sat);
 
-                if($request->stok[$x]>0) $idbarang = $idbarang.'|'.$detail[$x]->idbarang.','.$request->stok[$x];
-                $detail[$x]->jumlah = $detail[$x]->qty * $detail[$x]->h_sat;
-                $total += $request->stok[$x] * $detail[$x]->h_sat;
-
-                $stok = Stok::where('idbarang', $detail[$x]->idbarang)->where('idsupplier', $detail[$x]->idsupplier)->first();
-                $stok->qtyin -= $request->stok[$x];
-                $stok->stok -= $request->stok[$x];
+                $stok = Stok::where('idbarang', $detail->idbarang)->where('idsupplier', $detail->idsupplier)->first();
+                $stok->qtyin -= $barang[1];
+                $stok->stok -= $barang[1];
                 
                 $stok->save();
-                $detail[$x]->save();
+                $detail->save();
             }
+            // for($x=0;$x<count($detail);$x++){
+            //     $detail[$x]->qty -= $request->stok[$x];
+
+            //     $idbarang = $idbarang.'|'.$detail[$x]->idbarang.','.$request->stok[$x];
+            //     $detail[$x]->jumlah = $detail[$x]->qty * $detail[$x]->h_sat;
+            //     $total += $request->stok[$x] * $detail[$x]->h_sat;
+
+            //     $stok = Stok::where('idbarang', $detail[$x]->idbarang)->where('idsupplier', $detail[$x]->idsupplier)->first();
+            //     $stok->qtyin -= $request->stok[$x];
+            //     $stok->stok -= $request->stok[$x];
+                
+            //     $stok->save();
+            //     $detail[$x]->save();
+            // }
             // dd($detail, $request->all(), $stok);
             $retur->nomor = $barang_masuk->nomor.'_RE';
             $retur->id_detailbarangmasuk = $idbarang;
             $retur->jumretur = $total;
 
             $barang_masuk->jumlah -= $total;
-            
+            // dd($barang_masuk, $stok, $retur);
             $barang_masuk->save();
             $retur->save();
         } catch (Exception $exception) {

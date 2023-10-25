@@ -39,8 +39,10 @@ class CetakController extends Controller
         foreach($barang as $unit){
             if($unit!=''){
                 $temp = explode(',', $unit);
-                $tempBrg = Barang::findOrFail($temp[0]);
-                $tempHarga = BarangMasukDetail::where('idtransaksi',$d['retur']->id_barangmasuk)->where('idbarang',$temp[0])->first();
+                // dd($temp, $barang);
+                $tempHarga = BarangMasukDetail::findOrFail($temp[0]);
+                $tempBrg = Barang::findOrFail($tempHarga->idbarang);
+                
                 array_push($d['listBarang'], $tempBrg->namabarang.'|'.$temp[1].'|'.$tempHarga->h_sat);
             }
             
