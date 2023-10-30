@@ -37,7 +37,8 @@ class BarangKeluarController extends Controller
     {
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = BarangKeluar::with('getMember:id,nama', 'getBarang:id,namabarang');
+        // $data = BarangKeluar::with('getMember:id,nama', 'getBarang:id,namabarang');
+        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namamember FROM barang_keluar A LEFT JOIN mmember B ON A.idmember = B.id'));
         $datatable = Datatables::of($data);
         $datatable->rawColumns(['action']);
 

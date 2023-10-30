@@ -658,7 +658,7 @@ active
         { data: 'id', title: 'ID', width: '5%' },
         { data: 'nomor', title: 'Nomor Transaksi', width: '18%' },
         { data: 'tanggal', title: 'Tanggal', width: '15%' },
-        { data: 'get_supplier.nama', title: 'Supplier', searchable: false },
+        { data: 'namasupplier', title: 'Supplier' },
         {
           data: 'jumlah', title: 'Total', width: '15%', render: function (e, d, r) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR'}).format(e);

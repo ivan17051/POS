@@ -25,7 +25,8 @@ class BarangMasukController extends Controller
     {
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = Barang::raw('SELECT * FROM mbarang A JOIN mkategori B ON A.idkategori = B.id');
-        $data = BarangMasuk::with('getSupplier');
+        // $data = BarangMasuk::with('getSupplier');
+        $data = DB::select(DB::raw('SELECT A.*, B.nama AS namasupplier FROM barang_masuk A LEFT JOIN msupplier B ON A.idsupplier = B.id'));
         $datatable = Datatables::of($data);
         $datatable->rawColumns(['action']);
 
@@ -41,7 +42,7 @@ class BarangMasukController extends Controller
                     '<a class="dropdown-item" href="'. route('barang_masuk.edit', ['id'=>$t->id]) .'">Edit</a>' .
                     '<a class="dropdown-item" href="#" onclick="cetak(' . $t->id . ')" >Cetak</a>' .
                     '<a class="dropdown-item" href="#" onclick="pembayaran(this)" >Pembayaran</a>' .
-                    '<a class="dropdown-item" href="#" onclick="retur(' . $t->id . ')" >Retur</a>' .
+                    '<a class="dropdown-item" href="'.route('retur.create', ['id'=>$t->id]).'">Retur</a>' .
                     '<div class="dropdown-divider"></div>' .
                     '<a class="dropdown-item" href="#" onclick="hapus(' . $t->id . ')">Hapus</a>' .
                     '</div>' .
