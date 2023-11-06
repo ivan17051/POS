@@ -52,9 +52,10 @@
                 <th class="headerFont fontCenter fontBold" style="font-size:13px; width:5%;">NO</th>
                 <th class="headerFont fontCenter fontBold" style="font-size:13px; width:35%;">NAMA BARANG</th>
                 <th class="headerFont fontCenter fontBold" style="font-size:13px; width:20%;">KODE BARANG</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:15%;">HARGA PEROLEHAN</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:10%;">STOK SISTEM</th>
-                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:15%;">JUMLAH TOTAL</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:9%;">LOKASI</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:13%;">HARGA PEROLEHAN</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:5%;">STOK SISTEM</th>
+                <th class="headerFont fontCenter fontBold" style="font-size:13px; width:13%;">JUMLAH TOTAL</th>
               </tr>
             </thead>
             <tbody class="tb-body font-13">
@@ -71,6 +72,7 @@
                 <td class=" fontJustify">{{$key+1}}. </td>
                 <td class=" fontJustify">{{$unit->namabarang}}</td>
                 <td class=" fontCenter">{{$unit->kodebarang}}</td>
+                <td class=" fontCenter">{{$unit->lokasi}}</td>
                 <td class=" fontCenter">{{number_format($unit->hargabeli)}}</td>
                 <td class=" fontCenter">{{$unit->stok}}</td>
                 <td class=" fontCenter">{{number_format($total)}}</td>

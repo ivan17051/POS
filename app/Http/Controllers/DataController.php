@@ -152,7 +152,7 @@ class DataController extends Controller
             // dd($request->all());
             if($request->lokasi == 'semua'){
                 // $data = Stok::with('getBarang:id,namabarang,kodebarang')->get(['id', 'idbarang', 'stok']);
-                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
+                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.lokasi, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
                     FROM stok A
                     JOIN barang_masuk_detail Ca ON (A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier)
                     JOIN mbarang B ON A.idbarang = B.id
