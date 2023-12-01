@@ -13,6 +13,7 @@
         "kylekatarnls/laravel-carbon-2": "^1.0.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
+        "maatwebsite/excel": "^3.1",
         "myclabs/php-enum": "1.7.7",
         "nesbot/carbon": "2.53.1 as 1.39.0",
         "phpoffice/phpspreadsheet": "1.19.0",
@@ -29,7 +30,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/thanks": true
+        }
     },
     "extra": {
         "laravel": {

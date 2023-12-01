@@ -79,7 +79,7 @@
               </tr>
               @endforeach
               <tr>
-                <td class=" fontJustify" colspan="5">TOTAL </td>
+                <td class=" fontJustify" colspan="6">TOTAL </td>
                 <td class=" fontCenter">{{number_format($totall)}}</td>
               </tr>
             </tbody>

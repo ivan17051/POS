@@ -318,6 +318,7 @@ active
             $('#detail_brg_msk').append(
               '<tr>'+
               '<td>' + e.get_barang.namabarang + '</td>' +
+              '<td>' + e.get_barang.kodebarang + '</td>' +
               '<td>' + e.stok + '</td>' +
               '<td>' + e.stokreal + '</td>' +
               '<td>' + e.selisih + '</td>' +

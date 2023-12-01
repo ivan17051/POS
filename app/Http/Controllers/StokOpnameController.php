@@ -29,7 +29,8 @@ class StokOpnameController extends Controller
     }
 
     public function detail($id){
-        $data = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang')->get();
+        $data = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang,kodebarang')->get();
+        $data = ;
         return $data; 
     }
 

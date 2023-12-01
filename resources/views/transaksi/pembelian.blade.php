@@ -206,7 +206,7 @@ active
 
     function kurangiTotal(jumlah) {
       total = total - jumlah;
-      $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+      $('#total').html(new total.toLocaleString("id-ID", {style:"currency", currency:"IDR"}));
       $('#jumlah').val(total);
     }
 
@@ -329,8 +329,8 @@ active
         total = total + jumlah;
         var cmd = '<td>' + barang[4] + '</td>' +
           '<td>' + qty + '</td>' +
-          '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(h_sat) + '</td>' +
-          '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(jumlah) + '</td>';
+          '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 6 }).format(h_sat) + '</td>' +
+          '<td>' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 6 }).format(jumlah) + '</td>';
 
         $('#detailBrg').append(
           '<tr>' +
@@ -343,7 +343,7 @@ active
         channel.postMessage('addbarang||' + '<tr>' + cmd + '</tr>||' + new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
 
         $('#qty').val('');
-        $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(total));
+        $('#total').html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 6 }).format(total));
         $('#jumlah').val(total);
         $('#selectbarang').val('');
         $('#selectbarang').select2('open');

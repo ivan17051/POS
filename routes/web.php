@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/data/laporan', 'DataController@laporan');
     Route::post('/data/laporan', 'DataController@downloadLaporan')->name('data.download');
+    Route::get('/data/exportlaporan', 'DataController@downloadExcel')->name('data.export');
 
     Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
     Route::post('/pengaturan', 'PengaturanController@store')->name('pengaturan.store');

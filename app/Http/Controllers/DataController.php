@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BarangMasukDetail;
+use App\Exports\ExportLaporanStok;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Stok;
@@ -11,7 +12,7 @@ use App\Member;
 use App\BarangKeluar;
 use App\BarangKeluarDetail;
 use DB;
-use Validator;
+use Excel;
 
 class DataController extends Controller
 {
@@ -158,7 +159,7 @@ class DataController extends Controller
                     JOIN mbarang B ON A.idbarang = B.id
                     WHERE A.stok > 0';
             } else {
-                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
+                $query = 'SELECT A.idbarang, A.idsupplier, A.stok, B.lokasi, B.namabarang, B.kodebarang, Ca.h_sat AS hargabeli
                     FROM stok A
                     JOIN barang_masuk_detail Ca ON A.idbarang = Ca.idbarang AND A.idsupplier = Ca.idsupplier
                     JOIN mbarang B ON A.idbarang = B.id
@@ -261,6 +262,11 @@ class DataController extends Controller
             return view('laporan.laporan8', ['data' => $data]);
         }
 
+    }
+
+    public function downloadExcel(Request $request)
+    {
+        return Excel::download(new ExportLaporanStok('ATK1'), 'MttRegistrations.xlsx');
     }
 
     function getWorkingDays($startDate, $endDate)
