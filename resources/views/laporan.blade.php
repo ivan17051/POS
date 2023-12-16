@@ -120,7 +120,7 @@ active
                 <label class="col-sm-2 col-form-label">Lokasi</label>
                 <div class="col-sm-10">
                   <div class="form-group">
-                    <select name="lokasi" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Lokasi">
+                    <select name="lokasi" id="lokasi" class="selectpicker form-control" data-size="5" data-style="btn btn-primary btn-round" data-live-search="true" title="Lokasi">
                       <option value="semua">Semua Lokasi</option>
                       @foreach($lokasi as $unit)
                       <option value="{{$unit->lokasi}}">{{$unit->lokasi}}</option>
@@ -131,6 +131,7 @@ active
               </div>
               <div class="row text-right mt-3">
                 <div class="col">
+                  <a href="" id="btnDownload" class="btn btn-success" hidden>Download</a>
                   <button type="submit" class="btn btn-primary">Lihat</button>
                   <!-- <button type="submit" class="btn btn-success">Download</button>                   -->
                 </div>
@@ -152,20 +153,32 @@ active
     // console.log(e.target.value);
     var lokasi = $('#lokasi');
     var tanggal = $('#tanggal');
-    
+    var download = $('#btnDownload');
+
     if(e.target.value==4 ){
       lokasi.attr('hidden', false)
       lokasi.find('select').attr('required', true);
       tanggal.attr('hidden', true)
+      download.attr('hidden', false)
     }else if(e.target.value==5 || e.target.value==8) {
       lokasi.attr('hidden', true)
       lokasi.find('select').attr('required', false);
       tanggal.attr('hidden', true)
+      download.attr('hidden', true)
     }else {
       lokasi.attr('hidden', true)
       lokasi.find('select').attr('required', false);
       tanggal.attr('hidden', false)
+      download.attr('hidden', true)
     }
+    
+  })
+
+  $('#lokasi').change(function(e){
+    var lokasi = $('#lokasi option:selected').val();
+    var download = $('#btnDownload');
+    console.log(lokasi)
+    download.attr('href',"{{route('data.export')}}/?lokasi="+lokasi)
   })
 
   $(function () {

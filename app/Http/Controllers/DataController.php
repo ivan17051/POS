@@ -266,7 +266,7 @@ class DataController extends Controller
 
     public function downloadExcel(Request $request)
     {
-        return Excel::download(new ExportLaporanStok('ATK1'), 'MttRegistrations.xlsx');
+        return Excel::download(new ExportLaporanStok($request->lokasi), 'Laporan Stok.xlsx');
     }
 
     function getWorkingDays($startDate, $endDate)
