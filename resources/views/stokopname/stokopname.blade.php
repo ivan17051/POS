@@ -46,10 +46,11 @@ active
           <div class="table-responsive">
             <table class="table" style="font-size:14px;">
               <thead class="text-primary">
-                <th style="width:55%;font-size:15px;">Nama Barang</th>
-                <th style="width:15%;font-size:15px;">Stok</th>
-                <th style="width:15%;font-size:15px;">Stok Asli</th>
-                <th style="width:15%;font-size:15px;">Selisih</th>
+                <th style="font-size:15px;">Nama Barang</th>
+                <th style="width:18%;font-size:15px;">Kode Barang</th>
+                <th style="width:12%;font-size:15px;">Stok</th>
+                <th style="width:13%;font-size:15px;">Stok Asli</th>
+                <th style="width:12%;font-size:15px;">Selisih</th>
               </thead>
               <tbody id="detail_brg_msk">
 
@@ -454,19 +455,19 @@ active
         {
           data: 'id', title: 'Aksi', class: "text-center", width: 1, orderable: false, render: function (e, d, r) {
             var where = '';
+            var where2 = '';
             if(r.status=='draft'){
               where = '<a class="dropdown-item" href="#" onclick="sunting(this)" >Sunting</a>';
-            }
+              where2 = '<div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>';
+              where = ''; // sementara
+            } 
             var action = '<span class="nav-item dropdown ">' +
               '<a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
               '<i class="material-icons">more_vert</i>' +
               '</a>' +
               '<div class="dropdown-menu dropdown-menu-left" >' +
               '<a class="dropdown-item" href="#" onclick="view(this)">Lihat</a>' + where +
-              '<a class="dropdown-item" href="#" onclick="cetak(this)">Cetak</a>' +
-              '<a class="dropdown-item" href="{{route("stokopname.sesuai",["id"=>''])}}/'+e+'" ">Sesuaikan</a>' +
-              '<div class="dropdown-divider"></div>' +
-              '<a class="dropdown-item" href="#" onclick="hapus(' + e + ')">Hapus</a>' +
+              '<a class="dropdown-item" href="{{route("stokopname.sesuai",["id"=>''])}}/'+e+'" ">Sesuaikan</a>' + where2 +
               '</div>' +
               '</span>'
             return action;

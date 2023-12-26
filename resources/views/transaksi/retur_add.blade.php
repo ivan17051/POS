@@ -352,9 +352,9 @@ active
   function addPengadaan() {
     var idbrg = $('#selectBarang option:selected').val();
     var nama = $('#selectBarang option:selected').data('nama');
-    var qty = $('[name=qty]').val();
+    var qty = parseInt($('[name=qty]').val());
     var h_sat = $('[name=h_sat]').val();
-    var qtyretur = $('[name=qtyretur]').val();
+    var qtyretur = parseInt($('[name=qtyretur]').val());
     
     if (idbrg == '') {
       alert('Pilih Barang');
@@ -362,7 +362,7 @@ active
     } else if (qtyretur == '' || qtyretur <= 0) {
       alert("Qty harus valid");
     } else if (qtyretur > qty) {
-      alert("Qty tidak boleh lebih dari stok");
+      alert("Qty tidak boleh lebih dari stok.");
     } else {
       jumDetailMasuk++;
       $('#detailBrgRetur').append(
