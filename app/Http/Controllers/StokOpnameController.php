@@ -30,7 +30,7 @@ class StokOpnameController extends Controller
 
     public function detail($id){
         $data = StokOpnameDetail::where('idstokopname', $id)->with('getBarang:id,namabarang,kodebarang')->get();
-        $data = ;
+        // $data = ;
         return $data; 
     }
 
@@ -152,5 +152,22 @@ class StokOpnameController extends Controller
         DB::commit();
         $this->flashSuccess('Penyesuaian Berhasil');
         return back();
+    }
+
+    public function destroy($id){
+        try {
+            $data = StokOpname::findOrFail($id);
+            $detail = StokOpnameDetail::where('idstokopname', $id)->get();
+            foreach($detail as $unit) $unit->delete();
+            $data->delete();
+
+        } catch(Exception $exception){
+            DB::rollBack();
+            $this->flashError($exception->getMessage());
+            return back();
+        }
+        DB::commit();
+        $this->flashSuccess('Hapus Data Stok Opname Berhasil');
+        return back(); 
     }
 }

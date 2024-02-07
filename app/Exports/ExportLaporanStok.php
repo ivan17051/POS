@@ -22,6 +22,7 @@ class ExportLaporanStok implements FromCollection, ShouldAutoSize
     {
         // dd($this->lokasi);
         if($this->lokasi == 'semua'){
+        if($this->lokasi == 'semua'){
             // $data = Stok::with('getBarang:id,namabarang,kodebarang')->get(['id', 'idbarang', 'stok']);
             $query = 'SELECT B.lokasi, B.namabarang, B.kodebarang, A.stok, max(Ca.h_sat) AS hargabeli, (A.stok * max(Ca.h_sat)) AS jumlah
                     FROM stok A
